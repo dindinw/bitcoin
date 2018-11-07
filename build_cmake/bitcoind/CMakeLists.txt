@@ -195,6 +195,10 @@ add_executable(${PROJECT_NAME}
         #../../src/crypto/sha256_sse41.cpp
         ../../src/crypto/sha512.cpp
         ../../src/crypto/sha512.h
+
+        ../../src/crypto/siphash.cpp
+        ../../src/crypto/siphash.h
+
         ../../src/index/base.cpp
         ../../src/index/base.h
         ../../src/index/txindex.cpp
@@ -333,15 +337,19 @@ add_executable(${PROJECT_NAME}
         ../../src/uint256.cpp
         ../../src/uint256.h
         ../../src/undo.h
-        ../../src/util.cpp
-        ../../src/util.h
-        ../../src/utilmemory.h
-        ../../src/utilmoneystr.cpp
-        ../../src/utilmoneystr.h
-        ../../src/utilstrencodings.cpp
-        ../../src/utilstrencodings.h
-        ../../src/utiltime.cpp
-        ../../src/utiltime.h
+
+        ../../src/util/bytevectorhash.cpp
+        ../../src/util/bytevectorhash.h
+
+        ../../src/util/system.cpp
+        ../../src/util/system.h
+        ../../src/util/memory.h
+        ../../src/util/moneystr.cpp
+        ../../src/util/moneystr.h
+        ../../src/util/strencodings.cpp
+        ../../src/util/strencodings.h
+        ../../src/util/time.cpp
+        ../../src/util/time.h
         ../../src/validation.cpp
         ../../src/validation.h
         ../../src/validationinterface.cpp
