@@ -364,8 +364,10 @@ add_executable(${PROJECT_NAME}
         ../../src/warnings.h)
 
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libunivalue ${CMAKE_CURRENT_BINARY_DIR}/libunivalue)
+
 target_link_libraries(${PROJECT_NAME}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/univalue/.libs/libunivalue.a
+        PRIVATE univalue
         ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libleveldb.a
         ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libleveldb_sse42.a
         ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libmemenv.a
