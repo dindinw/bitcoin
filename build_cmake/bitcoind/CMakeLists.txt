@@ -1,3 +1,31 @@
+# The default ./configure
+# Options used to compile and link:
+#  with wallet   = yes
+#  with gui / qt = yes
+#    with bip70  = yes
+#    with qr     = yes
+#  with zmq      = yes
+#  with test     = yes
+#  with bench    = yes
+#  with upnp     = yes
+#  use asm       = yes
+#  sanitizers    =
+#  debug enabled = no
+#  gprof enabled = no
+#  werror        = no
+#
+#  target os     = darwin
+#  build os      = darwin
+#
+#  CC            = gcc
+#  CFLAGS        = -g -O2
+#  CPPFLAGS      =   -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2  -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS -I/usr/local/opt/berkeley-db@4/include -DMAC_OSX
+#  CXX           = g++ -std=c++11
+#  CXXFLAGS      =   -Wstack-protector -fstack-protector-all  -Wall -Wextra -Wformat -Wvla -Wformat-security -Wthread-safety-analysis -Wrange-loop-analysis -Wredundant-decls  -Wno-unused-parameter -Wno-self-assign -Wno-unused-local-typedef -Wno-deprecated-register -Wno-implicit-fallthrough   -g -O2
+#  LDFLAGS       = -pthread    -Wl,-headerpad_max_install_names -Wl,-dead_strip
+#  ARFLAGS       = cr
+#
+
 cmake_minimum_required(VERSION 3.11)
 project(bitcoind)
 
