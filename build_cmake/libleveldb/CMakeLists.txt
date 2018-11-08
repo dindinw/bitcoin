@@ -145,6 +145,6 @@ list(APPEND libleveldb_sse42_SOURCES
         ../../src/leveldb/port/port_posix_sse.cc
     )
 
-add_library(libleveldb ${libleveldb_SOURCES})
-add_library(libmemenv ${libmemenv_SOURCES})
-add_library(leveldb_sse4 ${libleveldb_sse42_SOURCES})
+add_library(leveldb ${libleveldb_SOURCES})
+add_library(memenv ${libmemenv_SOURCES})
+add_library(leveldb_sse42 ${libleveldb_sse42_SOURCES})

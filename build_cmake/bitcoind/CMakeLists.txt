@@ -393,12 +393,13 @@ add_executable(${PROJECT_NAME}
 
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libunivalue ${CMAKE_CURRENT_BINARY_DIR}/libunivalue)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libleveldb  ${CMAKE_CURRENT_BINARY_DIR}/libleveldb)
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE univalue
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libleveldb.a
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libleveldb_sse42.a
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libmemenv.a
+        PRIVATE leveldb
+        PRIVATE leveldb_sse42
+        PRIVATE memenv
         ${CMAKE_CURRENT_SOURCE_DIR}/../../src/secp256k1/.libs/libsecp256k1.a
         crypto
         miniupnpc
