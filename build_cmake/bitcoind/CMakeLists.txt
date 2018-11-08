@@ -394,13 +394,15 @@ add_executable(${PROJECT_NAME}
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libunivalue ${CMAKE_CURRENT_BINARY_DIR}/libunivalue)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libleveldb  ${CMAKE_CURRENT_BINARY_DIR}/libleveldb)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../libsecp256k1  ${CMAKE_CURRENT_BINARY_DIR}/libsecp256k1)
+
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE univalue
         PRIVATE leveldb
         PRIVATE leveldb_sse42
         PRIVATE memenv
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/secp256k1/.libs/libsecp256k1.a
+        PRIVATE secp256k1
         crypto
         miniupnpc
         event

@@ -3,11 +3,6 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-# This project can use C11, but will gracefully decay down to C89.
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED OFF)
-set(CMAKE_C_EXTENSIONS OFF)
-
 # This project requires C++11.
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
