@@ -33,9 +33,9 @@ list(APPEND libbitcoin_consensus_SOURCES
         ../../src/version.h
         )
 
-add_library(libbitcoin_consensus STATIC ${libbitcoin_consensus_SOURCES})
-        target_compile_definitions(libbitcoin_consensus PRIVATE -DHAVE_CONFIG_H)
-        target_include_directories(libbitcoin_consensus PRIVATE ${BITCOIN_ROOT}
+add_library(bitcoin_consensus STATIC ${libbitcoin_consensus_SOURCES})
+target_compile_definitions(bitcoin_consensus PRIVATE -DHAVE_CONFIG_H)
+target_include_directories(bitcoin_consensus PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/secp256k1/include
 )

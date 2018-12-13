@@ -15,9 +15,9 @@ list(APPEND libbitcoin_wallet_SOURCES
         ../../src/wallet/coinselection.cpp
 )
 
-add_library(libbitcoin_wallet STATIC ${libbitcoin_wallet_SOURCES})
-        target_compile_definitions(libbitcoin_wallet PRIVATE -DHAVE_CONFIG_H)
-        target_include_directories(libbitcoin_wallet PRIVATE ${BITCOIN_ROOT}
+add_library(bitcoin_wallet STATIC ${libbitcoin_wallet_SOURCES})
+target_compile_definitions(bitcoin_wallet PRIVATE -DHAVE_CONFIG_H)
+target_include_directories(bitcoin_wallet PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include

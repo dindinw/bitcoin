@@ -8,9 +8,9 @@ list(APPEND libbitcoin_zmq_a_SOURCES
   ../../src/zmq/zmqpublishnotifier.cpp
   ../../src/zmq/zmqrpc.cpp)
 
-add_library(libbitcoin_zmq STATIC ${libbitcoin_zmq_a_SOURCES})
-target_compile_definitions(libbitcoin_zmq PRIVATE -DENABLE_ZMQ)
-target_include_directories(libbitcoin_zmq PRIVATE ${BITCOIN_ROOT}
+add_library(bitcoin_zmq STATIC ${libbitcoin_zmq_a_SOURCES})
+target_compile_definitions(bitcoin_zmq PRIVATE -DENABLE_ZMQ)
+target_include_directories(bitcoin_zmq PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/zmq
         ${BITCOIN_ROOT}/src/univalue

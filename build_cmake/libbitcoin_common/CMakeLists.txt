@@ -23,9 +23,9 @@ list(APPEND libbitcoin_common_SOURCES
         ../../src/warnings.cpp
 )
 
-add_library(libbitcoin_common STATIC ${libbitcoin_common_SOURCES})
-        target_compile_definitions(libbitcoin_common PRIVATE -DHAVE_CONFIG_H)
-        target_include_directories(libbitcoin_common PRIVATE ${BITCOIN_ROOT}
+add_library(bitcoin_common STATIC ${libbitcoin_common_SOURCES})
+target_compile_definitions(bitcoin_common PRIVATE -DHAVE_CONFIG_H)
+target_include_directories(bitcoin_common PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include

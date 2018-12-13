@@ -25,9 +25,9 @@ if (GLIBC_BACK_COMPAT)
                 .../../src/compat/glibc_compat.cpp)
 endif()
 
-add_library(libbitcoin_util STATIC ${libbitcoin_util_SOURCES})
-        target_compile_definitions(libbitcoin_util PRIVATE -DHAVE_CONFIG_H)
-        target_include_directories(libbitcoin_util PRIVATE ${BITCOIN_ROOT}
+add_library(bitcoin_util STATIC ${libbitcoin_util_SOURCES})
+target_compile_definitions(bitcoin_util PRIVATE -DHAVE_CONFIG_H)
+target_include_directories(bitcoin_util PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include
