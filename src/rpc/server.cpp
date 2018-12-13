@@ -8,11 +8,12 @@
 #include <fs.h>
 #include <key_io.h>
 #include <random.h>
+#include <rpc/util.h>
 #include <shutdown.h>
 #include <sync.h>
 #include <ui_interface.h>
-#include <util/system.h>
 #include <util/strencodings.h>
+#include <util/system.h>
 
 #include <boost/bind.hpp>
 #include <boost/signals2/signal.hpp>
@@ -141,10 +142,6 @@ std::vector<unsigned char> ParseHexO(const UniValue& o, std::string strKey)
     return ParseHexV(find_value(o, strKey), strKey);
 }
 
-/**
- * Note: This interface may still be subject to change.
- */
-
 std::string CRPCTable::help(const std::string& strCommand, const JSONRPCRequest& helpreq) const
 {
     std::string strRet;
@@ -203,10 +200,12 @@ UniValue help(const JSONRPCRequest& jsonRequest)
 {
     if (jsonRequest.fHelp || jsonRequest.params.size() > 1)
         throw std::runtime_error(
-            "help ( \"command\" )\n"
-            "\nList all commands, or get help for a specified command.\n"
-            "\nArguments:\n"
-            "1. \"command\"     (string, optional) The command to get help on\n"
+            RPCHelpMan{"help",
+                "\nList all commands, or get help for a specified command.\n",
+                {
+                    {"command", RPCArg::Type::STR, /* opt */ true, /* default_val */ "all commands", "The command to get help on"},
+                }}
+                .ToString() +
             "\nResult:\n"
             "\"text\"     (string) The help text\n"
         );
@@ -222,22 +221,30 @@ UniValue help(const JSONRPCRequest& jsonRequest)
 UniValue stop(const JSONRPCRequest& jsonRequest)
 {
     // Accept the deprecated and ignored 'detach' boolean argument
+    // Also accept the hidden 'wait' integer argument (milliseconds)
+    // For instance, 'stop 1000' makes the call wait 1 second before returning
+    // to the client (intended for testing)
     if (jsonRequest.fHelp || jsonRequest.params.size() > 1)
         throw std::runtime_error(
-            "stop\n"
-            "\nStop Bitcoin server.");
+            RPCHelpMan{"stop",
+                "\nStop Bitcoin server.", {}}
+                .ToString());
     // Event loop will exit after current HTTP requests have been handled, so
     // this reply will get back to the client.
     StartShutdown();
+    if (jsonRequest.params[0].isNum()) {
+        MilliSleep(jsonRequest.params[0].get_int());
+    }
     return "Bitcoin server stopping";
 }
 
 static UniValue uptime(const JSONRPCRequest& jsonRequest)
 {
-    if (jsonRequest.fHelp || jsonRequest.params.size() > 1)
+    if (jsonRequest.fHelp || jsonRequest.params.size() > 0)
         throw std::runtime_error(
-                "uptime\n"
-                        "\nReturns the total uptime of the server.\n"
+            RPCHelpMan{"uptime",
+                "\nReturns the total uptime of the server.\n", {}}
+                .ToString() +
                         "\nResult:\n"
                         "ttt        (numeric) The number of seconds that the server has been running\n"
                         "\nExamples:\n"
@@ -249,15 +256,12 @@ static UniValue uptime(const JSONRPCRequest& jsonRequest)
 }
 
 // clang-format off
-/**
- * Call Table
- */
 static const CRPCCommand vRPCCommands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
     /* Overall control/query calls */
     { "control",            "help",                   &help,                   {"command"}  },
-    { "control",            "stop",                   &stop,                   {}  },
+    { "control",            "stop",                   &stop,                   {"wait"}  },
     { "control",            "uptime",                 &uptime,                 {}  },
 };
 // clang-format on

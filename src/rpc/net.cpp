@@ -7,17 +7,18 @@
 #include <chainparams.h>
 #include <clientversion.h>
 #include <core_io.h>
-#include <validation.h>
 #include <net.h>
 #include <net_processing.h>
 #include <netbase.h>
 #include <policy/policy.h>
 #include <rpc/protocol.h>
+#include <rpc/util.h>
 #include <sync.h>
 #include <timedata.h>
 #include <ui_interface.h>
-#include <util/system.h>
 #include <util/strencodings.h>
+#include <util/system.h>
+#include <validation.h>
 #include <version.h>
 #include <warnings.h>
 
@@ -27,8 +28,9 @@ static UniValue getconnectioncount(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "getconnectioncount\n"
-            "\nReturns the number of connections to other nodes.\n"
+            RPCHelpMan{"getconnectioncount",
+                "\nReturns the number of connections to other nodes.\n", {}}
+                .ToString() +
             "\nResult:\n"
             "n          (numeric) The connection count\n"
             "\nExamples:\n"
@@ -46,10 +48,12 @@ static UniValue ping(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "ping\n"
-            "\nRequests that a ping be sent to all other nodes, to measure ping time.\n"
-            "Results provided in getpeerinfo, pingtime and pingwait fields are decimal seconds.\n"
-            "Ping command is handled in queue with all other commands, so it measures processing backlog, not just network ping.\n"
+            RPCHelpMan{"ping",
+                "\nRequests that a ping be sent to all other nodes, to measure ping time.\n"
+                "Results provided in getpeerinfo, pingtime and pingwait fields are decimal seconds.\n"
+                "Ping command is handled in queue with all other commands, so it measures processing backlog, not just network ping.\n",
+                {}}
+                .ToString() +
             "\nExamples:\n"
             + HelpExampleCli("ping", "")
             + HelpExampleRpc("ping", "")
@@ -69,8 +73,9 @@ static UniValue getpeerinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "getpeerinfo\n"
-            "\nReturns data about each connected network node as a json array of objects.\n"
+            RPCHelpMan{"getpeerinfo",
+                "\nReturns data about each connected network node as a json array of objects.\n", {}}
+                .ToString() +
             "\nResult:\n"
             "[\n"
             "  {\n"
@@ -200,14 +205,16 @@ static UniValue addnode(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 2 ||
         (strCommand != "onetry" && strCommand != "add" && strCommand != "remove"))
         throw std::runtime_error(
-            "addnode \"node\" \"add|remove|onetry\"\n"
-            "\nAttempts to add or remove a node from the addnode list.\n"
-            "Or try a connection to a node once.\n"
-            "Nodes added using addnode (or -connect) are protected from DoS disconnection and are not required to be\n"
-            "full nodes/support SegWit as other outbound peers are (though such peers will not be synced from).\n"
-            "\nArguments:\n"
-            "1. \"node\"     (string, required) The node (see getpeerinfo for nodes)\n"
-            "2. \"command\"  (string, required) 'add' to add a node to the list, 'remove' to remove a node from the list, 'onetry' to try a connection to the node once\n"
+            RPCHelpMan{"addnode",
+                "\nAttempts to add or remove a node from the addnode list.\n"
+                "Or try a connection to a node once.\n"
+                "Nodes added using addnode (or -connect) are protected from DoS disconnection and are not required to be\n"
+                "full nodes/support SegWit as other outbound peers are (though such peers will not be synced from).\n",
+                {
+                    {"node", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The node (see getpeerinfo for nodes)"},
+                    {"command", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "'add' to add a node to the list, 'remove' to remove a node from the list, 'onetry' to try a connection to the node once"},
+                }}
+                .ToString() +
             "\nExamples:\n"
             + HelpExampleCli("addnode", "\"192.168.0.6:8333\" \"onetry\"")
             + HelpExampleRpc("addnode", "\"192.168.0.6:8333\", \"onetry\"")
@@ -243,13 +250,15 @@ static UniValue disconnectnode(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0 || request.params.size() >= 3)
         throw std::runtime_error(
-            "disconnectnode \"[address]\" [nodeid]\n"
-            "\nImmediately disconnects from the specified peer node.\n"
-            "\nStrictly one out of 'address' and 'nodeid' can be provided to identify the node.\n"
-            "\nTo disconnect by nodeid, either set 'address' to the empty string, or call using the named 'nodeid' argument only.\n"
-            "\nArguments:\n"
-            "1. \"address\"     (string, optional) The IP address/port of the node\n"
-            "2. \"nodeid\"      (number, optional) The node ID (see getpeerinfo for node IDs)\n"
+            RPCHelpMan{"disconnectnode",
+                "\nImmediately disconnects from the specified peer node.\n"
+                "\nStrictly one out of 'address' and 'nodeid' can be provided to identify the node.\n"
+                "\nTo disconnect by nodeid, either set 'address' to the empty string, or call using the named 'nodeid' argument only.\n",
+                {
+                    {"address", RPCArg::Type::STR, /* opt */ true, /* default_val */ "fallback to nodeid", "The IP address/port of the node"},
+                    {"nodeid", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "fallback to address", "The node ID (see getpeerinfo for node IDs)"},
+                }}
+                .ToString() +
             "\nExamples:\n"
             + HelpExampleCli("disconnectnode", "\"192.168.0.6:8333\"")
             + HelpExampleCli("disconnectnode", "\"\" 1")
@@ -286,11 +295,13 @@ static UniValue getaddednodeinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw std::runtime_error(
-            "getaddednodeinfo ( \"node\" )\n"
-            "\nReturns information about the given added node, or all added nodes\n"
-            "(note that onetry addnodes are not listed here)\n"
-            "\nArguments:\n"
-            "1. \"node\"   (string, optional) If provided, return information about this specific node, otherwise all nodes are returned.\n"
+            RPCHelpMan{"getaddednodeinfo",
+                "\nReturns information about the given added node, or all added nodes\n"
+                "(note that onetry addnodes are not listed here)\n",
+                {
+                    {"node", RPCArg::Type::STR, /* opt */ true, /* default_val */ "all nodes", "If provided, return information about this specific node, otherwise all nodes are returned."},
+                }}
+                .ToString() +
             "\nResult:\n"
             "[\n"
             "  {\n"
@@ -353,9 +364,11 @@ static UniValue getnettotals(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 0)
         throw std::runtime_error(
-            "getnettotals\n"
-            "\nReturns information about network traffic, including bytes in, bytes out,\n"
-            "and current time.\n"
+            RPCHelpMan{"getnettotals",
+                "\nReturns information about network traffic, including bytes in, bytes out,\n"
+                "and current time.\n",
+                {}}
+                .ToString() +
             "\nResult:\n"
             "{\n"
             "  \"totalbytesrecv\": n,   (numeric) Total bytes received\n"
@@ -419,8 +432,9 @@ static UniValue getnetworkinfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "getnetworkinfo\n"
-            "Returns an object containing various state info regarding P2P networking.\n"
+            RPCHelpMan{"getnetworkinfo",
+                "Returns an object containing various state info regarding P2P networking.\n", {}}
+                .ToString() +
             "\nResult:\n"
             "{\n"
             "  \"version\": xxxxx,                      (numeric) the server version\n"
@@ -499,13 +513,15 @@ static UniValue setban(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() < 2 ||
         (strCommand != "add" && strCommand != "remove"))
         throw std::runtime_error(
-                            "setban \"subnet\" \"add|remove\" (bantime) (absolute)\n"
-                            "\nAttempts to add or remove an IP/Subnet from the banned list.\n"
-                            "\nArguments:\n"
-                            "1. \"subnet\"       (string, required) The IP/Subnet (see getpeerinfo for nodes IP) with an optional netmask (default is /32 = single IP)\n"
-                            "2. \"command\"      (string, required) 'add' to add an IP/Subnet to the list, 'remove' to remove an IP/Subnet from the list\n"
-                            "3. \"bantime\"      (numeric, optional) time in seconds how long (or until when if [absolute] is set) the IP is banned (0 or empty means using the default time of 24h which can also be overwritten by the -bantime startup argument)\n"
-                            "4. \"absolute\"     (boolean, optional) If set, the bantime must be an absolute timestamp in seconds since epoch (Jan 1 1970 GMT)\n"
+            RPCHelpMan{"setban",
+                "\nAttempts to add or remove an IP/Subnet from the banned list.\n",
+                {
+                    {"subnet", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "The IP/Subnet (see getpeerinfo for nodes IP) with an optional netmask (default is /32 = single IP)"},
+                    {"command", RPCArg::Type::STR, /* opt */ false, /* default_val */ "", "'add' to add an IP/Subnet to the list, 'remove' to remove an IP/Subnet from the list"},
+                    {"bantime", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "0", "time in seconds how long (or until when if [absolute] is set) the IP is banned (0 or empty means using the default time of 24h which can also be overwritten by the -bantime startup argument)"},
+                    {"absolute", RPCArg::Type::BOOL, /* opt */ true, /* default_val */ "false", "If set, the bantime must be an absolute timestamp in seconds since epoch (Jan 1 1970 GMT)"},
+                }}
+                .ToString() +
                             "\nExamples:\n"
                             + HelpExampleCli("setban", "\"192.168.0.6\" \"add\" 86400")
                             + HelpExampleCli("setban", "\"192.168.0.0/24\" \"add\"")
@@ -559,8 +575,9 @@ static UniValue listbanned(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-                            "listbanned\n"
-                            "\nList all banned IPs/Subnets.\n"
+            RPCHelpMan{"listbanned",
+                "\nList all banned IPs/Subnets.\n", {}}
+                .ToString() +
                             "\nExamples:\n"
                             + HelpExampleCli("listbanned", "")
                             + HelpExampleRpc("listbanned", "")
@@ -592,8 +609,9 @@ static UniValue clearbanned(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-                            "clearbanned\n"
-                            "\nClear all banned IPs.\n"
+            RPCHelpMan{"clearbanned",
+                "\nClear all banned IPs.\n", {}}
+                .ToString() +
                             "\nExamples:\n"
                             + HelpExampleCli("clearbanned", "")
                             + HelpExampleRpc("clearbanned", "")
@@ -610,10 +628,12 @@ static UniValue setnetworkactive(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1) {
         throw std::runtime_error(
-            "setnetworkactive true|false\n"
-            "\nDisable/enable all p2p network activity.\n"
-            "\nArguments:\n"
-            "1. \"state\"        (boolean, required) true to enable networking, false to disable\n"
+            RPCHelpMan{"setnetworkactive",
+                "\nDisable/enable all p2p network activity.\n",
+                {
+                    {"state", RPCArg::Type::BOOL, /* opt */ false, /* default_val */ "", "true to enable networking, false to disable"},
+                }}
+                .ToString()
         );
     }
 
@@ -630,11 +650,12 @@ static UniValue getnodeaddresses(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1) {
         throw std::runtime_error(
-            "getnodeaddresses ( count )\n"
-            "\nReturn known addresses which can potentially be used to find new nodes in the network\n"
-            "\nArguments:\n"
-            "1. \"count\"    (numeric, optional) How many addresses to return. Limited to the smaller of " + std::to_string(ADDRMAN_GETADDR_MAX) +
-                " or " + std::to_string(ADDRMAN_GETADDR_MAX_PCT) + "% of all known addresses. (default = 1)\n"
+            RPCHelpMan{"getnodeaddresses",
+                "\nReturn known addresses which can potentially be used to find new nodes in the network\n",
+                {
+                    {"count", RPCArg::Type::NUM, /* opt */ true, /* default_val */ "1", "How many addresses to return. Limited to the smaller of " + std::to_string(ADDRMAN_GETADDR_MAX) + " or " + std::to_string(ADDRMAN_GETADDR_MAX_PCT) + "% of all known addresses."},
+                }}
+                .ToString() +
             "\nResult:\n"
             "[\n"
             "  {\n"

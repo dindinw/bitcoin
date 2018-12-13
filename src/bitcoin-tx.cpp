@@ -255,7 +255,7 @@ static void MutateTxAddInput(CMutableTransaction& tx, const std::string& strInpu
         throw std::runtime_error("invalid TX input vout '" + strVout + "'");
 
     // extract the optional sequence number
-    uint32_t nSequenceIn=std::numeric_limits<unsigned int>::max();
+    uint32_t nSequenceIn = CTxIn::SEQUENCE_FINAL;
     if (vStrInputParts.size() > 2)
         nSequenceIn = std::stoul(vStrInputParts[2]);
 
@@ -819,10 +819,6 @@ static int CommandLineRawTx(int argc, char* argv[])
         }
 
         OutputTx(tx);
-    }
-
-    catch (const boost::thread_interrupted&) {
-        throw;
     }
     catch (const std::exception& e) {
         strPrint = std::string("error: ") + e.what();

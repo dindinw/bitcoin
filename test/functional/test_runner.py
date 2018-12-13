@@ -120,6 +120,7 @@ BASE_SCRIPTS = [
     'wallet_disableprivatekeys.py',
     'wallet_disableprivatekeys.py --usecli',
     'interface_http.py',
+    'interface_rpc.py',
     'rpc_psbt.py',
     'rpc_users.py',
     'feature_proxy.py',
@@ -152,9 +153,11 @@ BASE_SCRIPTS = [
     'wallet_importprunedfunds.py',
     'p2p_leak_tx.py',
     'rpc_signmessage.py',
+    'wallet_balance.py',
     'feature_nulldummy.py',
     'mempool_accept.py',
     'wallet_import_rescan.py',
+    'wallet_import_with_label.py',
     'rpc_bind.py --ipv4',
     'rpc_bind.py --ipv6',
     'rpc_bind.py --nonloopback',
@@ -183,6 +186,7 @@ BASE_SCRIPTS = [
     'feature_config_args.py',
     'rpc_help.py',
     'feature_help.py',
+    'feature_shutdown.py',
     # Don't append tests at the end to avoid merge conflicts
     # Put them in a random line within the section that fits their approximate run-time
 ]
@@ -270,7 +274,7 @@ def main():
     if tests:
         # Individual tests have been specified. Run specified tests that exist
         # in the ALL_SCRIPTS list. Accept the name with or without .py extension.
-        tests = [re.sub("\.py$", "", test) + ".py" for test in tests]
+        tests = [test + ".py" if ".py" not in test else test for test in tests]
         for test in tests:
             if test in ALL_SCRIPTS:
                 test_list.append(test)
@@ -365,7 +369,7 @@ def run_tests(*, test_list, src_dir, build_dir, tmpdir, jobs=1, enable_coverage=
         tmpdir=tmpdir,
         test_list=test_list,
         flags=flags,
-        timeout_duration=20 * 60 if runs_ci else float('inf'),  # in seconds
+        timeout_duration=40 * 60 if runs_ci else float('inf'),  # in seconds
     )
     start_time = time.time()
     test_results = []
@@ -635,7 +639,7 @@ class RPCCoverage():
         with open(coverage_ref_filename, 'r', encoding="utf8") as coverage_ref_file:
             all_cmds.update([line.strip() for line in coverage_ref_file.readlines()])
 
-        for root, dirs, files in os.walk(self.dir):
+        for root, _, files in os.walk(self.dir):
             for filename in files:
                 if filename.startswith(coverage_file_prefix):
                     coverage_filenames.add(os.path.join(root, filename))
