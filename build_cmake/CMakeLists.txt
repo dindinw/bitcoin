@@ -92,10 +92,10 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 
 # =======================
 # Build bitcoin librarys :
-#  - server (shared between bitcoind & boincoin-qt)
-#  - consensus (shared between all executables that validate any consensus rules.)
 #  - common (shared between bitcoind, and bitcoin-qt and non-server tools)
+#  - consensus (shared between all executables that validate any consensus rules.)
 #  - cli    (cli: shared between bitcoin-cli and bitcoin-qt)
+#  - server (shared between bitcoind & boincoin-qt)
 #  - util   (util: shared between all executables. This library *must* be included to make sure that the glibc
 #  - wallet (shared between bitcoind and bitcoin-qt, but only linked when wallet enabled)
 #  - crypto
@@ -104,12 +104,13 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 #  - zmq (if enable)
 #  - qt (LIBBITCOINQT)
 
-
-# LIBBITCOIN_SERVER=libbitcoin_server.a
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
-
 # LIBBITCOIN_COMMON=libbitcoin_common.a
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_common)
 # LIBBITCOIN_CONSENSUS=libbitcoin_consensus.a
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_consensus ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_consensus)
+# LIBBITCOIN_SERVER=libbitcoin_server.a
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
+
 # LIBBITCOIN_CLI=libbitcoin_cli.a
 # LIBBITCOIN_UTIL=libbitcoin_util.a
 # LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
