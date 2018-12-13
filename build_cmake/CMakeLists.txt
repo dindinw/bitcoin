@@ -106,7 +106,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 
 
 # LIBBITCOIN_SERVER=libbitcoin_server.a
-# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
 
 # LIBBITCOIN_COMMON=libbitcoin_common.a
 # LIBBITCOIN_CONSENSUS=libbitcoin_consensus.a

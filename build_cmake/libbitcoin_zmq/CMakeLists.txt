@@ -1,10 +1,12 @@
 find_package (ZMQ REQUIRED)
-
+if(ZMQ_FOUND)
+    message(STATUS "zmq found at ${ZMQ_INCLUDE_DIRS}")
+endif()
 list(APPEND libbitcoin_zmq_a_SOURCES
-  ${BITCOIN_ROOT}/src/zmq/zmqabstractnotifier.cpp
-  ${BITCOIN_ROOT}/src/zmq/zmqnotificationinterface.cpp
-  ${BITCOIN_ROOT}/src/zmq/zmqpublishnotifier.cpp
-  ${BITCOIN_ROOT}/src/zmq/zmqrpc.cpp)
+  ../../src/zmq/zmqabstractnotifier.cpp
+  ../../src/zmq/zmqnotificationinterface.cpp
+  ../../src/zmq/zmqpublishnotifier.cpp
+  ../../src/zmq/zmqrpc.cpp)
 
 add_library(libbitcoin_zmq STATIC ${libbitcoin_zmq_a_SOURCES})
 target_compile_definitions(libbitcoin_zmq PRIVATE -DENABLE_ZMQ)
