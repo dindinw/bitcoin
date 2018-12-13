@@ -114,8 +114,12 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server    ${CMAKE_CURREN
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_cli       ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_cli)
 # LIBBITCOIN_UTIL=libbitcoin_util.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_util      ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_util)
-
 # LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
+# LIBBITCOIN_CRYPTO_SSE41=crypto/libbitcoin_crypto_sse41.a
+# LIBBITCOIN_CRYPTO_AVX2=crypto/libbitcoin_crypto_avx2.a
+# LIBBITCOIN_CRYPTO_SHANI=crypto/libbitcoin_crypto_shani.a
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_crypto    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_crypto)
+
 # LIBBITCOIN_WALLET=libbitcoin_wallet.a
 # LIBBITCOINQT=qt/libbitcoinqt.a
 
