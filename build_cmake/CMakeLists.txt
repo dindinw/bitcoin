@@ -104,8 +104,21 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 #  - zmq (if enable)
 #  - qt (LIBBITCOINQT)
 
-# LIBBITCOIN_ZMQ=libbitcoin_zmq.a
-# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoinzmq  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoinzmq)
+
+# LIBBITCOIN_SERVER=libbitcoin_server.a
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
+
+# LIBBITCOIN_COMMON=libbitcoin_common.a
+# LIBBITCOIN_CONSENSUS=libbitcoin_consensus.a
+# LIBBITCOIN_CLI=libbitcoin_cli.a
+# LIBBITCOIN_UTIL=libbitcoin_util.a
+# LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
+# LIBBITCOINQT=qt/libbitcoinqt.a
+
+option(ZMQ "enable zmq" OFF)
+if (ZMQ)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_zmq)
+endif()
 
 
 #========================
