@@ -110,8 +110,9 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common    ${CMAKE_CURREN
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_consensus ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_consensus)
 # LIBBITCOIN_SERVER=libbitcoin_server.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
-
 # LIBBITCOIN_CLI=libbitcoin_cli.a
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_cli       ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_cli)
+
 # LIBBITCOIN_UTIL=libbitcoin_util.a
 # LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
 # LIBBITCOINQT=qt/libbitcoinqt.a
