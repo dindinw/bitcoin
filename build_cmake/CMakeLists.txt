@@ -10,14 +10,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 # The root dir
 set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-# ====================
+# ==============================
 # Check Requried Dependeces:
 #  - berkeley-db
 #  - Boost
 #  - OpenSSL
 #  - qt (if GUI)
-# ====================
-
+#
 
 # BDB berkeley-db 4
 MESSAGE(STATUS "try Found libdb libraries")
@@ -79,30 +78,31 @@ IF (Qt5Test_FOUND)
     include_directories(${Qt5Test_INCLUDE_DIRS})
 ENDIF(Qt5Test_FOUND)
 
-# ====================
-# build library
+# ===========================
+#  Build dependence library
 #  - leveldb
 #  - secp256k1
 #  - univalue
-# ====================
+#
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libleveldb   ${CMAKE_CURRENT_BINARY_DIR}/libleveldb)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libsecp256k1 ${CMAKE_CURRENT_BINARY_DIR}/libsecp256k1)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY_DIR}/libunivalue)
 
 
-# =======================
-# Build bitcoin librarys :
-#  - common (shared between bitcoind, and bitcoin-qt and non-server tools)
-#  - consensus (shared between all executables that validate any consensus rules.)
-#  - cli    (cli: shared between bitcoin-cli and bitcoin-qt)
-#  - server (shared between bitcoind & boincoin-qt)
-#  - util   (util: shared between all executables. This library *must* be included to make sure that the glibc
-#  - wallet (shared between bitcoind and bitcoin-qt, but only linked when wallet enabled)
+# ======================
+# Build bitcoin librarys
+#  - common    (shared between bitcoind, and bitcoin-qt and non-server tools)
+#  - consensus (shared between all executables that validate any consensus rules)
+#  - cli       (shared between bitcoin-cli and bitcoin-qt)
+#  - server    (shared between bitcoind & boincoin-qt)
+#  - util      (shared between all executables. This library *must* be included to make sure
+#               the glibc backward-compatibility objects and their sanity checks are linked.)
 #  - crypto
-#    - base   (crypto primitives library)
-#    - others (if enable : SSE41,AVX2,SHANI )
-#  - zmq (if enable)
-#  - qt (LIBBITCOINQT)
+#    - base    (crypto primitives library)
+#    - others  (if enable : SSE41,AVX2,SHANI)
+#  - wallet    (shared between bitcoind and bitcoin-qt, but only linked when wallet enabled)
+#  - zmq       (if enable)
+#  - qt        (if enable)
 
 # LIBBITCOIN_COMMON=libbitcoin_common.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_common)
@@ -121,11 +121,18 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_util      ${CMAKE_CURREN
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_crypto    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_crypto)
 
 # LIBBITCOIN_WALLET=libbitcoin_wallet.a
-# LIBBITCOINQT=qt/libbitcoinqt.a
+if(ENABLE_WALLET)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_wallet    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_wallet)
+endif()
 
 option(ZMQ "enable zmq" OFF)
 if (ZMQ)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_zmq)
+endif()
+
+# LIBBITCOINQT=qt/libbitcoinqt.a
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoinqt  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoinqt)
+if (ENABLE_QT)
 endif()
 
 

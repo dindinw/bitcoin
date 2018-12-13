@@ -46,6 +46,11 @@ list(APPEND libbitcoin_server_SOURCES
         ../../src/validationinterface.cpp
         ../../src/versionbits.cpp)
 
+if(NOT ENABLE_WALLET)
+        list(APPEND libbitcoin_server_SOURCES
+        ../../src/dummywallet.cpp)
+endif()
+
 add_library(libbitcoin_server STATIC ${libbitcoin_server_SOURCES})
         target_compile_definitions(libbitcoin_server PRIVATE -DHAVE_CONFIG_H)
         target_include_directories(libbitcoin_server PRIVATE ${BITCOIN_ROOT}
