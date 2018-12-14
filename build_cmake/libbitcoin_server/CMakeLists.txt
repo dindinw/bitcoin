@@ -45,7 +45,6 @@ list(APPEND libbitcoin_server_SOURCES
         ../../src/validation.cpp
         ../../src/validationinterface.cpp
         ../../src/versionbits.cpp
-        ${BITCOIN_CORE_H}
         )
 
 if(NOT ENABLE_WALLET)

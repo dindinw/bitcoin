@@ -1,6 +1,7 @@
 
 list(APPEND libbitcoin_wallet_SOURCES
         ../../src/interfaces/wallet.cpp
+        ../../src/interfaces/handler.cpp   # required for gcc link fail to resolve the wallet/server depends
         ../../src/wallet/coincontrol.cpp
         ../../src/wallet/crypter.cpp
         ../../src/wallet/db.cpp
@@ -13,7 +14,6 @@ list(APPEND libbitcoin_wallet_SOURCES
         ../../src/wallet/walletdb.cpp
         ../../src/wallet/walletutil.cpp
         ../../src/wallet/coinselection.cpp
-        ${BITCOIN_CORE_H}
 )
 
 add_library(bitcoin_wallet STATIC ${libbitcoin_wallet_SOURCES})

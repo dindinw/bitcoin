@@ -28,9 +28,7 @@
 
 add_executable(bitcoind ../../src/bitcoind.cpp )
 
-list(APPEND bitcoind_LIBRARIES
-        bitcoin_server
-)
+list(APPEND bitcoind_LIBRARIES bitcoin_server )
 
 if(ENABLE_WALLET)
     list(APPEND bitcoind_LIBRARIES bitcoin_wallet)
@@ -40,10 +38,10 @@ list(APPEND bitcoind_LIBRARIES
         bitcoin_common
         univalue
         bitcoin_util
-        bitcoin_zmq
         bitcoin_consensus
         bitcoin_crypto_base
 )
+
 if(ENABLE_SSE41)
     list(APPEND bitcoind_LIBRARIES bitcoin_crypto_sse41)
 endif()
@@ -58,7 +56,7 @@ endif()
 
 if(ENABLE_ZMQ)
     list(APPEND bitcoind_LIBRARIES
-        zmq bitcoin_zmq)
+        bitcoin_zmq zmq)
 endif()
 
 list(APPEND bitcoind_LIBRARIES
@@ -74,8 +72,6 @@ list(APPEND bitcoind_LIBRARIES
         event
         #zmq
 )
-
-
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
 
