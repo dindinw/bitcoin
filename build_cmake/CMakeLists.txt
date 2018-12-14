@@ -80,29 +80,31 @@ if ("${OPENSSL_ROOT_DIR}" STREQUAL "")
     endif()
 endif()
 
-# Qt5, the package_config way not work
-#FIND_PACKAGE( Qt5 REQUIRED)
-#IF (PKG_QT5_FOUND)
-#    MESSAGE(STATUS "Found qt5 ${PKG_QT5_VERSION}")
-#    MESSAGE(STATUS "add qt5 include dir ${PKG_QT5_INCLUDEDIR}")
-#    include_directories(${PKG_QT5_INCLUDEDIR})
-#ENDIF(PKG_QT5_FOUND)
+if(ENABLE_QT)
+    # Qt5, the package_config way not work
+    #FIND_PACKAGE( Qt5 REQUIRED)
+    #IF (PKG_QT5_FOUND)
+    #    MESSAGE(STATUS "Found qt5 ${PKG_QT5_VERSION}")
+    #    MESSAGE(STATUS "add qt5 include dir ${PKG_QT5_INCLUDEDIR}")
+    #    include_directories(${PKG_QT5_INCLUDEDIR})
+    #ENDIF(PKG_QT5_FOUND)
 
-# Qt5
-MESSAGE(STATUS "try Found qt5 libraries")
-list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt/")
+    # Qt5
+    MESSAGE(STATUS "try Found qt5 libraries")
+    list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt/")
 
-FIND_PACKAGE(Qt5Core CONFIG REQUIRED)
-IF (Qt5Core_FOUND)
-    MESSAGE(STATUS "add qt5 include dir ${Qt5Core_INCLUDE_DIRS}")
-    include_directories(${Qt5Core_INCLUDE_DIRS})
-ENDIF(Qt5Core_FOUND)
+    FIND_PACKAGE(Qt5Core CONFIG REQUIRED)
+    IF (Qt5Core_FOUND)
+        MESSAGE(STATUS "add qt5 include dir ${Qt5Core_INCLUDE_DIRS}")
+        include_directories(${Qt5Core_INCLUDE_DIRS})
+    ENDIF(Qt5Core_FOUND)
 
-FIND_PACKAGE(Qt5Test CONFIG REQUIRED)
-IF (Qt5Test_FOUND)
-    MESSAGE(STATUS "add qt5 include dir ${Qt5Test_INCLUDE_DIRS}")
-    include_directories(${Qt5Test_INCLUDE_DIRS})
-ENDIF(Qt5Test_FOUND)
+    FIND_PACKAGE(Qt5Test CONFIG REQUIRED)
+    IF (Qt5Test_FOUND)
+        MESSAGE(STATUS "add qt5 include dir ${Qt5Test_INCLUDE_DIRS}")
+        include_directories(${Qt5Test_INCLUDE_DIRS})
+    ENDIF(Qt5Test_FOUND)
+endif()
 
 # ===========================
 # Generate the config_h
