@@ -13,6 +13,7 @@ list(APPEND libbitcoin_wallet_SOURCES
         ../../src/wallet/walletdb.cpp
         ../../src/wallet/walletutil.cpp
         ../../src/wallet/coinselection.cpp
+        ${BITCOIN_CORE_H}
 )
 
 add_library(bitcoin_wallet STATIC ${libbitcoin_wallet_SOURCES})

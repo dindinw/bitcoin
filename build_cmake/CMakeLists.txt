@@ -152,6 +152,127 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 #  - zmq       (if enable)
 #  - qt        (if enable)
 
+list(APPEND BITCOIN_CORE_H
+        ${BITCOIN_ROOT}/src/addrdb.h
+        ${BITCOIN_ROOT}/src/addrman.h
+        ${BITCOIN_ROOT}/src/attributes.h
+        ${BITCOIN_ROOT}/src/base58.h
+        ${BITCOIN_ROOT}/src/bech32.h
+        ${BITCOIN_ROOT}/src/bloom.h
+        ${BITCOIN_ROOT}/src/blockencodings.h
+        ${BITCOIN_ROOT}/src/blockfilter.h
+        ${BITCOIN_ROOT}/src/chain.h
+        ${BITCOIN_ROOT}/src/chainparams.h
+        ${BITCOIN_ROOT}/src/chainparamsbase.h
+        ${BITCOIN_ROOT}/src/chainparamsseeds.h
+        ${BITCOIN_ROOT}/src/checkpoints.h
+        ${BITCOIN_ROOT}/src/checkqueue.h
+        ${BITCOIN_ROOT}/src/clientversion.h
+        ${BITCOIN_ROOT}/src/coins.h
+        ${BITCOIN_ROOT}/src/compat.h
+        ${BITCOIN_ROOT}/src/compat/byteswap.h
+        ${BITCOIN_ROOT}/src/compat/endian.h
+        ${BITCOIN_ROOT}/src/compat/sanity.h
+        ${BITCOIN_ROOT}/src/compressor.h
+        ${BITCOIN_ROOT}/src/consensus/consensus.h
+        ${BITCOIN_ROOT}/src/consensus/tx_verify.h
+        ${BITCOIN_ROOT}/src/core_io.h
+        ${BITCOIN_ROOT}/src/core_memusage.h
+        ${BITCOIN_ROOT}/src/cuckoocache.h
+        ${BITCOIN_ROOT}/src/fs.h
+        ${BITCOIN_ROOT}/src/httprpc.h
+        ${BITCOIN_ROOT}/src/httpserver.h
+        ${BITCOIN_ROOT}/src/index/base.h
+        ${BITCOIN_ROOT}/src/index/txindex.h
+        ${BITCOIN_ROOT}/src/indirectmap.h
+        ${BITCOIN_ROOT}/src/init.h
+        ${BITCOIN_ROOT}/src/interfaces/chain.h
+        ${BITCOIN_ROOT}/src/interfaces/handler.h
+        ${BITCOIN_ROOT}/src/interfaces/node.h
+        ${BITCOIN_ROOT}/src/interfaces/wallet.h
+        ${BITCOIN_ROOT}/src/key.h
+        ${BITCOIN_ROOT}/src/key_io.h
+        ${BITCOIN_ROOT}/src/keystore.h
+        ${BITCOIN_ROOT}/src/dbwrapper.h
+        ${BITCOIN_ROOT}/src/limitedmap.h
+        ${BITCOIN_ROOT}/src/logging.h
+        ${BITCOIN_ROOT}/src/memusage.h
+        ${BITCOIN_ROOT}/src/merkleblock.h
+        ${BITCOIN_ROOT}/src/miner.h
+        ${BITCOIN_ROOT}/src/net.h
+        ${BITCOIN_ROOT}/src/net_processing.h
+        ${BITCOIN_ROOT}/src/netaddress.h
+        ${BITCOIN_ROOT}/src/netbase.h
+        ${BITCOIN_ROOT}/src/netmessagemaker.h
+        ${BITCOIN_ROOT}/src/noui.h
+        ${BITCOIN_ROOT}/src/outputtype.h
+        ${BITCOIN_ROOT}/src/policy/feerate.h
+        ${BITCOIN_ROOT}/src/policy/fees.h
+        ${BITCOIN_ROOT}/src/policy/policy.h
+        ${BITCOIN_ROOT}/src/policy/rbf.h
+        ${BITCOIN_ROOT}/src/pow.h
+        ${BITCOIN_ROOT}/src/protocol.h
+        ${BITCOIN_ROOT}/src/random.h
+        ${BITCOIN_ROOT}/src/reverse_iterator.h
+        ${BITCOIN_ROOT}/src/reverselock.h
+        ${BITCOIN_ROOT}/src/rpc/blockchain.h
+        ${BITCOIN_ROOT}/src/rpc/client.h
+        ${BITCOIN_ROOT}/src/rpc/mining.h
+        ${BITCOIN_ROOT}/src/rpc/protocol.h
+        ${BITCOIN_ROOT}/src/rpc/server.h
+        ${BITCOIN_ROOT}/src/rpc/rawtransaction.h
+        ${BITCOIN_ROOT}/src/rpc/register.h
+        ${BITCOIN_ROOT}/src/rpc/util.h
+        ${BITCOIN_ROOT}/src/scheduler.h
+        ${BITCOIN_ROOT}/src/script/descriptor.h
+        ${BITCOIN_ROOT}/src/script/ismine.h
+        ${BITCOIN_ROOT}/src/script/sigcache.h
+        ${BITCOIN_ROOT}/src/script/sign.h
+        ${BITCOIN_ROOT}/src/script/standard.h
+        ${BITCOIN_ROOT}/src/shutdown.h
+        ${BITCOIN_ROOT}/src/streams.h
+        ${BITCOIN_ROOT}/src/support/allocators/secure.h
+        ${BITCOIN_ROOT}/src/support/allocators/zeroafterfree.h
+        ${BITCOIN_ROOT}/src/support/cleanse.h
+        ${BITCOIN_ROOT}/src/support/events.h
+        ${BITCOIN_ROOT}/src/support/lockedpool.h
+        ${BITCOIN_ROOT}/src/sync.h
+        ${BITCOIN_ROOT}/src/threadsafety.h
+        ${BITCOIN_ROOT}/src/threadinterrupt.h
+        ${BITCOIN_ROOT}/src/timedata.h
+        ${BITCOIN_ROOT}/src/torcontrol.h
+        ${BITCOIN_ROOT}/src/txdb.h
+        ${BITCOIN_ROOT}/src/txmempool.h
+        ${BITCOIN_ROOT}/src/ui_interface.h
+        ${BITCOIN_ROOT}/src/undo.h
+        ${BITCOIN_ROOT}/src/util/bytevectorhash.h
+        ${BITCOIN_ROOT}/src/util/system.h
+        ${BITCOIN_ROOT}/src/util/memory.h
+        ${BITCOIN_ROOT}/src/util/moneystr.h
+        ${BITCOIN_ROOT}/src/util/time.h
+        ${BITCOIN_ROOT}/src/validation.h
+        ${BITCOIN_ROOT}/src/validationinterface.h
+        ${BITCOIN_ROOT}/src/versionbits.h
+        ${BITCOIN_ROOT}/src/versionbitsinfo.h
+        ${BITCOIN_ROOT}/src/walletinitinterface.h
+        ${BITCOIN_ROOT}/src/wallet/coincontrol.h
+        ${BITCOIN_ROOT}/src/wallet/crypter.h
+        ${BITCOIN_ROOT}/src/wallet/db.h
+        ${BITCOIN_ROOT}/src/wallet/feebumper.h
+        ${BITCOIN_ROOT}/src/wallet/fees.h
+        ${BITCOIN_ROOT}/src/wallet/rpcwallet.h
+        ${BITCOIN_ROOT}/src/wallet/wallet.h
+        ${BITCOIN_ROOT}/src/wallet/walletdb.h
+        ${BITCOIN_ROOT}/src/wallet/walletutil.h
+        ${BITCOIN_ROOT}/src/wallet/coinselection.h
+        ${BITCOIN_ROOT}/src/warnings.h
+        ${BITCOIN_ROOT}/src/zmq/zmqabstractnotifier.h
+        ${BITCOIN_ROOT}/src/zmq/zmqconfig.h
+        ${BITCOIN_ROOT}/src/zmq/zmqnotificationinterface.h
+        ${BITCOIN_ROOT}/src/zmq/zmqpublishnotifier.h
+        ${BITCOIN_ROOT}/src/zmq/zmqrpc.h
+)
+
 # LIBBITCOIN_COMMON=libbitcoin_common.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_common)
 
@@ -204,6 +325,9 @@ endif()
 #     - $(LIBUNIVALUE) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBSECP256K1)
 #
 
+
+
+
 # bitcoind
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoind  ${CMAKE_CURRENT_BINARY_DIR}/bitcoind)
 
@@ -236,4 +360,5 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoind  ${CMAKE_CURRENT_BINARY_DI
 
 #========================
 # Build bitcion-qt TEST :
+
 
