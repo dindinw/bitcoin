@@ -28,26 +28,34 @@
 
 add_executable(bitcoind ../../src/bitcoind.cpp)
 
-target_link_libraries(bitcoind
-        PRIVATE univalue
-        PRIVATE leveldb
-        PRIVATE leveldb_sse42
-        PRIVATE memenv
-        PRIVATE secp256k1
+list(APPEND bitcoind_LIBRARIES
         crypto
         miniupnpc
         event
         event_pthreads
         ${Boost_LIBRARIES}
-        zmq
         ${LIBDB_CXX_LIBRARIES}
+        univalue
+        leveldb
+        leveldb_sse42
+        memenv
+        secp256k1
         bitcoin_server bitcoin_cli bitcoin_common bitcoin_util bitcoin_consensus
-        bitcoin_zmq
-        bitcoin_crypto_base bitcoin_crypto_sse41 bitcoin_crypto_avx2 bitcoin_crypto_shani
-        )
+        bitcoin_crypto_base bitcoin_crypto_sse41 bitcoin_crypto_avx2 bitcoin_crypto_shani)
+if(ENABLE_ZMQ)
+    list(APPEND bitcoind_LIBRARIES
+        zmq bitcoin_zmq)
+endif()
+
+if(ENABLE_WALLET)
+    list(APPEND bitcoind_LIBRARIES
+        bitcoin_wallet
+    )
+endif()
+
+target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
 
 target_compile_definitions(bitcoind PRIVATE -DHAVE_CONFIG_H)
-#target_compile_definitions(bitcoind PRIVATE -DBUILD_BITCOIN_INTERNAL)  # required from SHA256AutoDetect() sha256.cpp
 target_include_directories(bitcoind PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue

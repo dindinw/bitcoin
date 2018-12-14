@@ -10,6 +10,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 # The root dir
 set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
+# All Options
+option(ENABLE_WALLET "enable wallet" ON)
+option(ENABLE_ZMQ "enable zmq" OFF)
+
 # ==============================
 # Check Requried Dependeces:
 #  - berkeley-db
@@ -125,8 +129,7 @@ if(ENABLE_WALLET)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_wallet    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_wallet)
 endif()
 
-option(ZMQ "enable zmq" OFF)
-if (ZMQ)
+if (ENABLE_ZMQ)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_zmq)
 endif()
 
