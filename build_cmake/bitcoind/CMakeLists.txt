@@ -40,17 +40,28 @@ list(APPEND bitcoind_LIBRARIES
         leveldb_sse42
         memenv
         secp256k1
-        bitcoin_server bitcoin_cli bitcoin_common bitcoin_util bitcoin_consensus
-        bitcoin_crypto_base bitcoin_crypto_sse41 bitcoin_crypto_avx2 bitcoin_crypto_shani)
+        bitcoin_server bitcoin_common bitcoin_util bitcoin_consensus
+        bitcoin_crypto_base)
+
 if(ENABLE_ZMQ)
     list(APPEND bitcoind_LIBRARIES
         zmq bitcoin_zmq)
 endif()
 
 if(ENABLE_WALLET)
-    list(APPEND bitcoind_LIBRARIES
-        bitcoin_wallet
-    )
+    list(APPEND bitcoind_LIBRARIES bitcoin_wallet)
+endif()
+
+if(ENABLE_SSE41)
+    list(APPEND bitcoind_LIBRARIES bitcoin_crypto_sse41)
+endif()
+
+if(ENABLE_AVX2)
+    list(APPEND bitcoind_LIBRARIES bitcoin_crypto_avx2)
+endif()
+
+if(ENABLE_SHANI)
+    list(APPEND bitcoind_LIBRARIES bitcoin_crypto_shani)
 endif()
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})

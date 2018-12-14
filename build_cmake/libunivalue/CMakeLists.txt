@@ -38,8 +38,6 @@ endif()
 
 include_directories(../../src/univalue/include)
 
-# Use -DBUILD_SHARED_LIBS=ON to generate SHARED library
-
 add_library(univalue
         ../../src/univalue/lib/univalue_get.cpp
         ../../src/univalue/lib/univalue_read.cpp

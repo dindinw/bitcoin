@@ -1,8 +1,29 @@
+#
+#  Copyright (c) 2018 Alex Wu
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+#
+#  The above copyright notice and this permission notice shall be included in
+#  all copies or substantial portions of the Software.
+#
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#  THE SOFTWARE.
+#
 cmake_minimum_required(VERSION 3.5)
 
 project(bitcoin)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 # The cmake helper modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
@@ -10,9 +31,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 # The root dir
 set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
+# ==============================
 # All Options
 option(ENABLE_WALLET "enable wallet" ON)
-option(ENABLE_ZMQ "enable zmq" OFF)
+option(ENABLE_ZMQ    "enable zmq"    OFF)
 
 # ==============================
 # Check Requried Dependeces:
@@ -83,6 +105,24 @@ IF (Qt5Test_FOUND)
 ENDIF(Qt5Test_FOUND)
 
 # ===========================
+# Generate the config_h
+# from ../configure.ac
+
+set(CLIENT_VERSION_MAJOR 0)
+set(CLIENT_VERSION_MINOR 17)
+set(CLIENT_VERSION_REVISION 99)
+set(CLIENT_VERSION_BUILD 0)
+set(CLIENT_VERSION_RC 0)                            # rev version (https://github.com/bitcoin/bitcoin/pull/14612)
+set(CLIENT_VERSION_IS_RELEASE false)                # true for release (../doc/release-process.md)
+set(COPYRIGHT_YEAR 2018)
+set(COPYRIGHT_HOLDERS "The %s developers")
+set(COPYRIGHT_HOLDERS_SUBSTITUTION "Bitcoin Core")
+string(REPLACE "%s" ${COPYRIGHT_HOLDERS_SUBSTITUTION} COPYRIGHT_HOLDERS_FINAL ${COPYRIGHT_HOLDERS})
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.h.in ${CMAKE_CURRENT_BINARY_DIR}/bitcion-config.h)
+
+
+# ===========================
 #  Build dependence library
 #  - leveldb
 #  - secp256k1
@@ -110,34 +150,37 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 
 # LIBBITCOIN_COMMON=libbitcoin_common.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_common)
+
 # LIBBITCOIN_CONSENSUS=libbitcoin_consensus.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_consensus ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_consensus)
+
 # LIBBITCOIN_SERVER=libbitcoin_server.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
+
 # LIBBITCOIN_CLI=libbitcoin_cli.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_cli       ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_cli)
+
 # LIBBITCOIN_UTIL=libbitcoin_util.a
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_util      ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_util)
+
 # LIBBITCOIN_CRYPTO_BASE=crypto/libbitcoin_crypto_base.a
 # LIBBITCOIN_CRYPTO_SSE41=crypto/libbitcoin_crypto_sse41.a
 # LIBBITCOIN_CRYPTO_AVX2=crypto/libbitcoin_crypto_avx2.a
 # LIBBITCOIN_CRYPTO_SHANI=crypto/libbitcoin_crypto_shani.a
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_crypto    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_crypto)
-
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_crypto     ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_crypto)
 # LIBBITCOIN_WALLET=libbitcoin_wallet.a
 if(ENABLE_WALLET)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_wallet    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_wallet)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_wallet ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_wallet)
 endif()
-
+# LIBBITCOIN_ZMQ=libbitcoin_zmq.a
 if (ENABLE_ZMQ)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_zmq)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_zmq)
 endif()
 
 # LIBBITCOINQT=qt/libbitcoinqt.a
 # add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoinqt  ${CMAKE_CURRENT_BINARY_DIR}/libbitcoinqt)
 # if (ENABLE_QT)
 # endif()
-
 
 #========================
 # Build Executable :
@@ -159,6 +202,11 @@ endif()
 
 # bitcoind
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoind  ${CMAKE_CURRENT_BINARY_DIR}/bitcoind)
+
+# bitcion-cli
+
+# bitcion-tx
+
 
 
 #========================
