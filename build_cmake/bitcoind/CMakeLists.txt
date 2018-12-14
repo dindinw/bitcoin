@@ -26,32 +26,24 @@
 #  ARFLAGS       = cr
 #
 
-add_executable(bitcoind ../../src/bitcoind.cpp)
+add_executable(bitcoind ../../src/bitcoind.cpp )
 
 list(APPEND bitcoind_LIBRARIES
-        crypto
-        miniupnpc
-        event
-        event_pthreads
-        ${Boost_LIBRARIES}
-        ${LIBDB_CXX_LIBRARIES}
-        univalue
-        leveldb
-        leveldb_sse42
-        memenv
-        secp256k1
-        bitcoin_server bitcoin_common bitcoin_util bitcoin_consensus
-        bitcoin_crypto_base)
-
-if(ENABLE_ZMQ)
-    list(APPEND bitcoind_LIBRARIES
-        zmq bitcoin_zmq)
-endif()
+        bitcoin_server
+)
 
 if(ENABLE_WALLET)
     list(APPEND bitcoind_LIBRARIES bitcoin_wallet)
 endif()
 
+list(APPEND bitcoind_LIBRARIES
+        bitcoin_common
+        univalue
+        bitcoin_util
+        bitcoin_zmq
+        bitcoin_consensus
+        bitcoin_crypto_base
+)
 if(ENABLE_SSE41)
     list(APPEND bitcoind_LIBRARIES bitcoin_crypto_sse41)
 endif()
@@ -63,6 +55,27 @@ endif()
 if(ENABLE_SHANI)
     list(APPEND bitcoind_LIBRARIES bitcoin_crypto_shani)
 endif()
+
+if(ENABLE_ZMQ)
+    list(APPEND bitcoind_LIBRARIES
+        zmq bitcoin_zmq)
+endif()
+
+list(APPEND bitcoind_LIBRARIES
+        leveldb
+        leveldb_sse42
+        memenv
+        secp256k1
+        ${Boost_LIBRARIES}
+        ${LIBDB_CXX_LIBRARIES}
+        crypto
+        #miniupnpc
+        event_pthreads
+        event
+        #zmq
+)
+
+
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
 

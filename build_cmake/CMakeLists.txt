@@ -38,10 +38,12 @@ option(ENABLE_ZMQ    "enable zmq"    OFF)
 
 # ==============================
 # Check Requried Dependeces:
-#  - berkeley-db
-#  - Boost
-#  - OpenSSL
-#  - qt (if GUI)
+#  - berkeley-db (required)
+#  - Boost       (required)
+#  - OpenSSL     (required)
+#  - libevent    (required)
+#  - miniupnpc   (if enable, should auto-checked)
+#  - qt          (if enable)
 #
 
 # BDB berkeley-db 4
