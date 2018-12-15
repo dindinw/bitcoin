@@ -85,17 +85,17 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libunivalue  ${CMAKE_CURRENT_BINARY
 #  - zmq       (if enable)
 #  - qt        (if enable)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_common)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_consensus ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_consensus)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_server)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_cli       ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_cli)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_util      ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_util)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_crypto    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_crypto)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_common)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_consensus)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_server)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_cli)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_util)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_crypto)
 if (ENABLE_WALLET)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_wallet ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_wallet)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_wallet)
 endif()
 if (ENABLE_ZMQ)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq    ${CMAKE_CURRENT_BINARY_DIR}/libbitcoin_zmq)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libbitcoin_zmq)
 endif()
 
 # LIBBITCOINQT=qt/libbitcoinqt.a
@@ -129,6 +129,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-tx)
 #     - $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_CRYPTO_SSE41)
 #     - $(LIBBITCOIN_CRYPTO_AVX2) $(LIBBITCOIN_CRYPTO_SHANI) $(LIBSECP256K1)
 #     - $(BOOST_LIBS) $(CRYPTO_LIBS)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin)
 
 #========================
 # BENCHMARKS :

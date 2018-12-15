@@ -1,101 +1,28 @@
-cmake_minimum_required(VERSION 3.11)
-project(test_bitcoin)
 
-set(CMAKE_CXX_STANDARD 14)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../CMakeModules")
-
-# open-ssl
-MESSAGE(STATUS "try Found open-ssl libraries")
-# add defaults for openssl
-if ("${OPENSSL_ROOT_DIR}" STREQUAL "")
-    if (NOT "$ENV{OPENSSL_ROOT_DIR}" STREQUAL "")
-        set(OPENSSL_ROOT_DIR $ENV{OPENSSL_ROOT_DIR})
-        set(OPENSSL_INCLUDE_DIR ${OPENSSL_ROOT_DIR}/include)
-    elseif (APPLE)
-        set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl")
-        set(OPENSSL_INCLUDE_DIR "/usr/local/opt/openssl/include")
-        MESSAGE(STATUS "Found open-ssl libraries ${OPENSSL_ROOT_DIR}")
-        include_directories(${OPENSSL_INCLUDE_DIR})
-    elseif(UNIX AND NOT APPLE)
-        set(OPENSSL_ROOT_DIR "/usr/include/openssl")
-        set(OPENSSL_INCLUDE_DIR "/usr/include/openssl/include")
-    else()
-        message(FATAL_ERROR "openssl not found and don't know where to look, please specify OPENSSL_ROOT_DIR")
-    endif()
-endif()
-
-# Boost
-MESSAGE(STATUS "try Found boost libraries")
-FIND_PACKAGE(Boost REQUIRED COMPONENTS
-        thread
-        filesystem
-        unit_test_framework)
+list (APPEND JSON_TEST_FILES
+        ../../src/test/data/script_tests.json
+        ../../src/test/data/base58_encode_decode.json
+        ../../src/test/data/blockfilters.json
+        ../../src/test/data/key_io_valid.json
+        ../../src/test/data/key_io_invalid.json
+        ../../src/test/data/script_tests.json
+        ../../src/test/data/sighash.json
+        ../../src/test/data/tx_invalid.json
+        ../../src/test/data/tx_valid.json
+)
 
 
-# HAVE_CONFIG_H
-add_definitions(-DHAVE_CONFIG_H)
-add_definitions(-DBUILD_BITCOIN_INTERNAL)
+list (APPEND BITCOIN_TEST_SUITE
+        ../../src/test/test_bitcoin_main.cpp
+        ../../src/test/test_bitcoin.h
+        ../../src/test/test_bitcoin.cpp)
 
-add_definitions(-DBOOST_TEST_DYN_LINK)
-
-
-include_directories(../../src)
-
-include_directories(../../src/compat)
-include_directories(../../src/config)
-include_directories(../../src/consensus)
-include_directories(../../src/crypto)
-include_directories(../../src/crypto/ctaes)
-include_directories(../../src/index)
-include_directories(../../src/interfaces)
-
-# levedb, should be a libary
-include_directories(../../src/leveldb/include)
-include_directories(../../src/leveldb/include/leveldb)
-include_directories(../../src/leveldb/helpers/memenv)
-
-include_directories(../../src/obj)
-include_directories(../../src/policy)
-include_directories(../../src/primitives)
-
-include_directories(../../src/rpc)
-include_directories(../../src/script)
-include_directories(../../src/secp256k1/contrib)
-include_directories(../../src/secp256k1/include)
-include_directories(../../src/secp256k1/src/modules)
-include_directories(../../src/secp256k1/src/modules/ecdh)
-include_directories(../../src/secp256k1/src/modules/recovery)
-
-include_directories(../../src/support)
-include_directories(../../src/support/allocators)
-
-include_directories(../../src/test)
-include_directories(../../src/test/data)
-include_directories(../../src/test/gen)
-
-include_directories(../../src/univalue)
-include_directories(../../src/univalue/include)
-include_directories(../../src/univalue/lib)
-
-include_directories(../../src/wallet)
-include_directories(../../src/wallet/test)
-
-include_directories(../../src/zmq)
-
-add_executable(${PROJECT_NAME}
-        ../../src/test/data/base58_encode_decode.json.h
-        ../../src/test/data/blockfilters.json.h
-        ../../src/test/data/key_io_invalid.json.h
-        ../../src/test/data/key_io_valid.json.h
-        ../../src/test/data/script_tests.json.h
-        ../../src/test/data/sighash.json.h
-        ../../src/test/data/tx_invalid.json.h
-        ../../src/test/data/tx_valid.json.h
-        ../../src/test/addrman_tests.cpp
-        ../../src/test/allocator_tests.cpp
-        ../../src/test/amount_tests.cpp
+list (APPEND BITCOIN_TESTS
         ../../src/test/arith_uint256_tests.cpp
+        ../../src/test/scriptnum10.h
+        ../../src/test/addrman_tests.cpp
+        ../../src/test/amount_tests.cpp
+        ../../src/test/allocator_tests.cpp
         ../../src/test/base32_tests.cpp
         ../../src/test/base58_tests.cpp
         ../../src/test/base64_tests.cpp
@@ -111,7 +38,6 @@ add_executable(${PROJECT_NAME}
         ../../src/test/compress_tests.cpp
         ../../src/test/crypto_tests.cpp
         ../../src/test/cuckoocache_tests.cpp
-        ../../src/test/dbwrapper_tests.cpp
         ../../src/test/denialofservice_tests.cpp
         ../../src/test/descriptor_tests.cpp
         ../../src/test/fs_tests.cpp
@@ -120,6 +46,7 @@ add_executable(${PROJECT_NAME}
         ../../src/test/key_io_tests.cpp
         ../../src/test/key_tests.cpp
         ../../src/test/limitedmap_tests.cpp
+        ../../src/test/dbwrapper_tests.cpp
         ../../src/test/main_tests.cpp
         ../../src/test/mempool_tests.cpp
         ../../src/test/merkle_tests.cpp
@@ -139,9 +66,8 @@ add_executable(${PROJECT_NAME}
         ../../src/test/sanity_tests.cpp
         ../../src/test/scheduler_tests.cpp
         ../../src/test/script_p2sh_tests.cpp
-        ../../src/test/script_standard_tests.cpp
         ../../src/test/script_tests.cpp
-        ../../src/test/scriptnum10.h
+        ../../src/test/script_standard_tests.cpp
         ../../src/test/scriptnum_tests.cpp
         ../../src/test/serialize_tests.cpp
         ../../src/test/sighash_tests.cpp
@@ -149,10 +75,6 @@ add_executable(${PROJECT_NAME}
         ../../src/test/skiplist_tests.cpp
         ../../src/test/streams_tests.cpp
         ../../src/test/sync_tests.cpp
-        ../../src/test/test_bitcoin.cpp
-        ../../src/test/test_bitcoin.h
-        # ../../src/test/test_bitcoin_fuzzy.cpp
-        ../../src/test/test_bitcoin_main.cpp
         ../../src/test/timedata_tests.cpp
         ../../src/test/torcontrol_tests.cpp
         ../../src/test/transaction_tests.cpp
@@ -162,257 +84,112 @@ add_executable(${PROJECT_NAME}
         ../../src/test/uint256_tests.cpp
         ../../src/test/util_tests.cpp
         ../../src/test/validation_block_tests.cpp
-        ../../src/addrdb.cpp
-        ../../src/addrdb.h
-        ../../src/addrman.cpp
-        ../../src/addrman.h
-        ../../src/amount.h
-        ../../src/arith_uint256.cpp
-        ../../src/arith_uint256.h
-        ../../src/base58.cpp
-        ../../src/base58.h
-        ../../src/bech32.cpp
-        ../../src/bech32.h
-        ../../src/blockencodings.cpp
-        ../../src/blockencodings.h
-        ../../src/blockfilter.cpp
-        ../../src/blockfilter.h
-        ../../src/bloom.cpp
-        ../../src/bloom.h
-        ../../src/chain.cpp
-        ../../src/chain.h
-        ../../src/chainparams.cpp
-        ../../src/chainparams.h
-        ../../src/chainparamsbase.cpp
-        ../../src/chainparamsbase.h
-        ../../src/chainparamsseeds.h
-        ../../src/checkpoints.cpp
-        ../../src/checkpoints.h
-        ../../src/checkqueue.h
-        ../../src/clientversion.cpp
-        ../../src/clientversion.h
-        ../../src/coins.cpp
-        ../../src/coins.h
-        ../../src/compat.h
-        ../../src/compressor.cpp
-        ../../src/compressor.h
-        ../../src/core_io.h
-        ../../src/core_memusage.h
-        ../../src/core_read.cpp
-        ../../src/core_write.cpp
-        ../../src/cuckoocache.h
-        ../../src/dbwrapper.cpp
-        ../../src/dbwrapper.h
-        ../../src/dummywallet.cpp
-        ../../src/fs.cpp
-        ../../src/fs.h
-        ../../src/hash.cpp
-        ../../src/hash.h
-        ../../src/httprpc.cpp
-        ../../src/httprpc.h
-        ../../src/httpserver.cpp
-        ../../src/httpserver.h
-        ../../src/indirectmap.h
-        ../../src/key.cpp
-        ../../src/key.h
-        ../../src/key_io.cpp
-        ../../src/key_io.h
-        ../../src/keystore.cpp
-        ../../src/keystore.h
-        ../../src/limitedmap.h
-        ../../src/logging.cpp
-        ../../src/logging.h
-        ../../src/memusage.h
-        ../../src/merkleblock.cpp
-        ../../src/merkleblock.h
-        ../../src/miner.cpp
-        ../../src/miner.h
-        ../../src/net.cpp
-        ../../src/net.h
-        ../../src/net_processing.cpp
-        ../../src/net_processing.h
-        ../../src/netaddress.cpp
-        ../../src/netaddress.h
-        ../../src/netbase.cpp
-        ../../src/netbase.h
-        ../../src/netmessagemaker.h
-        ../../src/noui.cpp
-        ../../src/noui.h
-        ../../src/outputtype.cpp
-        ../../src/outputtype.h
-        ../../src/compat/sanity.h
-        ../../src/compat/glibc_sanity.cpp
-        ../../src/compat/glibcxx_sanity.cpp
-        #../../src/crypto/ctaes/ctaes.c
-        #../../src/crypto/ctaes/ctaes.h
-        ../../src/crypto/aes.cpp
-        ../../src/crypto/aes.h
-        ../../src/crypto/chacha20.cpp
-        ../../src/crypto/chacha20.h
-        ../../src/crypto/common.h
-        ../../src/crypto/hmac_sha256.cpp
-        ../../src/crypto/hmac_sha256.h
-        ../../src/crypto/hmac_sha512.cpp
-        ../../src/crypto/hmac_sha512.h
-        ../../src/crypto/ripemd160.cpp
-        ../../src/crypto/ripemd160.h
-        ../../src/crypto/sha1.cpp
-        ../../src/crypto/sha1.h
-        ../../src/crypto/sha256.cpp
-        ../../src/crypto/sha256.h
-        #../../src/crypto/sha256_avx2.cpp
-        ../../src/crypto/sha256_shani.cpp
-        ../../src/crypto/sha256_sse4.cpp
-        #../../src/crypto/sha256_sse41.cpp
-        ../../src/crypto/sha512.cpp
-        ../../src/crypto/sha512.h
-        ../../src/index/base.cpp
-        ../../src/index/base.h
-        ../../src/index/txindex.cpp
-        ../../src/index/txindex.h
-        ../../src/script/bitcoinconsensus.cpp
-        ../../src/script/bitcoinconsensus.h
-        ../../src/script/descriptor.cpp
-        ../../src/script/descriptor.h
-        ../../src/script/interpreter.cpp
-        ../../src/script/interpreter.h
-        ../../src/script/ismine.cpp
-        ../../src/script/ismine.h
-        ../../src/script/script.cpp
-        ../../src/script/script.h
-        ../../src/script/script_error.cpp
-        ../../src/script/script_error.h
-        ../../src/script/sigcache.cpp
-        ../../src/script/sigcache.h
-        ../../src/script/sign.cpp
-        ../../src/script/sign.h
-        ../../src/script/standard.cpp
-        ../../src/script/standard.h
-        ../../src/pow.cpp
-        ../../src/pow.h
-        ../../src/prevector.h
-        ../../src/protocol.cpp
-        ../../src/protocol.h
-        ../../src/pubkey.cpp
-        ../../src/pubkey.h
-        ../../src/random.cpp
-        ../../src/random.h
-        ../../src/rest.cpp
-        ../../src/rpc/blockchain.cpp
-        ../../src/rpc/blockchain.h
-        ../../src/rpc/client.cpp
-        ../../src/rpc/client.h
-        ../../src/rpc/mining.cpp
-        ../../src/rpc/mining.h
-        ../../src/rpc/misc.cpp
-        ../../src/rpc/net.cpp
-        ../../src/rpc/protocol.cpp
-        ../../src/rpc/protocol.h
-        ../../src/rpc/rawtransaction.cpp
-        ../../src/rpc/rawtransaction.h
-        ../../src/rpc/register.h
-        ../../src/rpc/server.cpp
-        ../../src/rpc/server.h
-        ../../src/rpc/util.cpp
-        ../../src/rpc/util.h
+        ../../src/test/versionbits_tests.cpp
+)
 
-        ../../src/policy/feerate.cpp
-        ../../src/policy/feerate.h
-        ../../src/policy/fees.cpp
-        ../../src/policy/fees.h
-        ../../src/policy/policy.cpp
-        ../../src/policy/policy.h
-        ../../src/policy/rbf.cpp
-        ../../src/policy/rbf.h
-        ../../src/primitives/block.cpp
-        ../../src/primitives/block.h
-        ../../src/primitives/transaction.cpp
-        ../../src/primitives/transaction.h
-        ../../src/consensus/consensus.h
-        ../../src/consensus/merkle.cpp
-        ../../src/consensus/merkle.h
-        ../../src/consensus/params.h
-        ../../src/consensus/tx_verify.cpp
-        ../../src/consensus/tx_verify.h
-        ../../src/consensus/validation.h
-        ../../src/support/allocators/secure.h
-        ../../src/support/allocators/zeroafterfree.h
-        ../../src/support/cleanse.cpp
-        ../../src/support/cleanse.h
-        ../../src/support/events.h
-        ../../src/support/lockedpool.cpp
-        ../../src/support/lockedpool.h
+if(ENABLE_PROPERTY_TESTS)
+    list(APPEND BITCOIN_TESTS
+        ../../test/key_properties.cpp)
 
-        ../../src/zmq/zmqabstractnotifier.cpp
-        ../../src/zmq/zmqabstractnotifier.h
-        ../../src/zmq/zmqconfig.h
-        ../../src/zmq/zmqnotificationinterface.cpp
-        ../../src/zmq/zmqnotificationinterface.h
-        ../../src/zmq/zmqpublishnotifier.cpp
-        ../../src/zmq/zmqpublishnotifier.h
-        ../../src/zmq/zmqrpc.cpp
-        ../../src/zmq/zmqrpc.h
+    list(APPEND BITCOIN_TEST_SUITE
+        ../../src/test/gen/crypto_gen.cpp
+        ../../src/test/gen/crypto_gen.h)
+endif()
 
-        ../../src/reverse_iterator.h
-        ../../src/reverselock.h
-        ../../src/scheduler.cpp
-        ../../src/scheduler.h
-        ../../src/serialize.h
-        ../../src/span.h
-        ../../src/streams.h
-        ../../src/sync.cpp
-        ../../src/sync.h
-        ../../src/threadinterrupt.cpp
-        ../../src/threadinterrupt.h
-        ../../src/threadsafety.h
-        ../../src/timedata.cpp
-        ../../src/timedata.h
-        ../../src/tinyformat.h
-        ../../src/torcontrol.cpp
-        ../../src/torcontrol.h
-        ../../src/txdb.cpp
-        ../../src/txdb.h
-        ../../src/txmempool.cpp
-        ../../src/txmempool.h
-        ../../src/ui_interface.cpp
-        ../../src/ui_interface.h
-        ../../src/uint256.cpp
-        ../../src/uint256.h
-        ../../src/undo.h
-        ../../src/util.cpp
-        ../../src/util.h
-        ../../src/utilmemory.h
-        ../../src/utilmoneystr.cpp
-        ../../src/utilmoneystr.h
-        ../../src/utilstrencodings.cpp
-        ../../src/utilstrencodings.h
-        ../../src/utiltime.cpp
-        ../../src/utiltime.h
-        ../../src/validation.cpp
-        ../../src/validation.h
-        ../../src/validationinterface.cpp
-        ../../src/validationinterface.h
-        ../../src/version.h
-        ../../src/versionbits.cpp
-        ../../src/versionbits.h
-        ../../src/versionbitsinfo.cpp
-        ../../src/versionbitsinfo.h
-        ../../src/walletinitinterface.h
-        ../../src/warnings.cpp
-        ../../src/warnings.h)
+if(ENABLE_WALLET)
+    list(APPEND BITCOIN_TESTS
+        ../../src/wallet/test/psbt_wallet_tests.cpp
+        ../../src/wallet/test/wallet_tests.cpp
+        ../../src/wallet/test/wallet_crypto_tests.cpp
+        ../../src/wallet/test/coinselector_tests.cpp
+        ../../src/wallet/test/init_tests.cpp)
+
+    list(APPEND BITCOIN_TEST_SUITE
+        ../../src/wallet/test/wallet_test_fixture.cpp
+        ../../src/wallet/test/wallet_test_fixture.h
+        ../../src/wallet/test/init_test_fixture.cpp
+        ../../src/wallet/test/init_test_fixture.h)
+endif()
+
+list (APPEND test_bitcoin_SOURCES
+        ${BITCOIN_TEST_SUITE}
+        ${BITCOIN_TESTS}
+        ${JSON_TEST_FILES}
+        ${RAW_TEST_FILES})
 
 
-target_link_libraries( ${PROJECT_NAME}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/univalue/.libs/libunivalue.a
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libleveldb.a
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libleveldb_sse42.a
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/leveldb/libmemenv.a
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../src/secp256k1/.libs/libsecp256k1.a
-        crypto
-        miniupnpc
+if (ENABLE_WALLET)
+    list(APPEND test_bitcoin_LIBRARIES bitcoin_wallet)
+endif()
+
+find_package(Boost REQUIRED unit_test_framework)
+
+list(APPEND test_bitcoin_LIBRARIES
+        bitcoin_server bitcoin_cli bitcoin_common bitcoin_util
+        bitcoin_consensus bitcoin_crypto univalue
+        leveldb leveldb_sse42 memenv
+        Boost::unit_test_framework
+        Boost::filesystem
+        Boost::system
+        Boost::thread
+        Boost::chrono
+        secp256k1
         event
         event_pthreads
-        ${Boost_LIBRARIES}
-        zmq
-        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-        )
+        ${LIBDB_CXX_LIBRARIES}
+        crypto
+        # miniupnp
+        # rapidcheck
+)
+if(ENABLE_ZMQ)
+    list(APPEND test_bitcoin_LIBRARIES
+        zmq)
+endif()
+
+find_program(PYTHON python)
+function(gen_json_header NAME)
+    set(HEADERS "")
+    foreach(f ${ARGN})
+        # Get the proper name for the test variable.
+        get_filename_component(TEST_NAME ${f} NAME_WE)
+        get_filename_component(FULL_NAME ${f} ABSOLUTE)
+        set(h "${FULL_NAME}.h")
+        # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/${f} > ${h}")
+        add_custom_command(OUTPUT ${h}
+                COMMAND ${PYTHON}
+                ARGS
+                "${CMAKE_CURRENT_SOURCE_DIR}/gen_json_h.py"
+                "${TEST_NAME}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/${f}" > ${h}
+                MAIN_DEPENDENCY ${f}
+                DEPENDS
+                "gen_json_h.py"
+                VERBATIM
+                )
+        list(APPEND HEADERS ${h})
+    endforeach(f)
+    set(${NAME} "${HEADERS}" PARENT_SCOPE)
+endfunction()
+
+gen_json_header(JSON_HEADERS ${JSON_TEST_FILES})
+
+add_executable(test_bitcoin ${test_bitcoin_SOURCES})
+target_link_libraries(test_bitcoin ${test_bitcoin_LIBRARIES})
+target_compile_definitions(test_bitcoin PRIVATE HAVE_CONFIG_H)
+
+if(Boost_VERSION GREATER 105800)
+    message(STATUS "  use BOOST_TEST_DYN_LINK")
+    target_compile_definitions(test_bitcoin PRIVATE BOOST_TEST_DYN_LINK)
+endif()
+
+target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
+        ${BITCOIN_ROOT}/src
+        ${BITCOIN_ROOT}/src/univalue
+        ${BITCOIN_ROOT}/src/univalue/include
+        ${BITCOIN_ROOT}/src/leveldb/include
+        ${BITCOIN_ROOT}/src/leveldb/helpers/memenv
+        ${BITCOIN_ROOT}/src/secp256k1/include
+        ${LIBDB_CXX_INCLUDE_DIR}
+        ${BITCOIN_ROOT}/src/test/data
+        ${OPENSSL_INCLUDE_DIR}
+)
