@@ -25,11 +25,10 @@ if (USE_ASM)
         ../../src/crypto/sha256_sse4.cpp)
 endif()
 
-add_library(bitcoin_crypto_base STATIC ${libbitcoin_crypto_base_SOURCES})
-target_compile_definitions(bitcoin_crypto_base PRIVATE -DHAVE_CONFIG_H)
-target_include_directories(bitcoin_crypto_base PRIVATE ${BITCOIN_ROOT}
-        ${BITCOIN_ROOT}/src
-)
+add_library(bitcoin_crypto ${libbitcoin_crypto_base_SOURCES})
+target_compile_definitions(bitcoin_crypto PRIVATE -DHAVE_CONFIG_H)
+target_include_directories(bitcoin_crypto PRIVATE ${BITCOIN_ROOT}
+        ${BITCOIN_ROOT}/src)
 
 # LIBBITCOIN_CRYPTO_SSE41 = crypto/libbitcoin_crypto_sse41.a
 if (ENABLE_SSE41)
@@ -75,3 +74,13 @@ endif()
 
 message(STATUS "crypto use asm : ${USE_ASM}")
 message(STATUS "crypto SHANI/AVX2/SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
+
+if (ENABLE_SHANI)
+    target_link_libraries(bitcoin_crypto bitcoin_crypto_shani)
+endif()
+if (ENABLE_AVX2)
+    target_link_libraries(bitcoin_crypto bitcoin_crypto_avx2)
+endif()
+if (ENABLE_SSE41)
+    target_link_libraries(bitcoin_crypto bitcoin_crypto_sse41)
+endif()

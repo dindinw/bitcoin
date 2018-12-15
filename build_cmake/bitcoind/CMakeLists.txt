@@ -39,20 +39,8 @@ list(APPEND bitcoind_LIBRARIES
         univalue
         bitcoin_util
         bitcoin_consensus
-        bitcoin_crypto_base
+        bitcoin_crypto
 )
-
-if(ENABLE_SSE41)
-    list(APPEND bitcoind_LIBRARIES bitcoin_crypto_sse41)
-endif()
-
-if(ENABLE_AVX2)
-    list(APPEND bitcoind_LIBRARIES bitcoin_crypto_avx2)
-endif()
-
-if(ENABLE_SHANI)
-    list(APPEND bitcoind_LIBRARIES bitcoin_crypto_shani)
-endif()
 
 if(ENABLE_ZMQ)
     list(APPEND bitcoind_LIBRARIES
