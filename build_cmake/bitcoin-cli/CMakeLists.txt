@@ -2,14 +2,14 @@
 add_executable(bitcoin-cli ../../src/bitcoin-cli.cpp )
 
 target_link_libraries( bitcoin-cli
-        ${Boost_LIBRARIES}
-        crypto
-        event
-        event_pthreads
         bitcoin_cli
         univalue
         bitcoin_util
         bitcoin_crypto
+        ${Boost_LIBRARIES}
+        crypto
+        event
+        event_pthreads
 )
 
 target_compile_definitions(bitcoin-cli PRIVATE HAVE_CONFIG_H)
