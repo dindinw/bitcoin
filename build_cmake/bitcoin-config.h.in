@@ -1,3 +1,7 @@
+/* src/config/bitcoin-config.h.  Generated from bitcoin-config.cmake.h.in by CMake.  */
+/* bitcoin-config.cmake.h.in modified from  bitcoin-config.h.in */
+/* bitcoin-config.h.in Generated from configure.ac by autoheader.  */
+
 #ifndef BITCOIN_CONFIG_H
 
 #define BITCOIN_CONFIG_H
@@ -57,25 +61,25 @@
 #cmakedefine FDELT_TYPE
 
 /* define if the Boost library is available */
-#undef HAVE_BOOST
+#cmakedefine HAVE_BOOST
 
 /* define if the Boost::Chrono library is available */
-#undef HAVE_BOOST_CHRONO
+#cmakedefine HAVE_BOOST_CHRONO
 
 /* define if the Boost::Filesystem library is available */
-#undef HAVE_BOOST_FILESYSTEM
+#cmakedefine HAVE_BOOST_FILESYSTEM
 
 /* define if the Boost::System library is available */
-#undef HAVE_BOOST_SYSTEM
+#cmakedefine HAVE_BOOST_SYSTEM
 
 /* define if the Boost::Thread library is available */
-#undef HAVE_BOOST_THREAD
+#cmakedefine HAVE_BOOST_THREAD
 
 /* define if the Boost::Unit_Test_Framework library is available */
-#undef HAVE_BOOST_UNIT_TEST_FRAMEWORK
+#cmakedefine HAVE_BOOST_UNIT_TEST_FRAMEWORK
 
 /* Define to 1 if you have the <byteswap.h> header file. */
-#undef HAVE_BYTESWAP_H
+#cmakedefine HAVE_BYTESWAP_H 1
 
 /* Define this symbol if the consensus lib has been built */
 #undef HAVE_CONSENSUS_LIB
@@ -85,27 +89,27 @@
 
 /* Define to 1 if you have the declaration of `be16toh', and to 0 if you
    don't. */
-#undef HAVE_DECL_BE16TOH
+#cmakedefine HAVE_DECL_BE16TOH 1
 
 /* Define to 1 if you have the declaration of `be32toh', and to 0 if you
    don't. */
-#undef HAVE_DECL_BE32TOH
+#cmakedefine HAVE_DECL_BE32TOH 1
 
 /* Define to 1 if you have the declaration of `be64toh', and to 0 if you
    don't. */
-#undef HAVE_DECL_BE64TOH
+#cmakedefine HAVE_DECL_BE64TOH 1
 
 /* Define to 1 if you have the declaration of `bswap_16', and to 0 if you
    don't. */
-#undef HAVE_DECL_BSWAP_16
+#cmakedefine HAVE_DECL_BSWAP_16 1
 
 /* Define to 1 if you have the declaration of `bswap_32', and to 0 if you
    don't. */
-#undef HAVE_DECL_BSWAP_32
+#cmakedefine HAVE_DECL_BSWAP_32 1
 
 /* Define to 1 if you have the declaration of `bswap_64', and to 0 if you
    don't. */
-#undef HAVE_DECL_BSWAP_64
+#cmakedefine HAVE_DECL_BSWAP_64 1
 
 /* Define to 1 if you have the declaration of `daemon', and to 0 if you don't.
    */
@@ -125,39 +129,39 @@
 
 /* Define to 1 if you have the declaration of `htobe16', and to 0 if you
    don't. */
-#undef HAVE_DECL_HTOBE16
+#cmakedefine HAVE_DECL_HTOBE16 1
 
 /* Define to 1 if you have the declaration of `htobe32', and to 0 if you
    don't. */
-#undef HAVE_DECL_HTOBE32
+#cmakedefine HAVE_DECL_HTOBE32 1
 
 /* Define to 1 if you have the declaration of `htobe64', and to 0 if you
    don't. */
-#undef HAVE_DECL_HTOBE64
+#cmakedefine HAVE_DECL_HTOBE64 1
 
 /* Define to 1 if you have the declaration of `htole16', and to 0 if you
    don't. */
-#undef HAVE_DECL_HTOLE16
+#cmakedefine HAVE_DECL_HTOLE16 1
 
 /* Define to 1 if you have the declaration of `htole32', and to 0 if you
    don't. */
-#undef HAVE_DECL_HTOLE32
+#cmakedefine HAVE_DECL_HTOLE32 1
 
 /* Define to 1 if you have the declaration of `htole64', and to 0 if you
    don't. */
-#undef HAVE_DECL_HTOLE64
+#cmakedefine HAVE_DECL_HTOLE64 1
 
 /* Define to 1 if you have the declaration of `le16toh', and to 0 if you
    don't. */
-#undef HAVE_DECL_LE16TOH
+#cmakedefine HAVE_DECL_LE16TOH 1
 
 /* Define to 1 if you have the declaration of `le32toh', and to 0 if you
    don't. */
-#undef HAVE_DECL_LE32TOH
+#cmakedefine HAVE_DECL_LE32TOH 1
 
 /* Define to 1 if you have the declaration of `le64toh', and to 0 if you
    don't. */
-#undef HAVE_DECL_LE64TOH
+#cmakedefine HAVE_DECL_LE64TOH 1
 
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
@@ -183,7 +187,7 @@
 #undef HAVE_DLFCN_H
 
 /* Define to 1 if you have the <endian.h> header file. */
-#undef HAVE_ENDIAN_H
+#cmakedefine HAVE_ENDIAN_H 1
 
 /* Define to 1 if the system has the `dllexport' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_DLLEXPORT
@@ -404,7 +408,7 @@
 #undef STRERROR_R_CHAR_P
 
 /* Define this symbol to build in assembly routines */
-#undef USE_ASM
+#cmakedefine USE_ASM 1
 
 /* Define this symbol if coverage is enabled */
 #undef USE_COVERAGE

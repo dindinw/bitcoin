@@ -48,6 +48,7 @@ list(APPEND libbitcoin_server_SOURCES
         )
 
 if(NOT ENABLE_WALLET)
+        messsge(STATUS "wallet disnabled, using dummy wallet internally")
         list(APPEND libbitcoin_server_SOURCES
         ../../src/dummywallet.cpp)
 endif()
