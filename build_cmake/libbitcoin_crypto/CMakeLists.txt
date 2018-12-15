@@ -20,7 +20,6 @@ list(APPEND libbitcoin_crypto_base_SOURCES
         ../../src/crypto/siphash.cpp
         ../../src/crypto/siphash.h
 )
-message(STATUS "crypto if use asm")
 if (USE_ASM)
     list(APPEND libbitcoin_crypto_base_SOURCES
         ../../src/crypto/sha256_sse4.cpp)
@@ -32,8 +31,6 @@ target_include_directories(bitcoin_crypto_base PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
 )
 
-message(STATUS "${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
-message(STATUS "crypto if build sse41")
 # LIBBITCOIN_CRYPTO_SSE41 = crypto/libbitcoin_crypto_sse41.a
 if (ENABLE_SSE41)
     list(APPEND libbitcoin_crypto_sse41_SOURCES
@@ -48,7 +45,6 @@ if (ENABLE_SSE41)
     )
 endif()
 
-message(STATUS "crypto if build avx2")
 # LIBBITCOIN_CRYPTO_AVX2 = crypto/libbitcoin_crypto_avx2.a
 if (ENABLE_AVX2)
     list(APPEND libbitcoin_crypto_avx2_SOURCES
@@ -63,7 +59,6 @@ if (ENABLE_AVX2)
     )
 endif()
 
-message(STATUS "crypto if build shani")
 # LIBBITCOIN_CRYPTO_SHANI = crypto/libbitcoin_crypto_shani.a
 if (ENABLE_SHANI)
     list(APPEND libbitcoin_crypto_shani_SOURCES
@@ -77,3 +72,6 @@ if (ENABLE_SHANI)
         ${BITCOIN_ROOT}/src
     )
 endif()
+
+message(STATUS "crypto use asm : ${USE_ASM}")
+message(STATUS "crypto SHANI/AVX2/SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
