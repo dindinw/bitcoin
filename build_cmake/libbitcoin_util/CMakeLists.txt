@@ -31,4 +31,5 @@ target_include_directories(bitcoin_util PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include
+        ${OPENSSL_INCLUDE_DIR}
 )
