@@ -40,22 +40,22 @@
 #define COPYRIGHT_YEAR @COPYRIGHT_YEAR@
 
 /* Define this symbol to build code that uses AVX2 intrinsics */
-#cmakedefine ENABLE_AVX2
+#cmakedefine ENABLE_AVX2 1
 
 /* Define if BIP70 support should be compiled in */
-#cmakedefine01 ENABLE_BIP70
+#cmakedefine ENABLE_BIP70 1
 
 /* Define this symbol to build code that uses SHA-NI intrinsics */
-#cmakedefine ENABLE_SHANI
+#cmakedefine ENABLE_SHANI 1
 
 /* Define this symbol to build code that uses SSE4.1 intrinsics */
-#cmakedefine ENABLE_SSE41
+#cmakedefine ENABLE_SSE41 1
 
 /* Define to 1 to enable wallet functions */
-#cmakedefine01 ENABLE_WALLET
+#cmakedefine ENABLE_WALLET 1
 
 /* Define to 1 to enable ZMQ functions */
-#cmakedefine01 ENABLE_ZMQ
+#cmakedefine ENABLE_ZMQ 1
 
 /* parameter and return value type for __fdelt_chk */
 #cmakedefine FDELT_TYPE
@@ -78,8 +78,8 @@
 /* define if the Boost::Unit_Test_Framework library is available */
 #cmakedefine HAVE_BOOST_UNIT_TEST_FRAMEWORK
 
-/* Define if you have the <byteswap.h> header file. */
-#cmakedefine HAVE_BYTESWAP_H
+/* Define to 1 if you have the <byteswap.h> header file. */
+#cmakedefine HAVE_BYTESWAP_H 1
 
 /* Define this symbol if the consensus lib has been built */
 #undef HAVE_CONSENSUS_LIB
@@ -408,7 +408,7 @@
 #undef STRERROR_R_CHAR_P
 
 /* Define this symbol to build in assembly routines */
-#cmakedefine USE_ASM 1
+#cmakedefine USE_ASM
 
 /* Define this symbol if coverage is enabled */
 #undef USE_COVERAGE
