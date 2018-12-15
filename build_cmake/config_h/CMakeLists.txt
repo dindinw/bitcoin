@@ -63,6 +63,10 @@ CHECK_SYMBOL_EXISTS(bswap_16 "byteswap.h" HAVE_DECL_BSWAP_16)
 CHECK_SYMBOL_EXISTS(bswap_32 "byteswap.h" HAVE_DECL_BSWAP_32)
 CHECK_SYMBOL_EXISTS(bswap_64 "byteswap.h" HAVE_DECL_BSWAP_64)
 
+# HAVE_DECL_STRNLEN
+# AC_CHECK_DECLS([strnlen])
+CHECK_SYMBOL_EXISTS(strnlen "string.h" HAVE_DECL_STRNLEN)
+
 
 # USE_ASM
 # set(USE_ASM on)  see option

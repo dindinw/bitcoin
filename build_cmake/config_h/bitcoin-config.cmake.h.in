@@ -40,22 +40,22 @@
 #define COPYRIGHT_YEAR @COPYRIGHT_YEAR@
 
 /* Define this symbol to build code that uses AVX2 intrinsics */
-#cmakedefine ENABLE_AVX2 1
+#cmakedefine01 ENABLE_AVX2
 
 /* Define if BIP70 support should be compiled in */
-#cmakedefine ENABLE_BIP70 1
+#cmakedefine01 ENABLE_BIP70
 
 /* Define this symbol to build code that uses SHA-NI intrinsics */
-#cmakedefine ENABLE_SHANI 1
+#cmakedefine01 ENABLE_SHANI
 
 /* Define this symbol to build code that uses SSE4.1 intrinsics */
-#cmakedefine ENABLE_SSE41 1
+#cmakedefine01 ENABLE_SSE41
 
 /* Define to 1 to enable wallet functions */
-#cmakedefine ENABLE_WALLET 1
+#cmakedefine01 ENABLE_WALLET
 
 /* Define to 1 to enable ZMQ functions */
-#cmakedefine ENABLE_ZMQ 1
+#cmakedefine01 ENABLE_ZMQ
 
 /* parameter and return value type for __fdelt_chk */
 #cmakedefine FDELT_TYPE
@@ -79,7 +79,7 @@
 #cmakedefine HAVE_BOOST_UNIT_TEST_FRAMEWORK
 
 /* Define to 1 if you have the <byteswap.h> header file. */
-#cmakedefine HAVE_BYTESWAP_H 1
+#cmakedefine01 HAVE_BYTESWAP_H
 
 /* Define this symbol if the consensus lib has been built */
 #undef HAVE_CONSENSUS_LIB
@@ -89,27 +89,27 @@
 
 /* Define to 1 if you have the declaration of `be16toh', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_BE16TOH 1
+#cmakedefine01 HAVE_DECL_BE16TOH
 
 /* Define to 1 if you have the declaration of `be32toh', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_BE32TOH 1
+#cmakedefine01 HAVE_DECL_BE32TOH
 
 /* Define to 1 if you have the declaration of `be64toh', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_BE64TOH 1
+#cmakedefine01 HAVE_DECL_BE64TOH
 
 /* Define to 1 if you have the declaration of `bswap_16', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_BSWAP_16 1
+#cmakedefine01 HAVE_DECL_BSWAP_16
 
 /* Define to 1 if you have the declaration of `bswap_32', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_BSWAP_32 1
+#cmakedefine01 HAVE_DECL_BSWAP_32
 
 /* Define to 1 if you have the declaration of `bswap_64', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_BSWAP_64 1
+#cmakedefine01 HAVE_DECL_BSWAP_64
 
 /* Define to 1 if you have the declaration of `daemon', and to 0 if you don't.
    */
@@ -129,39 +129,39 @@
 
 /* Define to 1 if you have the declaration of `htobe16', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_HTOBE16 1
+#cmakedefine01 HAVE_DECL_HTOBE16
 
 /* Define to 1 if you have the declaration of `htobe32', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_HTOBE32 1
+#cmakedefine01 HAVE_DECL_HTOBE32
 
 /* Define to 1 if you have the declaration of `htobe64', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_HTOBE64 1
+#cmakedefine01 HAVE_DECL_HTOBE64
 
 /* Define to 1 if you have the declaration of `htole16', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_HTOLE16 1
+#cmakedefine01 HAVE_DECL_HTOLE16
 
 /* Define to 1 if you have the declaration of `htole32', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_HTOLE32 1
+#cmakedefine01 HAVE_DECL_HTOLE32
 
 /* Define to 1 if you have the declaration of `htole64', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_HTOLE64 1
+#cmakedefine01 HAVE_DECL_HTOLE64
 
 /* Define to 1 if you have the declaration of `le16toh', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_LE16TOH 1
+#cmakedefine01 HAVE_DECL_LE16TOH
 
 /* Define to 1 if you have the declaration of `le32toh', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_LE32TOH 1
+#cmakedefine01 HAVE_DECL_LE32TOH
 
 /* Define to 1 if you have the declaration of `le64toh', and to 0 if you
    don't. */
-#cmakedefine HAVE_DECL_LE64TOH 1
+#cmakedefine01 HAVE_DECL_LE64TOH
 
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
@@ -169,7 +169,7 @@
 
 /* Define to 1 if you have the declaration of `strnlen', and to 0 if you
    don't. */
-#undef HAVE_DECL_STRNLEN
+#cmakedefine01 HAVE_DECL_STRNLEN
 
 /* Define to 1 if you have the declaration of `__builtin_clz', and to 0 if you
    don't. */
