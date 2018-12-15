@@ -1,6 +1,8 @@
 include(CheckIncludeFiles)
 include(CheckSymbolExists)
 
+set(PACKAGE_NAME "Bitcoin Core")                    # AC_INIT
+
 set(CLIENT_VERSION_MAJOR 0)
 set(CLIENT_VERSION_MINOR 17)
 set(CLIENT_VERSION_REVISION 99)
@@ -12,26 +14,30 @@ set(COPYRIGHT_HOLDERS "The %s developers")
 set(COPYRIGHT_HOLDERS_SUBSTITUTION "Bitcoin Core")
 string(REPLACE "%s" ${COPYRIGHT_HOLDERS_SUBSTITUTION} COPYRIGHT_HOLDERS_FINAL ${COPYRIGHT_HOLDERS})
 
-# ENABLE_AVX2/ENABLE_SHANI/ENABLE_SSE41
+# CRYPTO : ENABLE_AVX2/ENABLE_SHANI/ENABLE_SSE41
 set(ENABLE_SHANI on) # TODO test logic
 set(ENABLE_AVX2 on)  # TODO test logic
 set(ENABLE_SSE41 on) # TODO test logic
 
-# HAVE_BOOST_XXX ...
+# BOOST_XXX ...
 # Boost is required, HAVE_BOOST_XXX should be set to on directly
 set(HAVE_BOOST on)
 set(HAVE_BOOST_CHRONO on)
 set(HAVE_BOOST_FILESYSTEM on)
 set(HAVE_BOOST_SYSTEM on)
 set(HAVE_BOOST_THREAD on)
-set(HAVE_BOOST_UNIT_TEST_FRAMEWORK on)
+set(HAVE_BOOST_UNIT_TEST_FRAMEWORK on)  # TODO, required if test enable
+# Boost >= 1.50 uses sleep_for rather than the now-deprecated sleep, however
+# it was broken from 1.50 to 1.52 when backed by nanosleep. Use sleep_for if
+# a working version is available, else fall back to sleep. sleep was removed
+# after 1.56.
+if(Boost_VERSION VERSION_LESS 105200)  #sleep_for broken , use sleep
+    set(HAVE_WORKING_BOOST_SLEEP on)
+else()                                 # use sleep_for
+    set(HAVE_WORKING_BOOST_SLEEP_FOR on)
+endif()
 
-# AC_CHECK_DECLS([le16toh, le32toh, le64toh, htole16, htole32, htole64, be16toh, be32toh, be64toh, htobe16, htobe32, htobe64],,,
-#		[#if HAVE_ENDIAN_H
-                 #include <endian.h>
-                 #elif HAVE_SYS_ENDIAN_H
-                 #include <sys/endian.h>
-                 #endif])
+# ENDIAN_XXX
 CHECK_INCLUDE_FILE("endian.h"     HAVE_ENDIAN_H)
 CHECK_INCLUDE_FILE("sys/endian.h" HAVE_SYS_ENDIAN_H)
 

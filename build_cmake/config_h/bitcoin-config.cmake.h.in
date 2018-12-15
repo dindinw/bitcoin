@@ -356,10 +356,10 @@
 #undef HAVE_VISIBILITY_ATTRIBUTE
 
 /* Define this symbol if boost sleep works */
-#undef HAVE_WORKING_BOOST_SLEEP
+#cmakedefine HAVE_WORKING_BOOST_SLEEP
 
 /* Define this symbol if boost sleep_for works */
-#undef HAVE_WORKING_BOOST_SLEEP_FOR
+#cmakedefine HAVE_WORKING_BOOST_SLEEP_FOR
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
@@ -368,7 +368,7 @@
 #undef PACKAGE_BUGREPORT
 
 /* Define to the full name of this package. */
-#undef PACKAGE_NAME
+#define PACKAGE_NAME "@PACKAGE_NAME@"
 
 /* Define to the full name and version of this package. */
 #undef PACKAGE_STRING
