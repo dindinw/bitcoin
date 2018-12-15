@@ -22,4 +22,5 @@ target_include_directories(bitcoin_wallet PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include
+        ${LIBDB_CXX_INCLUDE_DIR}
 )
