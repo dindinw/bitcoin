@@ -40,16 +40,16 @@
 #define COPYRIGHT_YEAR @COPYRIGHT_YEAR@
 
 /* Define this symbol to build code that uses AVX2 intrinsics */
-#cmakedefine01 ENABLE_AVX2
+#cmakedefine ENABLE_AVX2
 
 /* Define if BIP70 support should be compiled in */
 #cmakedefine01 ENABLE_BIP70
 
 /* Define this symbol to build code that uses SHA-NI intrinsics */
-#cmakedefine01 ENABLE_SHANI
+#cmakedefine ENABLE_SHANI
 
 /* Define this symbol to build code that uses SSE4.1 intrinsics */
-#cmakedefine01 ENABLE_SSE41
+#cmakedefine ENABLE_SSE41
 
 /* Define to 1 to enable wallet functions */
 #cmakedefine01 ENABLE_WALLET
