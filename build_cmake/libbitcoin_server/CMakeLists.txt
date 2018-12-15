@@ -61,4 +61,5 @@ target_include_directories(bitcoin_server PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src/univalue/include
         ${BITCOIN_ROOT}/src/leveldb/include
         ${BITCOIN_ROOT}/src/leveldb/helpers/memenv
+        ${OPENSSL_INCLUDE_DIR}
 )
