@@ -107,8 +107,7 @@ endif()
 # Build Executable :
 #  - bitcoind
 #  - bitcoin-cli
-#     - $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
-#     - $(LIBBITCOIN_CLI) $(LIBUNIVALUE) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO)
+
 #  - bitcoin-tx
 #     - $(BOOST_LIBS) $(CRYPTO_LIBS)
 #     - $(LIBUNIVALUE) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBSECP256K1)
@@ -118,6 +117,7 @@ endif()
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoind  ${CMAKE_CURRENT_BINARY_DIR}/bitcoind)
 
 # bitcion-cli
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-cli)
 
 # bitcion-tx
 
