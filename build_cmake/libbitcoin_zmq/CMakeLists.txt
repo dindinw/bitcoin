@@ -1,7 +1,4 @@
-find_package (ZMQ REQUIRED)
-if(ZMQ_FOUND)
-    message(STATUS "zmq found at ${ZMQ_INCLUDE_DIRS}")
-endif()
+
 list(APPEND libbitcoin_zmq_a_SOURCES
   ../../src/zmq/zmqabstractnotifier.cpp
   ../../src/zmq/zmqnotificationinterface.cpp

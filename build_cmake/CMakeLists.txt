@@ -52,6 +52,11 @@ find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
 find_package(OpenSSL REQUIRED)
 find_package(Libevent REQUIRED)
 
+if(ENABLE_ZMQ)
+find_package (ZMQ REQUIRED)
+endif()
+
+
 # libevent
 # miniupnpc
 # qt
