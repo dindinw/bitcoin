@@ -10,69 +10,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(libleveldb LANGUAGES CXX)
 
-include_directories(../../src/leveldb)
-include_directories(../../src/leveldb/include)
-include_directories(../../src/leveldb/include/leveldb)
-include_directories(../../src/leveldb/port)
-
 # libleveldb SOURCES
 list(APPEND libleveldb_SOURCES
-        ../../src/leveldb/port/atomic_pointer.h
-        ../../src/leveldb/port/port_example.h
-        ../../src/leveldb/port/port_posix.h
-        ../../src/leveldb/port/win/stdint.h
-        ../../src/leveldb/port/port.h
-        ../../src/leveldb/port/port_win.h
-        ../../src/leveldb/port/thread_annotations.h
-        ../../src/leveldb/include/leveldb/db.h
-        ../../src/leveldb/include/leveldb/options.h
-        ../../src/leveldb/include/leveldb/comparator.h
-        ../../src/leveldb/include/leveldb/filter_policy.h
-        ../../src/leveldb/include/leveldb/slice.h
-        ../../src/leveldb/include/leveldb/table_builder.h
-        ../../src/leveldb/include/leveldb/env.h
-        ../../src/leveldb/include/leveldb/c.h
-        ../../src/leveldb/include/leveldb/iterator.h
-        ../../src/leveldb/include/leveldb/cache.h
-        ../../src/leveldb/include/leveldb/dumpfile.h
-        ../../src/leveldb/include/leveldb/table.h
-        ../../src/leveldb/include/leveldb/write_batch.h
-        ../../src/leveldb/include/leveldb/status.h
-        ../../src/leveldb/db/log_format.h
-        ../../src/leveldb/db/memtable.h
-        ../../src/leveldb/db/version_set.h
-        ../../src/leveldb/db/write_batch_internal.h
-        ../../src/leveldb/db/filename.h
-        ../../src/leveldb/db/version_edit.h
-        ../../src/leveldb/db/dbformat.h
-        ../../src/leveldb/db/builder.h
-        ../../src/leveldb/db/log_writer.h
-        ../../src/leveldb/db/db_iter.h
-        ../../src/leveldb/db/skiplist.h
-        ../../src/leveldb/db/db_impl.h
-        ../../src/leveldb/db/table_cache.h
-        ../../src/leveldb/db/snapshot.h
-        ../../src/leveldb/db/log_reader.h
-        ../../src/leveldb/table/filter_block.h
-        ../../src/leveldb/table/block_builder.h
-        ../../src/leveldb/table/block.h
-        ../../src/leveldb/table/two_level_iterator.h
-        ../../src/leveldb/table/merger.h
-        ../../src/leveldb/table/format.h
-        ../../src/leveldb/table/iterator_wrapper.h
-        ../../src/leveldb/util/crc32c.h
-        ../../src/leveldb/util/env_posix_test_helper.h
-        ../../src/leveldb/util/arena.h
-        ../../src/leveldb/util/random.h
-        ../../src/leveldb/util/posix_logger.h
-        ../../src/leveldb/util/hash.h
-        ../../src/leveldb/util/histogram.h
-        ../../src/leveldb/util/coding.h
-        ../../src/leveldb/util/testutil.h
-        ../../src/leveldb/util/mutexlock.h
-        ../../src/leveldb/util/logging.h
-        ../../src/leveldb/util/testharness.h
-
         ../../src/leveldb/db/builder.cc
         ../../src/leveldb/db/c.cc
         ../../src/leveldb/db/dbformat.cc
@@ -141,5 +80,25 @@ list(APPEND libleveldb_sse42_SOURCES
     )
 
 add_library(leveldb ${libleveldb_SOURCES})
-add_library(memenv ${libmemenv_SOURCES})
-add_library(leveldb_sse42 ${libleveldb_sse42_SOURCES})
+add_library(memenv STATIC ${libmemenv_SOURCES})
+add_library(leveldb_sse42 STATIC ${libleveldb_sse42_SOURCES})
+
+# target_compile_definitions(leveldb PRIVATE LEVELDB_PLATFORM_POSIX)
+target_include_directories(leveldb
+        PUBLIC ../../src/leveldb/include
+        PUBLIC ../../src/leveldb/include/leveldb
+        PRIVATE ../../src/leveldb
+)
+
+target_include_directories(memenv
+        PUBLIC ../../src/leveldb/include
+        PUBLIC ../../src/leveldb/include/leveldb
+        PRIVATE ../../src/leveldb
+)
+
+target_include_directories(leveldb_sse42
+        PUBLIC ../../src/leveldb/include
+        PUBLIC ../../src/leveldb/include/leveldb
+        PRIVATE ../../src/leveldb
+        PRIVATE ../../src/leveldb/port
+)
