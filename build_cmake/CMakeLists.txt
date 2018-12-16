@@ -48,7 +48,6 @@ option(USE_UPNP      "enable UPnP"    OFF)
 #  - miniupnpc   (if enable, should auto-checked)
 #  - qt          (if enable)
 
-FIND_PACKAGE(libdb_cxx REQUIRED)
 FIND_PACKAGE(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
 FIND_PACKAGE(OpenSSL REQUIRED)
 

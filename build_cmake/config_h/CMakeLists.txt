@@ -19,6 +19,10 @@ set(ENABLE_AVX2  on CACHE INTERNAL "" ) # TODO test logic
 set(ENABLE_SSE41 on CACHE INTERNAL "" ) # TODO test logic
 message(STATUS "ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
 
+if(ENABLE_WALLET)
+    FIND_PACKAGE(libdb_cxx REQUIRED)  #bdb only required for support wallet
+endif()
+
 # BOOST_XXX ...
 # Boost is required, HAVE_BOOST_XXX should be set to on directly
 set(HAVE_BOOST on)

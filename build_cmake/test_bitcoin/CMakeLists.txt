@@ -197,3 +197,9 @@ target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src/test/data
         ${OPENSSL_INCLUDE_DIR}
 )
+
+enable_testing()
+add_test(test_bitcion test_bitcoin)
+add_custom_target(check_bitcoin COMMAND ${CMAKE_CTEST_COMMAND})
+add_dependencies(check_bitcoin test_bitcoin)
+
