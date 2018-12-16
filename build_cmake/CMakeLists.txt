@@ -45,7 +45,8 @@ option(USE_UPNP      "enable UPnP"    OFF)
 #  - Boost       (required)
 #  - OpenSSL     (required)
 #  - libevent    (required)
-#  - miniupnpc   (if enable, should auto-checked)
+#  - zmq         (if enbale)
+#  - miniupnpc   (if enable)
 #  - qt          (if enable)
 
 find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
@@ -53,11 +54,12 @@ find_package(OpenSSL REQUIRED)
 find_package(Libevent REQUIRED)
 
 if(ENABLE_ZMQ)
-find_package (ZMQ REQUIRED)
+    find_package (ZMQ)
+    if(NOT ZMQ_FOUND)
+        message(FATAL_ERROR "ENABLE_ZMQ is ${ENABLE_ZMQ} but libzmq not found, you might need swith to -DENABLE_ZMQ=off")
+    endif()
 endif()
 
-
-# libevent
 # miniupnpc
 # qt
 
