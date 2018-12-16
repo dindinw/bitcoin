@@ -63,4 +63,5 @@ target_include_directories(bitcoin_server PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src/leveldb/helpers/memenv
         ${Boost_INCLUDE_DIRS}
         ${OPENSSL_INCLUDE_DIR}
+        ${Libevent_INCLUDE_DIR}
 )

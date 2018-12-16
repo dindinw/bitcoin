@@ -57,6 +57,7 @@ if (WIN32)
         ../../src/leveldb/util/env_win.cc
         ../../src/leveldb/port/port_win.cc
         )
+    add_definitions(-DLEVELDB_PLATFORM_WINDOWS)
 else()
     add_definitions(-DLEVELDB_PLATFORM_POSIX)
     if(APPLE)
@@ -102,3 +103,12 @@ target_include_directories(leveldb_sse42
         PRIVATE ../../src/leveldb
         PRIVATE ../../src/leveldb/port
 )
+
+# TODO windows build
+# need to fix non-portable code of leveldb fork in the bitcoin code
+# 1. https://github.com/google/leveldb/commit/623d014a54f8cf9b74ad6aaba9181ca1e65c43a1
+#     -- remove non-portable headers <sys/types.h> and <unistd.h>  in db/c.cc db/c_test.c
+# 2. https://github.com/google/leveldb/commit/89af27bde59fbbb3025653812b45fec10a655cb7
+#     -- remove ssize
+# 3. need to fix bitcoin's port-win.h
+#     -- remove #define snprintf _snprintf

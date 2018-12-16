@@ -48,8 +48,9 @@ option(USE_UPNP      "enable UPnP"    OFF)
 #  - miniupnpc   (if enable, should auto-checked)
 #  - qt          (if enable)
 
-FIND_PACKAGE(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
-FIND_PACKAGE(OpenSSL REQUIRED)
+find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
+find_package(OpenSSL REQUIRED)
+find_package(Libevent REQUIRED)
 
 # libevent
 # miniupnpc
