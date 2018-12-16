@@ -124,6 +124,10 @@ endif()
 
 find_package(Boost REQUIRED unit_test_framework)
 
+if(USE_UPNP)
+    set(LIB_MINIUPNP miniupnpc)
+endif()
+
 list(APPEND test_bitcoin_LIBRARIES
         bitcoin_server bitcoin_cli bitcoin_common bitcoin_util
         bitcoin_consensus bitcoin_crypto univalue
@@ -138,7 +142,7 @@ list(APPEND test_bitcoin_LIBRARIES
         event_pthreads
         ${LIBDB_CXX_LIBRARIES}
         crypto
-        # miniupnp
+        ${LIB_MINIUPNP}
         # rapidcheck
 )
 if(ENABLE_ZMQ)

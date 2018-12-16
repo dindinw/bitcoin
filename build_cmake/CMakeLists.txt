@@ -34,8 +34,12 @@ set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 # ==============================
 # All Options
 option(ENABLE_WALLET "enable wallet"  ON)
-option(ENABLE_ZMQ    "enable zmq"     OFF)
+option(ENABLE_ZMQ    "enable zmq"     ON)
 option(USE_ASM       "enable use asm" ON)
+option(USE_UPNP      "enable UPnP"    OFF)
+if(USE_UPNP)
+    set(UPNP_DEFAULT 1) #TODO hardcoding
+endif()
 
 # ==============================
 # Check Requried Dependeces:

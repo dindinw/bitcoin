@@ -47,6 +47,10 @@ if(ENABLE_ZMQ)
         bitcoin_zmq zmq)
 endif()
 
+if(USE_UPNP)
+    set(LIB_MINIUPNP miniupnpc)
+endif()
+
 list(APPEND bitcoind_LIBRARIES
         leveldb
         leveldb_sse42
@@ -55,10 +59,9 @@ list(APPEND bitcoind_LIBRARIES
         ${Boost_LIBRARIES}
         ${LIBDB_CXX_LIBRARIES}
         crypto
-        #miniupnpc
+        ${LIB_MINIUPNP}
         event_pthreads
         event
-        #zmq
 )
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
