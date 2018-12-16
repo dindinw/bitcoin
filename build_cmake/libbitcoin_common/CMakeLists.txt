@@ -30,4 +30,5 @@ target_include_directories(bitcoin_common PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include
         ${BITCOIN_ROOT}/src/secp256k1/include
+        ${Boost_INCLUDE_DIRS}
 )
