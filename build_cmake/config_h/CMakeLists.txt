@@ -77,5 +77,12 @@ CHECK_SYMBOL_EXISTS(strnlen "string.h" HAVE_DECL_STRNLEN)
 
 # USE_ASM
 # set(USE_ASM on)  see option
+message(STATUS "config use asm is ${USE_ASM}")
+
+# USE_UPNP
+if(USE_UPNP)
+    set(UPNP_DEFAULT 1) #TODO hardcoding
+endif()
+message(STATUS "config use upnp is ${USE_UPNP}")
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)
