@@ -12,11 +12,10 @@ target_link_libraries( bitcoin-cli
         event
         event_pthreads
 )
-
+message( why not boost ?  ${Boost_INCLUDE_DIRS})
 target_compile_definitions(bitcoin-cli PRIVATE HAVE_CONFIG_H)
 target_include_directories(bitcoin-cli PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/univalue
         ${BITCOIN_ROOT}/src/univalue/include
-        ${Boost_INCLUDE_DIRS}
 )
