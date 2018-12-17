@@ -72,9 +72,6 @@ if (ENABLE_SHANI)
     )
 endif()
 
-message(STATUS "crypto use asm : ${USE_ASM}")
-message(STATUS "crypto SHANI/AVX2/SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
-
 if (ENABLE_SHANI)
     target_link_libraries(bitcoin_crypto bitcoin_crypto_shani)
 endif()

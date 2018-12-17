@@ -33,6 +33,7 @@ set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 # ==============================
 # All Options
+option(ENABLE_TEST   "enable test"    ON)
 option(ENABLE_WALLET "enable wallet"  ON)
 option(ENABLE_ZMQ    "enable zmq"     ON)
 option(USE_ASM       "enable use asm" ON)
@@ -50,6 +51,9 @@ option(USE_UPNP      "enable UPnP"    OFF)
 #  - qt          (if enable)
 
 find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
+if(ENABLE_TEST)
+    find_package(Boost REQUIRED unit_test_framework)
+endif()
 find_package(OpenSSL REQUIRED)
 find_package(Libevent REQUIRED)
 
@@ -149,4 +153,12 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin)
 #========================
 # Build bitcion-qt TEST :
 
-
+#========================
+#
+message(STATUS "Build Configuration:")
+message(STATUS "  ENABLE_TEST is ${ENABLE_TEST}")
+message(STATUS "  ENABLE_WALLET is ${ENABLE_WALLET}")
+message(STATUS "  ENABLE_ZMQ is ${ENABLE_ZMQ}")
+message(STATUS "  USE_ASM is ${USE_ASM}")
+message(STATUS "  USE_UPNP is ${USE_UPNP}")
+message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")

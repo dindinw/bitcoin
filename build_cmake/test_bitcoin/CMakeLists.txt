@@ -122,7 +122,6 @@ if (ENABLE_WALLET)
     list(APPEND test_bitcoin_LIBRARIES bitcoin_wallet)
 endif()
 
-find_package(Boost REQUIRED unit_test_framework)
 
 if(USE_UPNP)
     set(LIB_MINIUPNP miniupnpc)

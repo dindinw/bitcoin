@@ -25,7 +25,6 @@ if(WIN32)  # the crypto enhancement code are not supported for windows paltform 
     set(ENABLE_AVX2  off CACHE INTERNAL "" )
     set(ENABLE_SSE41 off CACHE INTERNAL "" )
 endif()
-message(STATUS "ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
 
 if(ENABLE_WALLET)
     FIND_PACKAGE(libdb_cxx REQUIRED)  #bdb only required for support wallet
@@ -76,25 +75,21 @@ if(ENDIAN_H)
 endif()
 
 # HAVE_BYTESWAP_H
-message(STATUS "check byteswap")
 CHECK_INCLUDE_FILE("byteswap.h" HAVE_BYTESWAP_H)
 CHECK_SYMBOL_EXISTS(bswap_16 "byteswap.h" HAVE_DECL_BSWAP_16)
 CHECK_SYMBOL_EXISTS(bswap_32 "byteswap.h" HAVE_DECL_BSWAP_32)
 CHECK_SYMBOL_EXISTS(bswap_64 "byteswap.h" HAVE_DECL_BSWAP_64)
 
 # HAVE_DECL_STRNLEN
-# AC_CHECK_DECLS([strnlen])
 CHECK_SYMBOL_EXISTS(strnlen "string.h" HAVE_DECL_STRNLEN)
-
 
 # USE_ASM
 # set(USE_ASM on)  see option
-message(STATUS "config use asm is ${USE_ASM}")
 
 # USE_UPNP
 if(USE_UPNP)
     set(UPNP_DEFAULT 1) #TODO hardcoding
 endif()
-message(STATUS "config use upnp is ${USE_UPNP}")
+
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)
