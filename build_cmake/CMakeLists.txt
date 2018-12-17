@@ -204,9 +204,10 @@ if(MSVC)
     #   - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
     #   - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
     # 2.) remove /DNDEBUG
-    message(STATUS "${CMAKE_CXX_FLAGS}") # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
-    message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}") #/MD /O2 /Ob2 /DNDEBUG
-    message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") #/MD /O2 /Ob2 /DNDEBUG
+    message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+    message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
+    message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
+    set(CMAKE_CXX_FLAGS_DEBUG    "/MTd /Zi /Ob0 /Od /RTC1" CACHE INTERNAL "")
     set(CMAKE_CXX_FLAGS_RELEASE  "/MT /O2 /Ob2" CACHE INTERNAL "")
 endif()
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")

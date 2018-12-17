@@ -16,8 +16,10 @@ find_path     (LIBEVENT_INCLUDE_DIR NAMES event.h        PATHS ${LibEvent_INCLUD
 find_library  (LIBEVENT_LIB         NAMES event          PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_CORE_LIB    NAMES event_core     PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_EXTRA_LIB   NAMES event_extra    PATHS ${LibEvent_LIBRARIES_PATHS})
+if(NOT WIN32)
 find_library  (LIBEVENT_PTHREAD_LIB NAMES event_pthreads PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_SSL_LIB     NAMES event_openssl  PATHS ${LibEvent_LIBRARIES_PATHS})
+endif()
 
 include (FindPackageHandleStandardArgs)
 
