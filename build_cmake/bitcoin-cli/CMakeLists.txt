@@ -6,7 +6,8 @@ target_link_libraries( bitcoin-cli
         univalue
         bitcoin_util
         bitcoin_crypto
-        ${Boost_LIBRARIES}
+        Boost::filesystem
+        Boost::thread
         crypto
         event
         event_pthreads

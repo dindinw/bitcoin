@@ -8,7 +8,10 @@ target_link_libraries(bitcoin-tx
         bitcoin_consensus
         bitcoin_crypto
         secp256k1
-        ${Boost_LIBRARIES}
+        Boost::filesystem
+        Boost::system
+        Boost::thread
+        Boost::chrono
         crypto
 )
 
