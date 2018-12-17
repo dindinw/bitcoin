@@ -144,8 +144,11 @@ list(APPEND test_bitcoin_LIBRARIES
         # rapidcheck
 )
 if(ENABLE_ZMQ)
-    list(APPEND test_bitcoin_LIBRARIES
-        zmq)
+    list(APPEND test_bitcoin_LIBRARIES zmq)
+endif()
+
+if(WIN32)
+    list(APPEND test_bitcoin_LIBRARIES ws2_32 Iphlpapi shlwapi crypt32)
 endif()
 
 find_package (Python 2 REQUIRED COMPONENTS Interpreter)
@@ -179,7 +182,7 @@ add_executable(test_bitcoin ${test_bitcoin_SOURCES})
 target_link_libraries(test_bitcoin ${test_bitcoin_LIBRARIES})
 target_compile_definitions(test_bitcoin PRIVATE HAVE_CONFIG_H)
 
-if(Boost_VERSION GREATER 105800)
+if(Boost_VERSION GREATER 105800 AND NOT WIN32)
     message(STATUS "  use BOOST_TEST_DYN_LINK")
     target_compile_definitions(test_bitcoin PRIVATE BOOST_TEST_DYN_LINK)
 endif()
