@@ -131,16 +131,15 @@ list(APPEND test_bitcoin_LIBRARIES
         bitcoin_server bitcoin_cli bitcoin_common bitcoin_util
         bitcoin_consensus bitcoin_crypto univalue
         leveldb leveldb_sse42 memenv
+        secp256k1
         Boost::unit_test_framework
         Boost::filesystem
         Boost::system
         Boost::thread
         Boost::chrono
-        secp256k1
-        event
-        event_pthreads
         ${LIBDB_CXX_LIBRARIES}
-        crypto
+        OpenSSL::Crypto
+        ${LIBEVENT_LIBRARIES}
         ${LIB_MINIUPNP}
         # rapidcheck
 )
@@ -149,7 +148,7 @@ if(ENABLE_ZMQ)
         zmq)
 endif()
 
-find_program(PYTHON python)
+find_package (Python 2 REQUIRED COMPONENTS Interpreter)
 function(gen_json_header NAME)
     set(HEADERS "")
     foreach(f ${ARGN})
@@ -159,7 +158,7 @@ function(gen_json_header NAME)
         set(h "${FULL_NAME}.h")
         # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/${f} > ${h}")
         add_custom_command(OUTPUT ${h}
-                COMMAND ${PYTHON}
+                COMMAND ${Python_EXECUTABLE}
                 ARGS
                 "${CMAKE_CURRENT_SOURCE_DIR}/gen_json_h.py"
                 "${TEST_NAME}"
@@ -183,6 +182,10 @@ target_compile_definitions(test_bitcoin PRIVATE HAVE_CONFIG_H)
 if(Boost_VERSION GREATER 105800)
     message(STATUS "  use BOOST_TEST_DYN_LINK")
     target_compile_definitions(test_bitcoin PRIVATE BOOST_TEST_DYN_LINK)
+endif()
+
+if(WIN32)
+    target_compile_definitions(test_bitcoin PRIVATE NOMINMAX)
 endif()
 
 target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
