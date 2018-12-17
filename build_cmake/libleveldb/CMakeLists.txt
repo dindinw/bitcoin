@@ -85,23 +85,23 @@ add_library(memenv STATIC ${libmemenv_SOURCES})
 add_library(leveldb_sse42 STATIC ${libleveldb_sse42_SOURCES})
 
 # target_compile_definitions(leveldb PRIVATE LEVELDB_PLATFORM_POSIX)
-target_include_directories(leveldb
-        PUBLIC ../../src/leveldb/include
-        PUBLIC ../../src/leveldb/include/leveldb
-        PRIVATE ../../src/leveldb
+target_include_directories(leveldb PRIVATE
+        ../../src/leveldb/include
+        ../../src/leveldb/include/leveldb
+        ../../src/leveldb
 )
 
-target_include_directories(memenv
-        PUBLIC ../../src/leveldb/include
-        PUBLIC ../../src/leveldb/include/leveldb
-        PRIVATE ../../src/leveldb
+target_include_directories(memenv PRIVATE
+        ../../src/leveldb/include
+        ../../src/leveldb/include/leveldb
+        ../../src/leveldb
 )
 
-target_include_directories(leveldb_sse42
-        PUBLIC ../../src/leveldb/include
-        PUBLIC ../../src/leveldb/include/leveldb
-        PRIVATE ../../src/leveldb
-        PRIVATE ../../src/leveldb/port
+target_include_directories(leveldb_sse42 PRIVATE
+        ../../src/leveldb/include
+        ../../src/leveldb/include/leveldb
+        ../../src/leveldb
+        ../../src/leveldb/port
 )
 
 # TODO windows build

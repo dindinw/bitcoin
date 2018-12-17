@@ -56,7 +56,10 @@ list(APPEND bitcoind_LIBRARIES
         leveldb_sse42
         memenv
         secp256k1
-        ${Boost_LIBRARIES}
+        Boost::filesystem
+        Boost::system
+        Boost::thread
+        Boost::chrono
         ${LIBDB_CXX_LIBRARIES}
         crypto
         ${LIB_MINIUPNP}
