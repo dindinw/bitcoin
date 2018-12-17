@@ -54,7 +54,11 @@ find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
 if(ENABLE_TEST)
     find_package(Boost REQUIRED unit_test_framework)
 endif()
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
 find_package(OpenSSL REQUIRED)
+message(STATUS "Found OpenSSL/Crypto ${OPENSSL_INCLUDE_DIR} ${OPENSSL_CRYPTO_LIBRARY}")
+
 find_package(Libevent REQUIRED)
 
 if(ENABLE_ZMQ)

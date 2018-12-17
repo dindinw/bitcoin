@@ -61,7 +61,7 @@ list(APPEND bitcoind_LIBRARIES
         Boost::thread
         Boost::chrono
         ${LIBDB_CXX_LIBRARIES}
-        crypto
+        OpenSSL::Crypto
         ${LIB_MINIUPNP}
         event_pthreads
         event
