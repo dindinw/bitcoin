@@ -12,7 +12,7 @@ target_link_libraries(bitcoin-tx
         Boost::system
         Boost::thread
         Boost::chrono
-        crypto
+        OpenSSL::Crypto
 )
 
 target_compile_definitions(bitcoin-tx PRIVATE HAVE_CONFIG_H)

@@ -8,9 +8,8 @@ target_link_libraries( bitcoin-cli
         bitcoin_crypto
         Boost::filesystem
         Boost::thread
-        crypto
-        event
-        event_pthreads
+        OpenSSL::Crypto
+        ${LIBEVENT_LIBRARIES}
 )
 message( why not boost ?  ${Boost_INCLUDE_DIRS})
 target_compile_definitions(bitcoin-cli PRIVATE HAVE_CONFIG_H)
