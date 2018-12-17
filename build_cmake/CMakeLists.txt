@@ -167,3 +167,49 @@ message(STATUS "  ENABLE_ZMQ is ${ENABLE_ZMQ}")
 message(STATUS "  USE_ASM is ${USE_ASM}")
 message(STATUS "  USE_UPNP is ${USE_UPNP}")
 message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
+
+#---------------
+# Windows Build: (test on Win10 + VS2017)
+#
+# 1.) Install Dependes by using `vcpkg` :
+#  vcpkg install berkeleydb:x64-windows-static
+#  vcpkg install boost:x64-windows-static
+#  vcpkg install openssl:x64-windows-static
+#  vcpkg install libevent:x64-windows-static
+#  vcpkg install zeromq:x64-windows-static
+# The vcpkg installed static libs speretely on the folder : <vcpkg_root>\installed\x64-windows-static\
+#
+# 2.) Toolchain configuation
+#  - The toolchain need to specify the architecture to match with x64 (instead of the x86 by default for CLion)
+#  - /MD flag MD_DynamicRelease should be RuntimeLibrary -> swich to /MT
+#    https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
+#    https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
+#  - NDEBUG on Release
+#    - the cmake add the NDEBUG define https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
+#    - net_processing.cpp (#if defined(NDEBUG))
+#    - validation.cpp (#if defined(NDEBUG))
+#
+# 3.) fix Code : (3 leveldb fix)
+#
+# 4.) Fix linker
+#  - need to add ws2_32 and shlwapi to linker
+#     - __imp__PathFileExistsW -> shlwapi.lib
+#     - net.cpp (FD_ISSET) -> ws2_32.lib
+#  - need link crypt32.lib (if static link openssl)
+#     - libeay32.lib __imp_CertOpenStore -> crypt32.lib
+#
+
+if(MSVC)
+    # 1.) Make sure to use the /MT flag for build static lib
+    #   - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
+    #   - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
+    # 2.) remove /DNDEBUG
+    message(STATUS "${CMAKE_CXX_FLAGS}") # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+    message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}") #/MD /O2 /Ob2 /DNDEBUG
+    message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") #/MD /O2 /Ob2 /DNDEBUG
+    set(CMAKE_CXX_FLAGS_RELEASE  "/MT /O2 /Ob2" CACHE INTERNAL "")
+endif()
+message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
+message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
+message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
