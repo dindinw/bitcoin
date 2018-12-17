@@ -1,8 +1,8 @@
 if (NOT "$ENV{LIBEVNET_ROOT}" STREQUAL "")
-    set(ENV{LIBEVENT_ROOT_DIR} $ENV{LIBEVNET_ROOT})
+    set(LIBEVENT_ROOT_DIR $ENV{LIBEVNET_ROOT})
 endif()
 find_path(LIBEVENT_INCLUDE_DIR event.h
-        /usr/include/ /usr/local/include/ ${LIBEVENT_ROOT_DIR}/indclude/)
+        /usr/include/ /usr/local/include/ ${LIBEVENT_ROOT_DIR}/include/)
 find_library(LIBEVENT_LIB NAMES event
         PATHS /usr/lib/ /usr/local/lib/ ${LIBEVENT_ROOT_DIR}/lib/)
 
