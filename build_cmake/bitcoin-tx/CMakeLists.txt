@@ -1,7 +1,7 @@
 
 add_executable(bitcoin-tx ../../src/bitcoin-tx.cpp )
 
-target_link_libraries(bitcoin-tx
+list(APPEND bitcoin-tx_LIBRARIES
         univalue
         bitcoin_common
         bitcoin_util
@@ -14,6 +14,11 @@ target_link_libraries(bitcoin-tx
         Boost::chrono
         OpenSSL::Crypto
 )
+if(WIN32)
+    list(APPEND bitcoin-tx_LIBRARIES ws2_32 shlwapi crypt32)
+endif()
+
+target_link_libraries(bitcoin-tx ${bitcoin-tx_LIBRARIES})
 
 target_compile_definitions(bitcoin-tx PRIVATE HAVE_CONFIG_H)
 target_include_directories(bitcoin-tx PRIVATE ${BITCOIN_ROOT}
