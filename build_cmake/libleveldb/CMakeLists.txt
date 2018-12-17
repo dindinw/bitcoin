@@ -84,7 +84,6 @@ add_library(leveldb ${libleveldb_SOURCES})
 add_library(memenv STATIC ${libmemenv_SOURCES})
 add_library(leveldb_sse42 STATIC ${libleveldb_sse42_SOURCES})
 
-# target_compile_definitions(leveldb PRIVATE LEVELDB_PLATFORM_POSIX)
 target_include_directories(leveldb PRIVATE
         ../../src/leveldb/include
         ../../src/leveldb/include/leveldb
@@ -103,12 +102,3 @@ target_include_directories(leveldb_sse42 PRIVATE
         ../../src/leveldb
         ../../src/leveldb/port
 )
-
-# TODO windows build
-# need to fix non-portable code of leveldb fork in the bitcoin code
-# 1. https://github.com/google/leveldb/commit/623d014a54f8cf9b74ad6aaba9181ca1e65c43a1
-#     -- remove non-portable headers <sys/types.h> and <unistd.h>  in db/c.cc db/c_test.c
-# 2. https://github.com/google/leveldb/commit/89af27bde59fbbb3025653812b45fec10a655cb7
-#     -- remove ssize
-# 3. need to fix bitcoin's port-win.h
-#     -- remove #define snprintf _snprintf

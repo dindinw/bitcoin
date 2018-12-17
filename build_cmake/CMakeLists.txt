@@ -191,7 +191,13 @@ message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENAB
 #    - net_processing.cpp (#if defined(NDEBUG))
 #    - validation.cpp (#if defined(NDEBUG))
 #
-# 3.) fix Code : (3 leveldb fix)
+# 3.) fix Code : need to fix non-portable code of leveldb fork in the bitcoin code
+#   - https://github.com/google/leveldb/commit/623d014a54f8cf9b74ad6aaba9181ca1e65c43a1
+#     - remove non-portable headers <sys/types.h> and <unistd.h>  in db/c.cc db/c_test.c
+#   - https://github.com/google/leveldb/commit/89af27bde59fbbb3025653812b45fec10a655cb7
+#     - remove ssize
+#   - need to fix bitcoin's port-win.h
+#     - remove #define snprintf _snprintf
 #
 # 4.) Fix linker
 #  - need to add ws2_32 and shlwapi to linker
@@ -199,18 +205,18 @@ message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENAB
 #     - net.cpp (FD_ISSET) -> ws2_32.lib
 #  - need link crypt32.lib (if static link openssl)
 #     - libeay32.lib __imp_CertOpenStore -> crypt32.lib
-#
+#  - need Iphlpapi.lib for test-bitcoin
 
 if(MSVC)
-    # 1.) Make sure to use the /MT flag for build static lib
+    # 1.) Make sure to use the /MT flag for the static lib
     #   - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
     #   - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
     # 2.) remove /DNDEBUG
     message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
     message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
     message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
-    set(CMAKE_CXX_FLAGS_DEBUG    "/MTd /Zi /Ob0 /Od /RTC1" CACHE INTERNAL "")
-    set(CMAKE_CXX_FLAGS_RELEASE  "/MT /O2 /Ob2" CACHE INTERNAL "")
+    set(CMAKE_CXX_FLAGS_DEBUG    "/MT /Zi /Ob0 /Od /RTC1" CACHE INTERNAL "") #  MTd -> MT
+    set(CMAKE_CXX_FLAGS_RELEASE  "/MT /O2 /Ob2" CACHE INTERNAL "")           #  MD  -> MT , remvoe NDEBUG
 endif()
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
