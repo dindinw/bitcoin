@@ -63,8 +63,7 @@ list(APPEND bitcoind_LIBRARIES
         ${LIBDB_CXX_LIBRARIES}
         OpenSSL::Crypto
         ${LIB_MINIUPNP}
-        event_pthreads
-        event
+        ${LIBEVENT_LIBRARIES}
 )
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})

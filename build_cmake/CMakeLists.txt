@@ -60,6 +60,7 @@ find_package(OpenSSL REQUIRED)
 message(STATUS "Found OpenSSL/Crypto ${OPENSSL_INCLUDE_DIR} ${OPENSSL_CRYPTO_LIBRARY}")
 
 find_package(Libevent REQUIRED)
+message(STATUS "Found libevent ${LIBEVENT_LIBRARIES}")
 
 if(ENABLE_ZMQ)
     find_package (ZMQ)
