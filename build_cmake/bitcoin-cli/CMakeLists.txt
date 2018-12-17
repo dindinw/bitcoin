@@ -12,7 +12,7 @@ list(APPEND bitcoin-cli_LIBRARIES
         ${LIBEVENT_LIBRARIES}
         )
 if(WIN32)
-    list(APPEND bitcoin-cli_LIBRARIES ws2_32 shlwapi crypt3)
+    list(APPEND bitcoin-cli_LIBRARIES ws2_32 shlwapi crypt32)
 endif()
 target_link_libraries( bitcoin-cli ${bitcoin-cli_LIBRARIES})
 
