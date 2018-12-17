@@ -1,7 +1,7 @@
 
 add_executable(bitcoin-cli ../../src/bitcoin-cli.cpp )
 
-target_link_libraries( bitcoin-cli
+list(APPEND bitcoin-cli_LIBRARIES
         bitcoin_cli
         univalue
         bitcoin_util
@@ -10,8 +10,12 @@ target_link_libraries( bitcoin-cli
         Boost::thread
         OpenSSL::Crypto
         ${LIBEVENT_LIBRARIES}
-)
-message( why not boost ?  ${Boost_INCLUDE_DIRS})
+        )
+if(WIN32)
+    list(APPEND bitcoin-cli_LIBRARIES ws2_32 shlwapi crypt3)
+endif()
+target_link_libraries( bitcoin-cli ${bitcoin-cli_LIBRARIES})
+
 target_compile_definitions(bitcoin-cli PRIVATE HAVE_CONFIG_H)
 target_include_directories(bitcoin-cli PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src

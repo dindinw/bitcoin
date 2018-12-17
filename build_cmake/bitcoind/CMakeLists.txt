@@ -66,11 +66,12 @@ list(APPEND bitcoind_LIBRARIES
         ${LIBEVENT_LIBRARIES}
 )
 
+if(WIN32)
+    list(APPEND bitcoind_LIBRARIES ws2_32 shlwapi crypt32)
+endif()
+
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
 
-if(WIN32)
-    target_link_libraries(bitcoind PRIVATE ws2_32 shlwapi crypt32)
-endif()
 
 target_compile_definitions(bitcoind PRIVATE -DHAVE_CONFIG_H)
 target_include_directories(bitcoind PRIVATE ${BITCOIN_ROOT}
