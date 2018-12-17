@@ -51,9 +51,7 @@ option(USE_UPNP      "enable UPnP"    OFF)
 #  - qt          (if enable)
 
 find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
-if(ENABLE_TEST)
-    find_package(Boost REQUIRED unit_test_framework)
-endif()
+
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
 find_package(OpenSSL REQUIRED)
@@ -147,7 +145,11 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-tx)
 #     - $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_CRYPTO_SSE41)
 #     - $(LIBBITCOIN_CRYPTO_AVX2) $(LIBBITCOIN_CRYPTO_SHANI) $(LIBSECP256K1)
 #     - $(BOOST_LIBS) $(CRYPTO_LIBS)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin)
+if(ENABLE_TEST)
+    find_package(Boost REQUIRED unit_test_framework)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin)
+endif()
+
 
 #========================
 # BENCHMARKS :
