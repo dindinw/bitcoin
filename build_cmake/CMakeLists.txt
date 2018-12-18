@@ -191,21 +191,29 @@ message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENAB
 #    - net_processing.cpp (#if defined(NDEBUG))
 #    - validation.cpp (#if defined(NDEBUG))
 #
-# 3.) fix Code : need to fix non-portable code of leveldb fork in the bitcoin code
-#   - https://github.com/google/leveldb/commit/623d014a54f8cf9b74ad6aaba9181ca1e65c43a1
-#     - remove non-portable headers <sys/types.h> and <unistd.h>  in db/c.cc db/c_test.c
-#   - https://github.com/google/leveldb/commit/89af27bde59fbbb3025653812b45fec10a655cb7
-#     - remove ssize
-#   - need to fix bitcoin's port-win.h
-#     - remove #define snprintf _snprintf
+# 3.) fix Code :
+#  - need to fix non-portable usage in the bitcoin's leveldb code
+#    - remove non-portable headers <sys/types.h> and <unistd.h>  in db/c.cc db/c_test.c
+#      - https://github.com/google/leveldb/commit/623d014a54f8cf9b74ad6aaba9181ca1e65c43a1
+#    - remove ssize in db/db_iter.cc
+#      - https://github.com/google/leveldb/commit/89af27bde59fbbb3025653812b45fec10a655cb7
+#      - remove #define snprintf _snprintf in port/port_win.h
+#  - refactor unicode filename wrapper (src/fs.cpp src/fs.h src/test/fs_test.cpp)
+#    - https://github.com/bitcoin/bitcoin/pull/13878/
+#    - https://github.com/bitcoin/bitcoin/issues/13869
+#    - test-bitcion have 2 failed tests on the unicode filename
 #
 # 4.) Fix linker
 #  - need to add ws2_32 and shlwapi to linker
-#     - __imp__PathFileExistsW -> shlwapi.lib
-#     - net.cpp (FD_ISSET) -> ws2_32.lib
+#    - __imp__PathFileExistsW -> shlwapi.lib
+#    - net.cpp (FD_ISSET) -> ws2_32.lib
 #  - need link crypt32.lib (if static link openssl)
-#     - libeay32.lib __imp_CertOpenStore -> crypt32.lib
+#    - libeay32.lib __imp_CertOpenStore -> crypt32.lib
 #  - need Iphlpapi.lib for test-bitcoin
+#
+# 5.) Warnings
+#  - https://github.com/bitcoin/bitcoin/pull/14151
+#
 
 if(MSVC)
     # 1.) Make sure to use the /MT flag for the static lib
