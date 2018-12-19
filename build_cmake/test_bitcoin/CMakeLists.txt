@@ -89,7 +89,7 @@ list (APPEND BITCOIN_TESTS
 
 if(ENABLE_PROPERTY_TESTS)
     list(APPEND BITCOIN_TESTS
-        ../../test/key_properties.cpp)
+        ../../src/test/key_properties.cpp)
 
     list(APPEND BITCOIN_TEST_SUITE
         ../../src/test/gen/crypto_gen.cpp
@@ -214,7 +214,11 @@ target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
 )
 
 enable_testing()
-add_test(test_bitcion test_bitcoin)
-add_custom_target(check_bitcoin
+#add_test(test_bitcion test_bitcoin)
+
+include(BoostTestHelpers)
+add_boost_test(test_bitcoin ${BITCOIN_TESTS})
+
+add_custom_target(check-bitcoin
         ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
-add_dependencies(check_bitcoin test_bitcoin)
+add_dependencies(check-bitcoin test_bitcoin)

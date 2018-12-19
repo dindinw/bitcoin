@@ -89,5 +89,9 @@ if(USE_UPNP)
     set(UPNP_DEFAULT 1) #TODO hardcoding
 endif()
 
+# HAVE_CONSENSUS_LIB
+set(HAVE_CONSENSUS_LIB 1)
+# HAVE_CXX11
+set(HAVE_CXX11 1)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)

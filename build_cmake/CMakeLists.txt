@@ -74,6 +74,13 @@ if(ENABLE_ZMQ)
     endif()
 endif()
 
+if(USE_UPNP)
+    find_package (Libminiupnpc)
+    if(NOT Libminiupnpc_FOUND)
+        message(FATAL_ERROR "USE_UPNP is ${USE_UPNP} but libminiupnpc not found, you might need swith to -DUSE_UPNP=off")
+    endif()
+endif()
+
 # miniupnpc
 # qt
 
