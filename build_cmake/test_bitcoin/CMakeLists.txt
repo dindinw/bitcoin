@@ -151,7 +151,13 @@ if(WIN32)
     list(APPEND test_bitcoin_LIBRARIES ws2_32 Iphlpapi shlwapi crypt32)
 endif()
 
-find_package (Python 2 REQUIRED COMPONENTS Interpreter)
+# The FindPython is more powerful but only avaible on the latest versions
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
+    find_package (Python 2 REQUIRED COMPONENTS Interpreter)
+else()
+    find_program(Python_EXECUTABLE python)
+endif()
+
 function(gen_json_header NAME)
     set(HEADERS "")
     foreach(f ${ARGN})
