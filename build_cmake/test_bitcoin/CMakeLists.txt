@@ -195,7 +195,11 @@ endif()
 
 if(WIN32)
     target_compile_definitions(test_bitcoin PRIVATE NOMINMAX)
+    if(MSVC) # make sure the Visual Studio read soure code file as utf-8
+        target_compile_options(test_bitcoin PRIVATE "/utf-8")
+    endif()
 endif()
+
 
 target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
@@ -211,6 +215,6 @@ target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
 
 enable_testing()
 add_test(test_bitcion test_bitcoin)
-add_custom_target(check_bitcoin COMMAND ${CMAKE_CTEST_COMMAND})
+add_custom_target(check_bitcoin
+        ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
 add_dependencies(check_bitcoin test_bitcoin)
-

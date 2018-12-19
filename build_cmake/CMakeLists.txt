@@ -208,7 +208,8 @@ message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENAB
 #  - refactor unicode filename wrapper (src/fs.cpp src/fs.h src/test/fs_test.cpp)
 #    - https://github.com/bitcoin/bitcoin/pull/13878/
 #    - https://github.com/bitcoin/bitcoin/issues/13869
-#    - test-bitcion have 2 failed tests on the unicode filename
+#  - test-bitcion have 2 failed tests on the unicode filename
+#      - fixed by using the /utf-8 flag to MSVC
 #
 # 4.) Fix linker
 #  - need to add ws2_32 and shlwapi to linker
