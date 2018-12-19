@@ -144,7 +144,7 @@ list(APPEND test_bitcoin_LIBRARIES
         # rapidcheck
 )
 if(ENABLE_ZMQ)
-    list(APPEND test_bitcoin_LIBRARIES zmq)
+    list(APPEND test_bitcoin_LIBRARIES ${ZMQ_LIBRARIES})
 endif()
 
 if(WIN32)
