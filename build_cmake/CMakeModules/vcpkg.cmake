@@ -1,0 +1,7 @@
+if (NOT "$ENV{VCPKG_ROOT}" STREQUAL "")
+    set(BOOST_ROOT    $ENV{VCPKG_ROOT})
+    set(OPENSSL_ROOT_DIR $ENV{VCPKG_ROOT})
+    set(LIBEVENT_ROOT  $ENV{VCPKG_ROOT})
+    set(LIBDB_CXX_DIR  $ENV{VCPKG_ROOT})
+    set(ZeroMQ_DIR $ENV{VCPKG_ROOT}/share/zeromq/)
+endif()

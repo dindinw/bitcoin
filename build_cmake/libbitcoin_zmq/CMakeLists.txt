@@ -7,6 +7,9 @@ list(APPEND libbitcoin_zmq_a_SOURCES
 
 add_library(bitcoin_zmq STATIC ${libbitcoin_zmq_a_SOURCES})
 target_compile_definitions(bitcoin_zmq PRIVATE -DENABLE_ZMQ)
+if(WIN32)
+    target_compile_definitions(bitcoin_zmq PUBLIC NOMINMAX)
+endif()
 target_include_directories(bitcoin_zmq PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/zmq

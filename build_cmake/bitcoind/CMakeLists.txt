@@ -44,7 +44,7 @@ list(APPEND bitcoind_LIBRARIES
 
 if(ENABLE_ZMQ)
     list(APPEND bitcoind_LIBRARIES
-        bitcoin_zmq zmq)
+        bitcoin_zmq {ZMQ_LIBRARIES})
 endif()
 
 if(USE_UPNP)
