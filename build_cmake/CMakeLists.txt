@@ -42,16 +42,19 @@ option(USE_UPNP      "enable UPnP"    OFF)
 
 # ==============================
 # Check Requried Dependeces:
-#  - berkeley-db (required)
 #  - Boost       (required)
 #  - OpenSSL     (required)
 #  - libevent    (required)
+#  - berkeley-db (if wallet enabled)
 #  - zmq         (if enbale)
 #  - miniupnpc   (if enable)
 #  - qt          (if enable)
 
-find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
+if(WIN32)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/vcpkg.cmake)
+endif()
 
+find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
 find_package(OpenSSL REQUIRED)
@@ -59,6 +62,10 @@ message(STATUS "Found OpenSSL/Crypto ${OPENSSL_INCLUDE_DIR} ${OPENSSL_CRYPTO_LIB
 
 find_package(Libevent REQUIRED)
 message(STATUS "Found libevent ${LIBEVENT_LIBRARIES}")
+
+if(ENABLE_WALLET)
+    find_package(libdb_cxx REQUIRED)  #bdb only required for support wallet
+endif()
 
 if(ENABLE_ZMQ)
     find_package (ZMQ)

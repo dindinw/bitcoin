@@ -26,9 +26,7 @@ if(WIN32)  # the crypto enhancement code are not supported for windows paltform 
     set(ENABLE_SSE41 off CACHE INTERNAL "" )
 endif()
 
-if(ENABLE_WALLET)
-    FIND_PACKAGE(libdb_cxx REQUIRED)  #bdb only required for support wallet
-endif()
+
 
 # BOOST_XXX ...
 # Boost is required, HAVE_BOOST_XXX should be set to on directly
