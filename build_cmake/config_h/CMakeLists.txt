@@ -94,7 +94,25 @@ set(HAVE_CONSENSUS_LIB 1)
 # HAVE_CXX11
 set(HAVE_CXX11 1)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)
+
+set(BITCOIN_CONFIG ${BITCOIN_ROOT}/src/config/bitcoin-config.h)
+set(BITCOIN_CONFIG_CMAKE ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)
+set(BITCOIN_CONFIG_CMAKE_IN ${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in)
+
+# generate bitcoin-config.cmake.h
+configure_file(${BITCOIN_CONFIG_CMAKE_IN} ${BITCOIN_CONFIG_CMAKE})
+
 include(MakeLink)
-make_link(${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h ${BITCOIN_ROOT}/src/config/bitcoin-config.h link-bitcoin-config)
+if(EXISTS ${BITCOIN_CONFIG})
+    if(IS_SYMLINK ${BITCOIN_CONFIG})
+        message(STATUS "${BITCOIN_CONFIG} symlinked")
+    else()
+        message(STATUS "${BITCOIN_CONFIG} existed, rename to ${BITCOIN_CONFIG}.old" )
+        file(RENAME ${BITCOIN_CONFIG} ${BITCOIN_CONFIG}.old)
+    endif()
+endif()
+if(NOT EXISTS ${BITCOIN_CONFIG})
+    # link to bitcoin-config.h
+    make_link(${BITCOIN_CONFIG_CMAKE} ${BITCOIN_CONFIG})
+endif()
 
