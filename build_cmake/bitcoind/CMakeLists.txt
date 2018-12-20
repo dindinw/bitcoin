@@ -47,10 +47,6 @@ if(ENABLE_ZMQ)
         bitcoin_zmq ${ZMQ_LIBRARIES})
 endif()
 
-if(USE_UPNP)
-    set(LIB_MINIUPNP miniupnpc)
-endif()
-
 list(APPEND bitcoind_LIBRARIES
         leveldb
         leveldb_sse42
@@ -62,9 +58,12 @@ list(APPEND bitcoind_LIBRARIES
         Boost::chrono
         ${LIBDB_CXX_LIBRARIES}
         OpenSSL::Crypto
-        ${LIB_MINIUPNP}
         ${LIBEVENT_LIBRARIES}
 )
+
+if(USE_UPNP)
+    list(APPEND bitcoind_LIBRARIES ${LIBMINIUPNPC_LIBRARIES})
+endif()
 
 if(WIN32)
     list(APPEND bitcoind_LIBRARIES ws2_32 shlwapi crypt32)

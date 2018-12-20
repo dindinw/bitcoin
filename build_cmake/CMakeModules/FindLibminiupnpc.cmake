@@ -1,8 +1,11 @@
+if (NOT "${LIBMINUPNPC_ROOT}" STREQUAL "")
+    set(LIBMINUPNPC_DIR ${LIBMINUPNPC_ROOT})
+endif()
 if (NOT "$ENV{LIBMINUPNPC_ROOT}" STREQUAL "")
     set(LIBMINUPNPC_DIR $ENV{LIBMINUPNPC_ROOT})
 endif()
 
-set(Libminiupnpc_EXTRA_PREFIXES /usr/local /opt/local "$ENV{HOME}" ${LLIBMINUPNPC_DIR})
+set(Libminiupnpc_EXTRA_PREFIXES /usr/local /opt/local "$ENV{HOME}" ${LIBMINUPNPC_DIR})
 foreach(prefix ${Libminiupnpc_EXTRA_PREFIXES})
     list(APPEND Libminiupnpc_INCLUDE_PATHS "${prefix}/include")
     list(APPEND Libminiupnpc_LIBRARIES_PATHS "${prefix}/lib")
