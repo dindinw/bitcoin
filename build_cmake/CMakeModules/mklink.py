@@ -6,8 +6,9 @@ import platform
 
 
 def main(src, dst):
-   symlink(src, dst)
-   print("symlink created")
+    symlink(src, dst)
+    print("symlink created")
+
 
 # Note : the original _symlink_win32 code copied from
 # https://github.com/erdc/python/blob/v2.7.4/Lib/test/symlink_support.py
@@ -72,6 +73,7 @@ def _symlink_win32(target, link, target_is_directory=False):
 
     target_is_directory = target_is_directory or os.path.isdir(target)
     handle_nonzero_success(CreateSymbolicLink(link, target, target_is_directory))
+
 
 symlink = os.symlink if hasattr(os, 'symlink') else (
     _symlink_win32 if platform.system() == 'Windows' else None
