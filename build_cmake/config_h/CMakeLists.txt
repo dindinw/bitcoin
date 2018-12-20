@@ -95,3 +95,6 @@ set(HAVE_CONSENSUS_LIB 1)
 set(HAVE_CXX11 1)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)
+include(MakeLink)
+make_link(${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h ${BITCOIN_ROOT}/src/config/bitcoin-config.h link-bitcoin-config)
+
