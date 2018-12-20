@@ -3,12 +3,14 @@
 import sys
 import os
 
+
 def main(src, dst):
     if sys.version_info.major > 2:
         os.symlink(src, dst)
         print("symlink created")
-    else :
+    else:
         print("python 2 not support yet")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

@@ -15,7 +15,8 @@ macro(make_link src dest)
     if(NOT "${retcode}" STREQUAL "0")
         if(WIN32)
             # https://superuser.com/questions/124679/how-do-i-create-a-link-in-windows-7-home-premium-as-a-regular-user
-            message(WARNING "For Windows Platform, please make sure has SeCreateSymbolicLinkPrivilege")
+            # https://blogs.windows.com/buildingapps/2016/12/02/symlinks-windows-10/
+            message(WARNING "For Windows Platform, please make sure has SeCreateSymbolicLinkPrivilege, For Windows 10, please open the developer mode")
         endif()
         message(FATAL_ERROR "Fatal error when make_link")
     endif()

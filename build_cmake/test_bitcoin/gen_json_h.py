@@ -3,6 +3,7 @@
 
 import sys
 
+
 # port from src/Makefile.test.include
 # $(HEXDUMP) -v -e '8/1 "0x%02x, "' -e '"\n"' $< | $(SED) -e 's/0x  ,//g' && \
 
@@ -17,6 +18,7 @@ def main3(test_name, input_file):
     print(" };")
     print("};")
 
+
 # For Python2
 def main2(test_name, input_file):
     with open(input_file, "rb") as f:
@@ -27,6 +29,7 @@ def main2(test_name, input_file):
     print(", ".join(map(lambda x: "0x{:02x}".format(ord(x)), contents)))
     print(" };")
     print("};")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
