@@ -79,5 +79,4 @@ target_include_directories(bitcoind PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src/univalue/include
         ${BITCOIN_ROOT}/src/secp256k1/include
         ${Boost_INCLUDE_DIRS}
-        ${LIBMINUPNPC_INCLUDE_DIRS}
 )
