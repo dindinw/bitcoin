@@ -125,7 +125,7 @@ endif()
 
 
 if(USE_UPNP)
-    set(LIB_MINIUPNP {LIBMINIUPNPC_LIBRARIES})
+    set(LIB_MINIUPNP ${LIBMINIUPNPC_LIBRARIES})
 endif()
 
 list(APPEND test_bitcoin_LIBRARIES
