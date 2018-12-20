@@ -30,4 +30,4 @@ find_package_handle_standard_args ( ZMQ DEFAULT_MSG ZMQ_LIBRARY ZMQ_INCLUDE_DIR 
 
 mark_as_advanced(ZMQ_INCLUDE_DIRS ZMQ_LIBRARIES )
 
-message(STATUS "Found libzmq at ${ZMQ_INCLUDE_DIRS} ${ZMQ_LIBRARIES}")
+message(STATUS "libzmq ${ZMQ_INCLUDE_DIRS} ${ZMQ_LIBRARIES}")

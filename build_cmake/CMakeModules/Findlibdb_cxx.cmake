@@ -12,4 +12,4 @@ find_library(LIBDB_CXX_LIBRARIES NAMES db_cxx libdb48
 
 mark_as_advanced(LIBDB_CXX_INCLUDE_DIR LIBDB_CXX_LIBRARIES )
 
-MESSAGE(STATUS "Found berkeleydb  ${LIBDB_CXX_INCLUDE_DIR} and ${LIBDB_CXX_LIBRARIES}")
+message(STATUS "berkeleydb  ${LIBDB_CXX_INCLUDE_DIR} and ${LIBDB_CXX_LIBRARIES}")

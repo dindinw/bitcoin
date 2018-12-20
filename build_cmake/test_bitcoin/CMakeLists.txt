@@ -217,7 +217,7 @@ target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
 enable_testing()
 #add_test(test_bitcion test_bitcoin)
 
-include(BoostTestHelpers)
+include(BoostTestHelper)
 add_boost_test(test_bitcoin ${BITCOIN_TESTS})
 
 add_custom_target(check-bitcoin
