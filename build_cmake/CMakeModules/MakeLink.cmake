@@ -1,12 +1,14 @@
 macro(make_link src dest)
     message(STATUS "mklink ${src} -> ${dest}")
 
-    # <= 3.12 in windows, use python
     if(WIN32 AND CMAKE_VERSION VERSION_LESS_EQUAL 3.12)
-        find_package (Python 3 REQUIRED COMPONENTS Interpreter)
+        # cmake <= 3.12 and in windows, use python
+        # use find_program instead of find_package since cmake <= 3.12
+        find_program(Python_EXECUTABLE python)
         execute_process( COMMAND ${Python_EXECUTABLE} "${CMAKE_MODULE_PATH}/mklink.py" ${src} ${dest}
                 RESULT_VARIABLE retcode)
-    else() # > 3.12, we can use cmake -E create_symlink
+    else()
+        # > 3.12, we can use cmake -E create_symlink
         execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink ${src} ${dest}
                 RESULT_VARIABLE retcode)
     endif()
