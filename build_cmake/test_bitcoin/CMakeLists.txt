@@ -118,6 +118,7 @@ list (APPEND test_bitcoin_SOURCES
         ${JSON_TEST_FILES}
         ${RAW_TEST_FILES})
 
+add_executable(test_bitcoin ${test_bitcoin_SOURCES})
 
 if (ENABLE_WALLET)
     list(APPEND test_bitcoin_LIBRARIES bitcoin_wallet)
@@ -188,7 +189,6 @@ endfunction()
 
 gen_json_header(JSON_HEADERS ${JSON_TEST_FILES})
 
-add_executable(test_bitcoin ${test_bitcoin_SOURCES})
 target_link_libraries(test_bitcoin ${test_bitcoin_LIBRARIES})
 target_compile_definitions(test_bitcoin PRIVATE HAVE_CONFIG_H)
 
