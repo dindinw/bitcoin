@@ -33,11 +33,13 @@ set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 # ==============================
 # All Options
-option(ENABLE_TEST   "enable test"    ON)
-option(ENABLE_WALLET "enable wallet"  ON)
-option(ENABLE_ZMQ    "enable zmq"     ON)
-option(USE_ASM       "enable use asm" ON)
-option(USE_UPNP      "enable UPnP"    OFF)
+option(ENABLE_TEST            "enable test"      ON)
+option(ENABLE_PROPERTY_TESTS  "enable RapidCheck property based tests" OFF)
+option(ENABLE_BENCH           "enable benchmark" ON)
+option(ENABLE_WALLET          "enable wallet"    ON)
+option(ENABLE_ZMQ             "enable zmq"       ON)
+option(USE_ASM                "enable use asm"   ON)
+option(USE_UPNP               "enable UPnP"      OFF)
 
 
 # ==============================
@@ -51,7 +53,10 @@ option(USE_UPNP      "enable UPnP"    OFF)
 #  - qt          (if enable)
 
 if(WIN32)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/vcpkg.cmake)
+    option(USE_VCPKG  "use vcpgk to mange depends on windows" ON)
+    if(USE_VGPGK)
+        include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/vcpkg.cmake)
+    endif()
 endif()
 
 find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
@@ -166,6 +171,8 @@ endif()
 
 #========================
 # BENCHMARKS :
+if(ENABLE_BENCH)
+endif()
 
 #========================
 # Build bitcion-qt :
