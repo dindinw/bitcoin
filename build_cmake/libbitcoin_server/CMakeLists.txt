@@ -64,5 +64,11 @@ target_include_directories(bitcoin_server PRIVATE ${BITCOIN_ROOT}
         ${Boost_INCLUDE_DIRS}
         ${OPENSSL_INCLUDE_DIR}
         ${LIBEVENT_INCLUDE_DIR}
-		${LIBMINIUPNPC_INCLUDE_DIRS}
 )
+
+if (USE_UPNP)
+    if(WIN32)
+        target_compile_definitions(bitcoin_server PRIVATE STATICLIB MINIUPNP_STATICLIB)
+    endif()
+    target_include_directories(bitcoin_server PUBLIC ${LIBMINIUPNPC_INCLUDE_DIRS})
+endif()

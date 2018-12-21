@@ -127,9 +127,7 @@ endif()
 
 if(USE_UPNP)
     set(LIB_MINIUPNP ${LIBMINIUPNPC_LIBRARIES})
-    if(WIN32)
-        target_compile_definitions(test_bitcoin PRIVATE STATICLIB MINIUPNP_STATICLIB)
-    endif()
+
 endif()
 
 list(APPEND test_bitcoin_LIBRARIES
