@@ -28,7 +28,7 @@ if(NOT "${TRIPLET_NAME_OK}" STREQUAL "" AND EXISTS ${VCPKG_TRIPLET})
         message(STATUS ${_vcpkg_triple_warn})
     endif()
 else()
-    message(FATAL_ERROR "vcpkg triple : ${VCPKG_TRIPELT} not correct, please specify correct VCPKG_TRIPLET")
+    message(FATAL_ERROR "vcpkg triple : ${VCPKG_TRIPLET} not correct, please specify correct VCPKG_TRIPLET")
 endif()
 
 message(STATUS "vcpkg triplet: ${VCPKG_TRIPLET}")
