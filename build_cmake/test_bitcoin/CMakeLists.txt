@@ -214,6 +214,9 @@ target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src/test/data
         ${OPENSSL_INCLUDE_DIR}
 )
+if(ENABLE_PROPERTY_TESTS) #need rapidcheck
+    target_include_directories(test_bitcoin PRIVATE ${RAPIDCHECK_INCLUDE_DIRS})
+endif()
 
 enable_testing()
 #add_test(test_bitcion test_bitcoin)
