@@ -64,5 +64,5 @@ target_include_directories(bitcoin_server PRIVATE ${BITCOIN_ROOT}
         ${Boost_INCLUDE_DIRS}
         ${OPENSSL_INCLUDE_DIR}
         ${LIBEVENT_INCLUDE_DIR}
-        ${LIBMINUPNPC_INCLUDE_DIRS}
+		${LIBMINIUPNPC_INCLUDE_DIRS}
 )
