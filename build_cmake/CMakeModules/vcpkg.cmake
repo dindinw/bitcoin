@@ -21,7 +21,7 @@ if ("${VCPKG_TRIPLET}" STREQUAL "")
     endif()
 endif()
 
-message(STATUS "VCPKG_TRIPLET = ${VCPKG_TRIPLET}")
+message(STATUS "vcpkg triplet: ${VCPKG_TRIPLET}")
 set(BOOST_ROOT    ${VCPKG_TRIPLET})
 set(OPENSSL_ROOT_DIR ${VCPKG_TRIPLET})
 set(LIBEVENT_ROOT_DIR  ${VCPKG_TRIPLET})
