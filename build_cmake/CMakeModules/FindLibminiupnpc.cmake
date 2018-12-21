@@ -11,9 +11,7 @@ foreach(prefix ${Libminiupnpc_EXTRA_PREFIXES})
     list(APPEND Libminiupnpc_LIBRARIES_PATHS "${prefix}/lib")
 endforeach()
 
-find_path (LIBMINIUPNPC_INCLUDE_DIR miniupnpc.h
-        NAMES miniupnpc.h
-        PATH_SUFFIXES miniupnpc
+find_path (LIBMINIUPNPC_INCLUDE_DIR NAMES miniupnpc/miniupnpc.h
         PATHS ${Libminiupnpc_INCLUDE_PATHS})
 find_library (LIBMINIUPNPC_LIB
         NAMES miniupnpc libminiupnpc
