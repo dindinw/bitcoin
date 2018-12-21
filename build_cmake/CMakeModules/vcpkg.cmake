@@ -7,8 +7,8 @@ if ("${VCPKG_TRIPLET}" STREQUAL "")
     if (NOT "$ENV{VCPKG_TRIPLET}" STREQUAL "")
         set(VCPKG_TRIPLET $ENV{VCPKG_TRIPLET})
     elseif(NOT "${VCPKG_ROOT}" STREQUAL "")
-        set(PATH VCPKG_TRIPLET ${VCPKG_ROOT}\\installed\\x64-windows-static)
-        set(VCPKG_TRIPLET_BYGUESS)
+        set(VCPKG_TRIPLET ${VCPKG_ROOT}\\installed\\x64-windows-static)
+        set(VCPKG_TRIPLET_BYGUESS 1)
     else()
         string(APPEND _vcpkg_error "The vcpkg triplet can not be found, please specify VCPKG_TRIPLET, ")
         string(APPEND _vcpkg_error "ex: <vcpkg>/installed/x64-windows-static")
@@ -18,9 +18,9 @@ endif()
 
 # check vcpkg triple pattern
 # https://github.com/Microsoft/vcpkg/blob/master/docs/users/triplets.md
-string(REGEX MATCH "x86|x64|arm|arm64-.*" TRIPLET_NAME_OK ${VCPKG_TRIPLET})
+string(REGEX MATCH "x86|x64|arm|arm64-.*" TRIPLET_NAME_OK "${VCPKG_TRIPLET}")
 
-if(TRIPLET_NAME_OK AND EXISTS ${VCPKG_TRIPLET})
+if(NOT "${TRIPLET_NAME_OK}" STREQUAL "" AND EXISTS ${VCPKG_TRIPLET})
     if(VCPKG_TRIPLET_BYGUESS)
         string( APPEND _vcpkg_triple_warn "WARNNING : VCPKG_TRIPLET set to ${VCPKG_TRIPLET} by default, ")
         string( APPEND _vcpkg_triple_warn "you might need to change to the suitable triplet for the ")
@@ -30,7 +30,6 @@ if(TRIPLET_NAME_OK AND EXISTS ${VCPKG_TRIPLET})
 else()
     message(FATAL_ERROR "vcpkg triple : ${VCPKG_TRIPELT} not correct, please specify correct VCPKG_TRIPLET")
 endif()
-
 
 message(STATUS "vcpkg triplet: ${VCPKG_TRIPLET}")
 set(BOOST_ROOT    ${VCPKG_TRIPLET})
