@@ -54,7 +54,7 @@ option(USE_UPNP               "enable UPnP"      OFF)
 
 if(WIN32)
     option(USE_VCPKG  "use vcpgk to mange depends on windows" ON)
-    if(USE_VCPGK)
+    if(USE_VCPKG)
         include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/vcpkg.cmake)
     endif()
 endif()
