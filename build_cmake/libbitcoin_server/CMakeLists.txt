@@ -68,7 +68,7 @@ target_include_directories(bitcoin_server PRIVATE ${BITCOIN_ROOT}
 
 if (USE_UPNP)
     if(WIN32)
-        target_compile_definitions(bitcoin_server PRIVATE STATICLIB MINIUPNP_STATICLIB)
+        target_compile_definitions(bitcoin_server PUBLIC STATICLIB MINIUPNP_STATICLIB)
     endif()
     target_include_directories(bitcoin_server PUBLIC ${LIBMINIUPNPC_INCLUDE_DIRS})
 endif()
