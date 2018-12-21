@@ -39,6 +39,18 @@ function(add_boost_test TEST_EXECUTABLE_NAME)
                         COMMAND ${TEST_EXECUTABLE_NAME}
                         --run_test=${TEST_SUITE_NAME}/${TEST_NAME} --catch_system_error=yes)
             endforeach()
+            # also need to match RC_BOOST_PROP (the rapidcheck tests)
+            set(FOUND_TESTS "")
+            string(REGEX MATCHALL "RC_BOOST_PROP\\( *([A-Za-z_0-9]+), *\\([^\n\r]*\\) *\\)"
+                    FOUND_TESTS ${SOURCE_FILE_CONTENTS})
+            foreach(HIT ${FOUND_TESTS})
+                #message(STATUS "HIT=${HIT}")
+                string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+), *\\([^\n\r]*\\) *\\).*" "\\1" TEST_NAME ${HIT})
+                #message(STATUS "add test ${TEST_SUITE_NAME}.${TEST_NAME}")
+                add_test(NAME "${TEST_SUITE_NAME}.${TEST_NAME}"
+                        COMMAND ${TEST_EXECUTABLE_NAME}
+                        --run_test=${TEST_SUITE_NAME}/${TEST_NAME} --catch_system_error=yes)
+            endforeach()
             set(TEST_SUITE_NAME "")
         endif()
     endforeach(f)
