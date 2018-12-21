@@ -27,6 +27,6 @@ mark_as_advanced(LIBMINIUPNPC_INCLUDE_DIRS LIBMINIUPNPC_LIBRARIES)
 
 if(Libminiupnpc_FOUND)
     message(STATUS "Libminiupnpc ${LIBMINIUPNPC_INCLUDE_DIRS} ${LIBMINIUPNPC_LIBRARIES}")
-else(libminiupnc_FIND_REQUIRED)
+else(libminiupnpc_FIND_REQUIRED)
     message(SEND_ERROR "Unable to find libminiupnpc.\nYour might need to specifiy LIBMINIUPNPC_ROOT")
 endif()

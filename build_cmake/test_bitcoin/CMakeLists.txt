@@ -88,7 +88,7 @@ list (APPEND BITCOIN_TESTS
 )
 
 if(ENABLE_PROPERTY_TESTS) #need rapidcheck
-    # find_package(rapidcheck)  //TODO
+    find_package(Rapidcheck)
     list(APPEND BITCOIN_TESTS
         ../../src/test/key_properties.cpp)
 

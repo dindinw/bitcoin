@@ -56,3 +56,15 @@ For Windows depends build and installation:
                        libevent:x64-windows-static `
                        zeromq:x64-windows-static `
 ```
+
+Other dependencies  :
+   - miniupnc
+```
+    .\vcpkg install miniupnpc:x86-windows-static
+    .\vcpkg install miniupnpc:x64-windows-static
+```
+   - rapidcheck
+```
+    .\vcpkg install rapidcheck:x86-windows-static
+    .\vcpkg install rapidcheck:x64-windows-static
+```
