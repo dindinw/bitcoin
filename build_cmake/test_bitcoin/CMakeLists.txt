@@ -233,7 +233,7 @@ if(_isMultiConfig)
     foreach(_cfg ${_configs})
         string(TOLOWER "${_cfg}" _cfg_lc)
         add_custom_target(check-bitcoin-${_cfg_lc}
-                ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND} -c ${_cfg})
+                ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND} -C ${_cfg})
         add_dependencies(check-bitcoin-${_cfg_lc} test_bitcoin)
     endforeach()
     add_custom_target(check-bitcoin
