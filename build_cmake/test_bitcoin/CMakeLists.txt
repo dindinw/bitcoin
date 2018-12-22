@@ -227,6 +227,21 @@ enable_testing()
 include(BoostTestHelper)
 add_boost_test(test_bitcoin ${BITCOIN_TESTS})
 
-add_custom_target(check-bitcoin
-        ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
-add_dependencies(check-bitcoin test_bitcoin)
+get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(_isMultiConfig)
+    set(_configs ${CMAKE_CONFIGURATION_TYPES})
+    foreach(_cfg ${_configs})
+        string(TOLOWER "${_cfg}" __cfg)
+        add_custom_target(check-bitcoin-${__cfg}
+                ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND} -c ${_cfg})
+        add_dependencies(check-bitcoin-${_cfg} test_bitcoin)
+    endforeach()
+    add_custom_target(check-bitcoin
+        ${CMAKE_COMMAND} -E cmake_echo_color --red --bold
+        "You are in multiconfig enviroment, please use check-bitcoin-debug/check-bitcion-release")
+else()
+    add_custom_target(check-bitcoin
+            ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
+    add_dependencies(check-bitcoin test_bitcoin)
+endif()
+
