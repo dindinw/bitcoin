@@ -33,16 +33,20 @@ endif()
 
 message(STATUS "vcpkg triplet: ${VCPKG_TRIPLET}")
 set(BOOST_ROOT    ${VCPKG_TRIPLET})
-if ("${Boost_LIBRARY_DIR_DEBUG}" STREQUAL "") # if using vcpkg, need to specifiy boost debug dir
-    set(Boost_LIBRARY_DIR_DEBUG ${VCPKG_TRIPLET}/debug/lib)
-    if(NOT EXISTS ${Boost_LIBRARY_DIR_DEBUG})
-        message(WARNING, "Boost_LIBRARY_DIR_DEBUG : ${Boost_LIBRARY_DIR_DEBUG} not exists.")
-    else()
-        message(STATUS,  "Boost_LIBRARY_DIR_DEBUG : ${Boost_LIBRARY_DIR_DEBUG}")
-    endif()
-endif()
-
 set(OPENSSL_ROOT_DIR ${VCPKG_TRIPLET})
 set(LIBEVENT_ROOT_DIR  ${VCPKG_TRIPLET})
 set(LIBDB_CXX_DIR  ${VCPKG_TRIPLET})
 set(ZeroMQ_DIR ${VCPKG_TRIPLET}/share/zeromq/)
+
+# if using vcpkg, need to specifiy debug library dir
+#  - boost
+#  - berkeley-db
+set(VCPKG_TRIPLET_DEBUG ${VCPKG_TRIPLET}/debug/lib)
+if(EXISTS ${VCPKG_TRIPLET_DEBUG})
+    set(Boost_LIBRARY_DIR_DEBUG ${VCPKG_TRIPLET_DEBUG})
+    set(LIBDB_CXX_DEBUG_DIR ${VCPKG_TRIPLET_DEBUG})
+    message(STATUS,  "Boost_LIBRARY_DIR_DEBUG : ${Boost_LIBRARY_DIR_DEBUG}")
+    message(STATUS,  "LIBDB_CXX_DEBUG_DIR: ${LIBDB_CXX_DEBUG_DIR}")
+else()
+    message(WARNING, "vcpkg debug dir: ${VCPKG_TRIPLET_DEBUG} not exists, the multiple-configuation build might not work properly")
+endif()
