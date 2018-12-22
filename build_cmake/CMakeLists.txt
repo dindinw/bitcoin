@@ -66,6 +66,12 @@ if(ENABLE_TEST)
     list(APPEND required_boost_components unit_test_framework)
 endif()
 find_package(Boost 1.47.0 REQUIRED COMPONENTS ${required_boost_components})
+if(Boost_DEBUG) # show debug message if Boost_DEBUG is on
+    message(STATUS "Boost_LIBRARIES : ${Boost_LIBRARIES}")
+    message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY : ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}")
+    message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE : ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}")
+    message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG : ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG}")
+endif()
 
 # OpenSSL
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
