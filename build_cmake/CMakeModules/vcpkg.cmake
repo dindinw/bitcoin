@@ -37,6 +37,8 @@ set(OPENSSL_ROOT_DIR ${VCPKG_TRIPLET})
 set(LIBEVENT_ROOT_DIR  ${VCPKG_TRIPLET})
 set(LIBDB_CXX_DIR  ${VCPKG_TRIPLET})
 set(ZeroMQ_DIR ${VCPKG_TRIPLET}/share/zeromq/)
+set(LIBMINIUPNPC_ROOT ${VCPKG_TRIPLET})
+set(RAPIDCHECK_ROOT ${VCPKG_TRIPLET})
 
 # if using vcpkg, need to specifiy debug library dir
 #  - boost
