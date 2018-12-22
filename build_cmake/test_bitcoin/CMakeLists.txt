@@ -231,10 +231,10 @@ get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(_isMultiConfig)
     set(_configs ${CMAKE_CONFIGURATION_TYPES})
     foreach(_cfg ${_configs})
-        string(TOLOWER "${_cfg}" __cfg)
-        add_custom_target(check-bitcoin-${__cfg}
+        string(TOLOWER "${_cfg}" _cfg_lc)
+        add_custom_target(check-bitcoin-${_cfg_lc}
                 ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND} -c ${_cfg})
-        add_dependencies(check-bitcoin-${_cfg} test_bitcoin)
+        add_dependencies(check-bitcoin-${_cfg_lc} test_bitcoin)
     endforeach()
     add_custom_target(check-bitcoin
         ${CMAKE_COMMAND} -E cmake_echo_color --red --bold
