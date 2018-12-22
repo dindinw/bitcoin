@@ -43,12 +43,15 @@ set(RAPIDCHECK_ROOT ${VCPKG_TRIPLET})
 # if using vcpkg, need to specifiy debug library dir
 #  - boost
 #  - berkeley-db
+#  - rapidcheck
 set(VCPKG_TRIPLET_DEBUG ${VCPKG_TRIPLET}/debug/lib)
 if(EXISTS ${VCPKG_TRIPLET_DEBUG})
     set(Boost_LIBRARY_DIR_DEBUG ${VCPKG_TRIPLET_DEBUG})
     set(LIBDB_CXX_DEBUG_DIR ${VCPKG_TRIPLET_DEBUG})
+    set(RPADID_DEBUG_DIR ${VCPKG_TRIPLET_DEBUG})
     message(STATUS,  "Boost_LIBRARY_DIR_DEBUG : ${Boost_LIBRARY_DIR_DEBUG}")
     message(STATUS,  "LIBDB_CXX_DEBUG_DIR: ${LIBDB_CXX_DEBUG_DIR}")
+    message(STATUS,  "RPADID_DEBUG_DIR: ${RPADID_DEBUG_DIR}")
 else()
     message(WARNING, "vcpkg debug dir: ${VCPKG_TRIPLET_DEBUG} not exists, the multiple-configuation build might not work properly")
 endif()
