@@ -43,7 +43,7 @@ option(USE_UPNP               "enable UPnP"      OFF)
 
 
 # ==============================
-# Check Requried Dependeces:
+# Find Requried Dependeces:
 #  - Boost       (required)
 #  - OpenSSL     (required)
 #  - libevent    (required)
@@ -52,6 +52,7 @@ option(USE_UPNP               "enable UPnP"      OFF)
 #  - miniupnpc   (if enable)
 #  - qt          (if enable)
 
+# try to use vcpkg if windows
 if(WIN32)
     option(USE_VCPKG  "use vcpgk to mange depends on windows" ON)
     if(USE_VCPKG)
@@ -59,18 +60,27 @@ if(WIN32)
     endif()
 endif()
 
-find_package(Boost 1.47.0 REQUIRED COMPONENTS system filesystem thread chrono)
+# Boost
+list(APPEND required_boost_components system filesystem thread chrono)
+if(ENABLE_TEST)
+    list(APPEND required_boost_components unit_test_framework)
+endif()
+find_package(Boost 1.47.0 REQUIRED COMPONENTS ${required_boost_components})
 
+# OpenSSL
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
 find_package(OpenSSL REQUIRED)
 message(STATUS "Found OpenSSL/Crypto ${OPENSSL_INCLUDE_DIR} ${OPENSSL_CRYPTO_LIBRARY}")
 
+# libevent
 find_package(Libevent REQUIRED)
 
+# berkeyley-db
 if(ENABLE_WALLET)
     find_package(libdb_cxx REQUIRED)  #bdb only required for support wallet
 endif()
 
+# zmq
 if(ENABLE_ZMQ)
     find_package (ZMQ)
     if(NOT ZMQ_FOUND)
@@ -78,6 +88,7 @@ if(ENABLE_ZMQ)
     endif()
 endif()
 
+# miniupnpc
 if(USE_UPNP)
     find_package (Libminiupnpc)
     if(NOT Libminiupnpc_FOUND)
@@ -85,7 +96,6 @@ if(USE_UPNP)
     endif()
 endif()
 
-# miniupnpc
 # qt
 
 # ===========================
@@ -150,7 +160,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-cli)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-tx)
 
 #========================
-# TEST :
+# Build Test Executable :
 #  - test_bitcoin
 #     - $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV)
 #     - $(BOOST_LIBS) $(BOOST_UNIT_TEST_FRAMEWORK_LIB) $(LIBSECP256K1) $(EVENT_LIBS) $(EVENT_PTHREADS_LIBS)
@@ -164,13 +174,12 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-tx)
 #     - $(LIBBITCOIN_CRYPTO_AVX2) $(LIBBITCOIN_CRYPTO_SHANI) $(LIBSECP256K1)
 #     - $(BOOST_LIBS) $(CRYPTO_LIBS)
 if(ENABLE_TEST)
-    find_package(Boost REQUIRED unit_test_framework)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin)
 endif()
 
 
 #========================
-# BENCHMARKS :
+# Build BENCHMARKS :
 if(ENABLE_BENCH)
 endif()
 
