@@ -11,7 +11,7 @@ find_library(LIBDB_CXX_LIBRARY_RELEASE NAMES db_cxx libdb48
         PATHS ${LIBDB_CXX_DIR}/lib /usr/lib/ /usr/local/lib/ /usr/local/opt/berkeley-db@4/lib)
 
 if(LIBDB_CXX_DEBUG_DIR)
-    find_library(LIBDB_CXX_LIBARY_DEBUG NAMES db_cxx libdb48
+    find_library(LIBDB_CXX_LIBRARY_DEBUG NAMES db_cxx libdb48
         PATHS ${LIBDB_CXX_DEBUG_DIR} ${LIBDB_CXX_DEBUG_DIR}/lib )
 endif()
 
