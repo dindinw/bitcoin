@@ -1,7 +1,7 @@
 macro(make_link src dest)
     message(STATUS "mklink ${src} -> ${dest}")
 
-    if(WIN32 AND CMAKE_VERSION VERSION_LESS_EQUAL 3.12)
+    if(WIN32 AND CMAKE_VERSION VERSION_LESS 3.13)
         # cmake <= 3.12 and in windows, use python
         # use find_program instead of find_package since cmake <= 3.12
         find_program(Python_EXECUTABLE python)

@@ -155,7 +155,7 @@ if(WIN32)
 endif()
 
 # The FindPython is more powerful but only avaible on the latest versions
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
+if(CMAKE_VERSION VERSION_GREATER 3.11)
     find_package (Python REQUIRED COMPONENTS Interpreter)
 else()
     find_program(Python_EXECUTABLE python)
