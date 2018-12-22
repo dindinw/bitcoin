@@ -66,7 +66,7 @@ if(USE_UPNP)
 endif()
 
 if(WIN32)
-    list(APPEND bitcoind_LIBRARIES ws2_32 shlwapi crypt32)
+    list(APPEND bitcoind_LIBRARIES ws2_32 Iphlpapi shlwapi crypt32)
 endif()
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
