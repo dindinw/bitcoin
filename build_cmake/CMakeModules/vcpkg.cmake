@@ -33,6 +33,19 @@ endif()
 
 message(STATUS "vcpkg triplet: ${VCPKG_TRIPLET}")
 set(BOOST_ROOT    ${VCPKG_TRIPLET})
+if ("${Boost_LIBRARY_DIR_DEBUG}" STREQUAL "") # if using vcpkg, need to specifiy boost debug dir
+    set(Boost_LIBRARY_DIR_DEBUG ${VCPKG_TRIPLET}/debug/lib)
+    if(NOT EXISTS Boost_LIBRARY_DIR_DEBUG)
+        message(WARNING, "Boost_LIBRARY_DIR_DEBUG : ${Boost_LIBRARY_DIR_DEBUG} not exists.")
+    endif()
+endif()
+
+
+message(STATUS "Boost_LIBRARIES : ${Boost_LIBRARIES}")
+message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY : ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}")
+message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE : ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE}")
+message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG : ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG}")
+
 set(OPENSSL_ROOT_DIR ${VCPKG_TRIPLET})
 set(LIBEVENT_ROOT_DIR  ${VCPKG_TRIPLET})
 set(LIBDB_CXX_DIR  ${VCPKG_TRIPLET})

@@ -250,13 +250,21 @@ if(MSVC)
     #   - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
     #   - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
     # 2.) remove /DNDEBUG
+    message(STATUS "MSVC_VERSION: ${MSVC_VERSION}")
+    message(STATUS "MSVC_C_ARCHITECTURE_ID ${MSVC_C_ARCHITECTURE_ID}")
+    message(STATUS "MSVC_CXX_ARCHITECTURE_ID ${MSVC_CXX_ARCHITECTURE_ID}")
     message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
     message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
     message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
-    set(CMAKE_CXX_FLAGS_DEBUG    "/MT /Zi /Ob0 /Od /RTC1" CACHE INTERNAL "") #  MTd -> MT
+    set(CMAKE_CXX_FLAGS_DEBUG    "/MTd /Zi /Ob0 /Od /RTC1" CACHE INTERNAL "") # MDd -> MTd
     set(CMAKE_CXX_FLAGS_RELEASE  "/MT /O2 /Ob2" CACHE INTERNAL "")           #  MD  -> MT , remvoe NDEBUG
 endif()
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
 message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
+
+message(STATUS "Build Type:")
+get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+message(STATUS "  isMultiConfig=${_isMultiConfig}  CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+
