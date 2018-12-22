@@ -199,6 +199,8 @@ endif()
 #
 message(STATUS "Build Configuration:")
 message(STATUS "  ENABLE_TEST is ${ENABLE_TEST}")
+message(STATUS "  ENABLE_PROPERTY_TESTS is ${ENABLE_PROPERTY_TESTS}")
+message(STATUS "  ENABLE_BENCH is ${ENABLE_BENCH}")
 message(STATUS "  ENABLE_WALLET is ${ENABLE_WALLET}")
 message(STATUS "  ENABLE_ZMQ is ${ENABLE_ZMQ}")
 message(STATUS "  USE_ASM is ${USE_ASM}")

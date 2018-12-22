@@ -191,7 +191,9 @@ target_link_libraries(test_bitcoin ${test_bitcoin_LIBRARIES})
 target_compile_definitions(test_bitcoin PRIVATE HAVE_CONFIG_H)
 
 if(Boost_VERSION GREATER 105800 AND NOT WIN32)
-    message(STATUS "  use BOOST_TEST_DYN_LINK")
+    if(Boost_DEBUG)
+        message(STATUS "  use BOOST_TEST_DYN_LINK")
+    endif()
     target_compile_definitions(test_bitcoin PRIVATE BOOST_TEST_DYN_LINK)
 endif()
 
