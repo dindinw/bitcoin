@@ -95,11 +95,29 @@ set(HAVE_CONSENSUS_LIB 1)
 set(HAVE_CXX11 1)
 
 
+# BITCOIN_CONFIG is the full `bitcoin-config.h` file path,
+# it's will be a symlink to the cmake generated config file finllay
 set(BITCOIN_CONFIG ${BITCOIN_ROOT}/src/config/bitcoin-config.h)
-set(BITCOIN_CONFIG_CMAKE ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.h)
+
+# BITCOIN_CONFIG_CMAKE_IN is the static cmake config file template
 set(BITCOIN_CONFIG_CMAKE_IN ${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.in)
 
-# generate bitcoin-config.cmake.h
+# BITCOIN_CONFIG_CMAKE is the cmake generated config file
+#
+# Notice for creating BITCOIN_CONFIG_CMAKE file name by using the ${CMAKE_CACHEFILE_DIR} varible
+# if 1.) in the multiple configuration enviroment, like VisualStudio or XCode
+#    2.) or different cmake_build_type are used in a singel-configruation environment, like CLion, CodeBlock.
+# When different configuration settings work in parallel, the shared `bitcoin-config.cmake.h` file
+# might led to the confilict settings, so we need to create the uniquity of BITCOIN_CONFIG_CMAKE.
+# Due to the different way bwtween the single/multiple-config of cmake, we have to Hack the
+# CMAKE_CACHEFILE_DIR, which contains full path to the directory that contains CMakeCache.txt file
+# (see https://cmake.org/cmake/help/v3.0/variable/CMAKE_CACHEFILE_DIR.html)
+# we use the BITCOIN_CONFIG_CMAKE name pattern as :
+#  bitcoin-config.cmake.<basename-of-CMAKE_CACHEFILE_DIR>.h
+get_filename_component(_gen_from ${CMAKE_CACHEFILE_DIR} NAME_WE)
+set(BITCOIN_CONFIG_CMAKE ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.${_gen_from}.h)
+
+# generate bitcoin-config.cmake.xxx.h
 configure_file(${BITCOIN_CONFIG_CMAKE_IN} ${BITCOIN_CONFIG_CMAKE})
 
 include(MakeLink)
@@ -115,4 +133,13 @@ if(NOT EXISTS ${BITCOIN_CONFIG})
     # link to bitcoin-config.h
     make_link(${BITCOIN_CONFIG_CMAKE} ${BITCOIN_CONFIG})
 endif()
+
+# this target only works as a developer convenience to relink the config.h in some rare case when
+# the file miss-linked anyway.  we have to call cmake's portbale command directly since the limition
+# of the build-time target it'q required 3.12 to work properly on all platform, but since its not
+# a config-time requirement, we can use `-E create_symlink` directly as a good-enough soultion
+# comparing with the more old-compatible make_link() function
+add_custom_target(relink
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${BITCOIN_CONFIG_CMAKE} ${BITCOIN_CONFIG}
+        COMMENT "relink: ${BITCOIN_CONFIG_CMAKE} => ${BITCOIN_CONFIG}")
 
