@@ -25,12 +25,15 @@ find_library  (LIBEVENT_EXTRA_LIB   NAMES event_extra    PATHS ${LibEvent_LIBRAR
 find_library  (LIBEVENT_PTHREAD_LIB NAMES event_pthreads PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_SSL_LIB     NAMES event_openssl  PATHS ${LibEvent_LIBRARIES_PATHS})
 
-list (APPEND LIBEVENT_LIBRARIES
-        ${LIBEVENT_LIB}
-        ${LIBEVENT_CORE_LIB}
-        ${LIBEVENT_EXTRA_LIB}
-        ${LIBEVENT_PTHREAD_LIB}
-        ${LIBEVENT_SSL_LIB})
+# must find
+list (APPEND LIBEVENT_LIBRARIES ${LIBEVENT_LIB} ${LIBEVENT_CORE_LIB} ${LIBEVENT_EXTRA_LIB})
+# might not find
+if (LIBEVENT_PTHREAD_LIB)
+    list (APPEND LIBEVENT_LIBRARIES ${LIBEVENT_PTHREAD_LIB})
+endif()
+if (LIBEVENT_SSL_LIB)
+    list (APPEND LIBEVENT_LIBRARIES ${LIBEVENT_SSL_LIB})
+endif()
 
 # if debug dir specified try to search the debug library
 if(LIBEVENT_DEBUG_DIR)
