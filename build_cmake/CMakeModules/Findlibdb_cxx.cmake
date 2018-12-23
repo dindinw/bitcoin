@@ -1,14 +1,27 @@
 if (NOT "$ENV{LIBDB_CXX_ROOT}" STREQUAL "")
     set(LIBDB_CXX_DIR $ENV{LIBDB_CXX_ROOT})
 endif()
+if (NOT "${LIBDB_CXX_ROOT}" STREQUAL "")
+    set(LIBDB_CXX_DIR ${LIBDB_CXX_ROOT})
+endif()
+
+list(APPEND libdbcxx_EXTRA_PREFIXES /usr/local /opt/local "$ENV{HOME}" ${LIBDB_CXX_DIR})
+
+if(WIN32 AND MINGW)
+    list(APPEND Libdbcxx_EXTRA_PREFIXES c:/msys64/usr)
+elseif(APPLE)
+    list(APPEND Libdbcxx_EXTRA_PREFIXES /usr/local/opt/berkeley-db@4)
+endif()
+
+foreach(prefix ${Libdbcxx_EXTRA_PREFIXES})
+    list(APPEND libdbcxx_INCLUDE_PATHS "${prefix}/include")
+    list(APPEND libdbcxx_LIBRARIES_PATHS "${prefix}/lib")
+endforeach()
+
 find_path(LIBDB_CXX_INCLUDE_DIR db_cxx.h
-        ${LIBDB_CXX_DIR}/include
-        /usr/include/
-        /usr/local/include/
-        /usr/local/opt/berkeley-db@4/include/
-        )
+        PATHS ${libdbcxx_INCLUDE_PATHS})
 find_library(LIBDB_CXX_LIBRARY_RELEASE NAMES db_cxx libdb48
-        PATHS ${LIBDB_CXX_DIR}/lib /usr/lib/ /usr/local/lib/ /usr/local/opt/berkeley-db@4/lib)
+        PATHS ${libdbcxx_LIBRARIES_PATHS})
 
 if(LIBDB_CXX_DEBUG_DIR)
     find_library(LIBDB_CXX_LIBRARY_DEBUG NAMES db_cxx libdb48
