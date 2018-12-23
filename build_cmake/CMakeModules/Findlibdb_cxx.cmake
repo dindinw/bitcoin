@@ -7,9 +7,7 @@ endif()
 
 list(APPEND libdbcxx_EXTRA_PREFIXES /usr/local /opt/local "$ENV{HOME}" ${LIBDB_CXX_DIR})
 
-if(WIN32 AND MSYS)
-    list(APPEND libdbcxx_EXTRA_PREFIXES c:/msys64/usr c:/msys64/usr/local)
-elseif(APPLE)
+if(APPLE)
     list(APPEND libdbcxx_EXTRA_PREFIXES /usr/local/opt/berkeley-db@4)
 endif()
 

@@ -10,9 +10,6 @@ if (NOT "$ENV{LIBEVENT_ROOT}" STREQUAL "")
 endif()
 
 list(APPEND LibEvent_EXTRA_PREFIXES /usr/local /opt/local "$ENV{HOME}" ${LIBEVENT_ROOT_DIR})
-if(WIN32 AND MINGW)
-    list(APPEND LibEvent_EXTRA_PREFIXES c:/msys64/usr)
-endif()
 foreach(prefix ${LibEvent_EXTRA_PREFIXES})
     list(APPEND LibEvent_INCLUDE_PATHS "${prefix}/include")
     list(APPEND LibEvent_LIBRARIES_PATHS "${prefix}/lib")
@@ -25,18 +22,15 @@ set (LIBEVENT_INCLUDE_DIRS ${LIBEVENT_INCLUDE_DIR})
 find_library  (LIBEVENT_LIB         NAMES event          PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_CORE_LIB    NAMES event_core     PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_EXTRA_LIB   NAMES event_extra    PATHS ${LibEvent_LIBRARIES_PATHS})
-if(NOT WIN32)
 find_library  (LIBEVENT_PTHREAD_LIB NAMES event_pthreads PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_SSL_LIB     NAMES event_openssl  PATHS ${LibEvent_LIBRARIES_PATHS})
-endif()
 
 list (APPEND LIBEVENT_LIBRARIES
         ${LIBEVENT_LIB}
         ${LIBEVENT_CORE_LIB}
-        ${LIBEVENT_EXTRA_LIB})
-if(NOT WIN32)
-    list (APPEND LIBEVENT_LIBRARIES ${LIBEVENT_PTHREAD_LIB} ${LIBEVENT_SSL_LIB})
-endif()
+        ${LIBEVENT_EXTRA_LIB}
+        ${LIBEVENT_PTHREAD_LIB}
+        ${LIBEVENT_SSL_LIB})
 
 # if debug dir specified try to search the debug library
 if(LIBEVENT_DEBUG_DIR)
@@ -45,6 +39,10 @@ if(LIBEVENT_DEBUG_DIR)
     find_library(LIBEVENT_CORE_LIB_DEBUG NAMES event_core
         PATHS ${LIBEVENT_DEBUG_DIR} ${LIBEVENT_DEBUG_DIR}/lib )
     find_library(LIBEVENT_EXTRA_LIB_DEBUG NAMES event_extra
+        PATHS ${LIBEVENT_DEBUG_DIR} ${LIBEVENT_DEBUG_DIR}/lib )
+    find_library(LIBEVENT_PTHREAD_LIB_DEBUG NAMES event_pthreads
+        PATHS ${LIBEVENT_DEBUG_DIR} ${LIBEVENT_DEBUG_DIR}/lib )
+    find_library(LIBEVENT_SSL_LIB_DEBUG  NAMES event_openssl
         PATHS ${LIBEVENT_DEBUG_DIR} ${LIBEVENT_DEBUG_DIR}/lib )
 endif()
 
@@ -64,6 +62,18 @@ if(LIBEVENT_LIBRARIES_RELEASE) # must have release library found at least
             set(LIBEVENT_EXTRA_LIB_DEBUG ${LIBEVENT_EXTRA_LIB})
         endif()
         list(APPEND _LIBEVENT_LIBS optimized ${LIBEVENT_EXTRA_LIB} debug ${LIBEVENT_EXTRA_LIB_DEBUG})
+        if(NOT LIBEVENT_PTHREAD_LIB_DEBUG)
+            set(LIBEVENT_PTHREAD_LIB_DEBUG ${LIBEVENT_PTHREAD_LIB})
+        endif()
+        if(LIBEVENT_PTHREAD_LIB) # might not find in some platform
+            list(APPEND _LIBEVENT_LIBS optimized ${LIBEVENT_PTHREAD_LIB} debug ${LIBEVENT_PTHREAD_LIB_DEBUG})
+        endif()
+        if(NOT LIBEVENT_SSL_LIB_DEBUG)
+            set(LIBEVENT_SSL_LIB_DEBUG ${LIBEVENT_SSL_LIB})
+        endif()
+        if(LIBEVENT_SSL_LIB) # might not find in some platform
+            list(APPEND _LIBEVENT_LIBS optimized ${LIBEVENT_SSL_LIB} debug ${LIBEVENT_SSL_LIB_DEBUG})
+        endif()
         set(LIBEVENT_LIBRARIES ${_LIBEVENT_LIBS})
     else()
         # For single-config generators where CMAKE_BUILD_TYPE has no value,
