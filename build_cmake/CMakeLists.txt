@@ -262,7 +262,7 @@ if(MSVC)
     #message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
     #message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
     #message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
-    string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}") # MDd -> MTd
+    string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")     # MDd -> MTd
     string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD ->MT
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
     # show target architecture
@@ -270,6 +270,11 @@ if(MSVC)
     set(ARCHITECTURE_ID ${MSVC_CXX_ARCHITECTURE_ID})
     message(STATUS "Target architecture = ${ARCHITECTURE_ID}")
 else()
+    # Keep build static exetuable
+    string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS_RELEASE}")
+    if(NOT _force_static)
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static")
+    endif()
     # for other compiler, we need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
     # for example : src/net_processing.cpp#L34~37
     string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
@@ -278,6 +283,8 @@ endif()
 # requried workaround force the compiler flags take effect by replacing the CMakeCache.txt
 set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}"   CACHE INTERNAL "")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE INTERNAL "")
+
+
 
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
