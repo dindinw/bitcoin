@@ -141,10 +141,9 @@ list(APPEND test_bitcoin_LIBRARIES
         Boost::thread
         Boost::chrono
         ${LIBDB_CXX_LIBRARIES}
-        OpenSSL::Crypto
+        ${OPENSSL_CRYPTO_LIBRARY}
         ${LIBEVENT_LIBRARIES}
         ${LIB_MINIUPNP}
-        # rapidcheck
 )
 if(ENABLE_ZMQ)
     list(APPEND test_bitcoin_LIBRARIES ${ZMQ_LIBRARIES})

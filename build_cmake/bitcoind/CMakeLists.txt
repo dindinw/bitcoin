@@ -57,7 +57,7 @@ list(APPEND bitcoind_LIBRARIES
         Boost::thread
         Boost::chrono
         ${LIBDB_CXX_LIBRARIES}
-        OpenSSL::Crypto
+        ${OPENSSL_CRYPTO_LIBRARY}
         ${LIBEVENT_LIBRARIES}
 )
 

@@ -12,7 +12,7 @@ list(APPEND bitcoin-tx_LIBRARIES
         Boost::system
         Boost::thread
         Boost::chrono
-        OpenSSL::Crypto
+        ${OPENSSL_CRYPTO_LIBRARY}
 )
 if(WIN32)
     list(APPEND bitcoin-tx_LIBRARIES ws2_32 shlwapi crypt32)

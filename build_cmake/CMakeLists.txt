@@ -61,6 +61,7 @@ if(WIN32)
 endif()
 
 # Boost
+set(Boost_USE_STATIC_LIBS ON) #always use static libs
 list(APPEND required_boost_components system filesystem thread chrono)
 if(ENABLE_TEST)
     list(APPEND required_boost_components unit_test_framework)
@@ -74,11 +75,11 @@ if(Boost_DEBUG) # show debug message if Boost_DEBUG is on
 endif()
 
 # OpenSSL
+set(OPENSSL_USE_STATIC_LIBS ON)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
-find_package(OpenSSL REQUIRED)
-message(STATUS "Found OpenSSL/Crypto ${OPENSSL_INCLUDE_DIR} ${OPENSSL_CRYPTO_LIBRARY}")
 
 # libevent
+set(LIBEVENT_USE_STATIC_LIBS ON)
 find_package(Libevent REQUIRED)
 
 # berkeyley-db

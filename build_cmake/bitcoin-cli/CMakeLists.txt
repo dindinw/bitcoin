@@ -8,7 +8,7 @@ list(APPEND bitcoin-cli_LIBRARIES
         bitcoin_crypto
         Boost::filesystem
         Boost::thread
-        OpenSSL::Crypto
+        ${OPENSSL_CRYPTO_LIBRARY}
         ${LIBEVENT_LIBRARIES}
         )
 if(WIN32)

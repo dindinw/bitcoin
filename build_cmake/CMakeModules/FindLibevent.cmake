@@ -85,6 +85,11 @@ if(LIBEVENT_LIBRARIES_RELEASE) # must have release library found at least
     endif()
 endif()
 
+# workaround to fix mingw static lib
+if(MINGW AND LIBEVENT_USE_STATIC_LIBS)
+    string(REPLACE ".dll" "" LIBEVENT_LIBRARIES "${LIBEVENT_LIBRARIES}")
+endif()
+
 include (FindPackageHandleStandardArgs)
 find_package_handle_standard_args (LIBEVENT DEFAULT_MSG LIBEVENT_LIBRARIES LIBEVENT_INCLUDE_DIR)
 mark_as_advanced(LIBEVENT_INCLUDE_DIRS LIBEVENT_LIBRARIES)
