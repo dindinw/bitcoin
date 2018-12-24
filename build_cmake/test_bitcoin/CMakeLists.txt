@@ -190,10 +190,11 @@ gen_json_header(JSON_HEADERS ${JSON_TEST_FILES})
 target_link_libraries(test_bitcoin ${test_bitcoin_LIBRARIES})
 target_compile_definitions(test_bitcoin PRIVATE HAVE_CONFIG_H)
 
-if(Boost_VERSION GREATER 105800 AND NOT WIN32)
-    if(Boost_DEBUG)
-        message(STATUS "  use BOOST_TEST_DYN_LINK")
-    endif()
+# Note about BOOST_TEST_DYN_LINK (since 1.58)
+# The MSVC required to keep using the static link since the static only depends of vcpkage
+# the mingw & cygwin should work with dynamical link.
+if(Boost_VERSION GREATER 105800 AND NOT MSVC)
+     message(STATUS "Boost test use BOOST_TEST_DYN_LINK")
     target_compile_definitions(test_bitcoin PRIVATE BOOST_TEST_DYN_LINK)
 endif()
 
