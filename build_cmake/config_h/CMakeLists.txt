@@ -104,17 +104,19 @@ set(BITCOIN_CONFIG_CMAKE_IN ${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-config.cmake.h.i
 
 # BITCOIN_CONFIG_CMAKE is the cmake generated config file
 #
-# Notice for creating BITCOIN_CONFIG_CMAKE file name by using the ${CMAKE_CACHEFILE_DIR} varible
+# Notice for creating BITCOIN_CONFIG_CMAKE file name by using the ${CMAKE_CURRENT_BINARY_DIR} varible
 # if 1.) in the multiple configuration enviroment, like VisualStudio or XCode
 #    2.) or different cmake_build_type are used in a singel-configruation environment, like CLion, CodeBlock.
 # When different configuration settings work in parallel, the shared `bitcoin-config.cmake.h` file
 # might led to the confilict settings, so we need to create the uniquity of BITCOIN_CONFIG_CMAKE.
 # Due to the different way bwtween the single/multiple-config of cmake, we have to Hack the
-# CMAKE_CACHEFILE_DIR, which contains full path to the directory that contains CMakeCache.txt file
-# (see https://cmake.org/cmake/help/v3.0/variable/CMAKE_CACHEFILE_DIR.html)
+# CMAKE_CURRENT_BINARY_DIR, which is the full path to to the build directory that is currently being
+# processed by cmake. (see https://cmake.org/cmake/help/v3.0/variable/CMAKE_CURRENT_BINARY_DIR.html)
 # we use the BITCOIN_CONFIG_CMAKE name pattern as :
-#  bitcoin-config.cmake.<basename-of-CMAKE_CACHEFILE_DIR>.h
-get_filename_component(_gen_from ${CMAKE_CACHEFILE_DIR} NAME_WE)
+#  bitcoin-config.cmake.<basename-of-the-parent-of-CMAKE_CURRENT_BINARY_DIR>.h
+
+get_filename_component(_real_path ${CMAKE_CURRENT_BINARY_DIR}/.. REALPATH)
+get_filename_component(_gen_from ${_real_path} NAME_WE)
 set(BITCOIN_CONFIG_CMAKE ${BITCOIN_ROOT}/src/config/bitcoin-config.cmake.${_gen_from}.h)
 
 # generate bitcoin-config.cmake.xxx.h
