@@ -20,7 +20,7 @@ set(ENABLE_SHANI on CACHE INTERNAL "" )
 set(ENABLE_AVX2  on CACHE INTERNAL "" )
 set(ENABLE_SSE41 on CACHE INTERNAL "" )
 
-if(WIN32)  # the crypto enhancement code are not supported for windows paltform yet
+if(WIN32 OR CYGWIN)  # the crypto enhancement code are not supported for windows paltform yet
     set(ENABLE_SHANI off CACHE INTERNAL "" )
     set(ENABLE_AVX2  off CACHE INTERNAL "" )
     set(ENABLE_SSE41 off CACHE INTERNAL "" )
