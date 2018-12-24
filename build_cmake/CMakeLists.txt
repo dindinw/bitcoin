@@ -258,15 +258,20 @@ if(MSVC)
     #   - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
     #   - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
     # 2.) remove /DNDEBUG
-    message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
-    message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
-    message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
-    set(CMAKE_CXX_FLAGS_DEBUG    "/MTd /Zi /Ob0 /Od /RTC1" CACHE INTERNAL "") # MDd -> MTd
-    set(CMAKE_CXX_FLAGS_RELEASE  "/MT /O2 /Ob2" CACHE INTERNAL "")           #  MD  -> MT , remvoe NDEBUG
+    #message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+    #message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
+    #message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
+    string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}") # MDd -> MTd
+    string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD ->MT
+    string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
     # show target architecture
     # https://dev.mysql.com/doc/internals/en/compiling-for-different-hardware-achitectures.html
     set(ARCHITECTURE_ID ${MSVC_CXX_ARCHITECTURE_ID})
     message(STATUS "Target architecture = ${ARCHITECTURE_ID}")
+else()
+    # for other compiler, we need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
+    # for example : src/net_processing.cpp#L34~37
+    string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
