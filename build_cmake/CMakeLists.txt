@@ -273,6 +273,11 @@ else()
     # for example : src/net_processing.cpp#L34~37
     string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
+
+# requried workaround force the compiler flags take effect by replacing the CMakeCache.txt
+set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}"   CACHE INTERNAL "")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE INTERNAL "")
+
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
 message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
