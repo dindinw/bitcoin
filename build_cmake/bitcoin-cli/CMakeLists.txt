@@ -13,6 +13,11 @@ list(APPEND bitcoin-cli_LIBRARIES
         )
 if(WIN32)
     list(APPEND bitcoin-cli_LIBRARIES ws2_32 shlwapi crypt32)
+    # need MSVCRT.LIB on x86, but not on x64
+    #  try libcmt.lib" and "libcmtd.lib
+    #if(MSVC AND "${MSVC_CXX_ARCHITECTURE_ID}" STREQUAL "X86")
+    #    target_link_libraries(bitcoin-tx libcmt)
+    #endif()
 endif()
 target_link_libraries( bitcoin-cli ${bitcoin-cli_LIBRARIES})
 
