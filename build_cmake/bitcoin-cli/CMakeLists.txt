@@ -21,6 +21,11 @@ if(WIN32)
 endif()
 target_link_libraries( bitcoin-cli ${bitcoin-cli_LIBRARIES})
 
+if(STATIC_BUILD AND UNIX AND NOT APPLE)
+    # required by static link of libcrypto.a
+    target_link_libraries(bitcoin-cli PRIVATE dl)
+endif()
+
 target_compile_definitions(bitcoin-cli PRIVATE HAVE_CONFIG_H)
 target_include_directories(bitcoin-cli PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src

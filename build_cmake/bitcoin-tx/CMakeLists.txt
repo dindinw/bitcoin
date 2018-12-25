@@ -20,6 +20,11 @@ endif()
 
 target_link_libraries(bitcoin-tx ${bitcoin-tx_LIBRARIES})
 
+if(STATIC_BUILD AND UNIX AND NOT APPLE)
+    # required by static link of libcrypto.a
+    target_link_libraries(bitcoin-tx PRIVATE dl)
+endif()
+
 target_compile_definitions(bitcoin-tx PRIVATE HAVE_CONFIG_H)
 target_include_directories(bitcoin-tx PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src

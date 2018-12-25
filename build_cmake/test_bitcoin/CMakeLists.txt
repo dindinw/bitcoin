@@ -220,6 +220,12 @@ if(ENABLE_PROPERTY_TESTS) #need rapidcheck
     target_include_directories(test_bitcoin PRIVATE ${RAPIDCHECK_INCLUDE_DIRS})
 endif()
 
+if(STATIC_BUILD AND UNIX AND NOT APPLE)
+    # required by static link of libcrypto.a
+    target_link_libraries(test_bitcoin PRIVATE dl)
+endif()
+
+
 enable_testing()
 #add_test(test_bitcion test_bitcoin)
 
