@@ -23,7 +23,7 @@ target_link_libraries( bitcoin-cli ${bitcoin-cli_LIBRARIES})
 
 if(STATIC_BUILD AND UNIX AND NOT APPLE)
     # required by static link of libcrypto.a
-    target_link_libraries(bitcoin-cli PRIVATE dl)
+    target_link_libraries(bitcoin-cli dl)
 endif()
 
 target_compile_definitions(bitcoin-cli PRIVATE HAVE_CONFIG_H)

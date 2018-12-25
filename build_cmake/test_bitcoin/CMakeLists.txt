@@ -222,7 +222,7 @@ endif()
 
 if(STATIC_BUILD AND UNIX AND NOT APPLE)
     # required by static link of libcrypto.a
-    target_link_libraries(test_bitcoin PRIVATE dl)
+    target_link_libraries(test_bitcoin dl)
 endif()
 
 
