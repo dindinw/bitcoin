@@ -69,7 +69,7 @@ if(MSVC)
     string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD  -> MT
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
 
-elseif()
+else()
     # Keep build static exetuable
     if(STATIC_BUILD AND NOT APPLE)
         # Note for Flags  : -static -static-libgcc -static-libstdc++
@@ -109,10 +109,12 @@ if(MSVC)
 endif()
 
 # Static lib config
-# Please Note: vcpkg is special
+# Please Note:
+# 1.) vcpkg is special
 # vcpkg use the special triple folder such as xxx-xxx-static for all static libaries
 # for example : you can't find static boost by naming pattern when set Boost_USE_STATIC_LIBS on
-if(STATIC_BUILD AND NOT USE_VCPKG)
+# 2.) Cygwin can't provide all required static libaries
+if(STATIC_BUILD AND NOT USE_VCPKG AND NOT CYGWIN)
     set(Boost_USE_STATIC_LIBS ON)
     set(OPENSSL_USE_STATIC_LIBS ON)
     set(LIBEVENT_USE_STATIC_LIBS ON)
