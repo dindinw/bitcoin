@@ -56,12 +56,6 @@ endif()
 # use -std=c++11 by default, in most cases we don't need set -std=gnc++11 globally
 set(CMAKE_CXX_STANDARD 11)
 
-# try to ask the compiler to create static libraries and the link to do the static
-# link if possible, use the add_compile_options() for the plalform/compiler in-depends.
-# for example, in macOS the `-static` will be ignored.
-if(STATIC_BUILD)
-    add_compile_options(-static)
-endif()
 
 if(MSVC)
     # 1.) force to use the /MT flag for the static lib
@@ -76,14 +70,37 @@ if(MSVC)
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
 
 else()
-    # Keep build static exetuable (except MacOSX)
 
-#    if(NOT APPLE)
-#        string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS_RELEASE}")
-#        if(NOT _force_static)
-#            set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static")
-#        endif()
+    # Keep build static exetuable (special on MacOSX)
+    # try to ask the compiler to create static libraries and the link to do the static
+    # link if possible, use the add_compile_options() for the plalform/compiler in-depends.
+    # for example, in macOS the `-static` will be ignored.
+    if(STATIC_BUILD AND NOT APPLE)
+        # for -static
+        string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS}")
+        if(NOT _force_static)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+        endif()
+
+    endif()
+    # if GNU :  -static-libgcc -static-libstdc++
+    if(STATIC_BUILD AND NOT APPLE)
+        string(REGEX MATCH "-static-libgcc" _force_static "${CMAKE_CXX_FLAGS}")
+        if(NOT _force_static)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+        endif()
+    endif()
+
+#    if(STATIC_BUILD)
+#        add_compile_options(-static)
 #    endif()
+
+    #    if(NOT APPLE)
+    #        string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS_RELEASE}")
+    #        if(NOT _force_static)
+    #            set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static")
+    #        endif()
+    #    endif()
     # for other compiler, we need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
     # for example : src/net_processing.cpp#L34~37
     string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
@@ -286,7 +303,7 @@ if(MSVC)                                          # if MSVC
     set(_target_arch ${MSVC_CXX_ARCHITECTURE_ID})
 elseif(APPLE AND CMAKE_OSX_ARCHITECTURES)         # if macOS find '-arch'
     set(_target_arch ${CMAKE_OSX_ARCHITECTURES})
-elseif(${CMAKE_C_FLAGS} OR ${CMAKE_CXX_FLAGS})    # otherwise find '-march'
+elseif(CMAKE_C_FLAGS OR CMAKE_CXX_FLAGS)    # otherwise find '-march'
     set(_target_arch_regex "^.*-march[= ]([^ ]+).*$")
     string(REGEX MATCH "${_target_arch_regex}" _target_arch_match ${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS})
     if (_target_arch_match)

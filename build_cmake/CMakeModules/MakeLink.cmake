@@ -8,7 +8,7 @@ macro(make_link src dest)
         execute_process( COMMAND ${Python_EXECUTABLE} "${CMAKE_MODULE_PATH}/mklink.py" ${src} ${dest}
                 RESULT_VARIABLE retcode)
     else()
-        # > 3.12, we can use cmake -E create_symlink
+        # > 3.12 or not windows, we can use cmake -E create_symlink
         execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink ${src} ${dest}
                 RESULT_VARIABLE retcode)
     endif()
