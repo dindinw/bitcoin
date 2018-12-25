@@ -71,7 +71,7 @@ if(MSVC)
 
 else()
     # Keep build static exetuable
-    if(STATIC_BUILD AND NOT APPLE)
+    if(STATIC_BUILD AND NOT APPLE AND NOT CYGWIN)
         # Note for Flags  : -static -static-libgcc -static-libstdc++
         # for example, in macOS the `-static` will try to link .
         string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS}")
