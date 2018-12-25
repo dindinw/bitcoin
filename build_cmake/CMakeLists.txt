@@ -69,7 +69,7 @@ if(MSVC)
     string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD  -> MT
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
 
-else()
+elseif(UNIX)
     # Keep build static exetuable
     if(STATIC_BUILD AND NOT APPLE)
         # Note for Flags  : -static -static-libgcc -static-libstdc++
@@ -80,6 +80,8 @@ else()
             #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
         endif()
+        # add link to dl, required by static link of libcrypto.a, it need to be global
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldl" )
     endif()
 
     # need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
@@ -279,6 +281,7 @@ message(STATUS "  CXX_COMPILER      : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
 message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "  EXE_LINKER_FLAGS  : ${CMAKE_EXE_LINKER_FLAGS}")
 
 # Show target architecture
 if(MSVC)                                          # if MSVC

@@ -71,12 +71,6 @@ endif()
 
 target_link_libraries(bitcoind PRIVATE ${bitcoind_LIBRARIES})
 
-if(STATIC_BUILD AND UNIX AND NOT APPLE)
-    # required by static link of libcrypto.a
-    target_link_libraries(bitcoind PRIVATE dl)
-endif()
-
-
 target_compile_definitions(bitcoind PRIVATE -DHAVE_CONFIG_H)
 target_include_directories(bitcoind PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
