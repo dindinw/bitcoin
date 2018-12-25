@@ -19,6 +19,12 @@ find_path     (LIBEVENT_INCLUDE_DIR NAMES event.h        PATHS ${LibEvent_INCLUD
 
 set (LIBEVENT_INCLUDE_DIRS ${LIBEVENT_INCLUDE_DIR})
 
+# Support preference of static libs by adjusting CMAKE_FIND_LIBRARY_SUFFIXES
+include(Common)
+if( LIBEVENT_USE_STATIC_LIBS )
+    to_static_find_libary_suffixes(_orig_CMAKE_FIND_LIBRARY_SUFFIXES)
+endif()
+
 find_library  (LIBEVENT_LIB         NAMES event          PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_CORE_LIB    NAMES event_core     PATHS ${LibEvent_LIBRARIES_PATHS})
 find_library  (LIBEVENT_EXTRA_LIB   NAMES event_extra    PATHS ${LibEvent_LIBRARIES_PATHS})
@@ -47,6 +53,11 @@ if(LIBEVENT_DEBUG_DIR)
         PATHS ${LIBEVENT_DEBUG_DIR} ${LIBEVENT_DEBUG_DIR}/lib )
     find_library(LIBEVENT_SSL_LIB_DEBUG  NAMES event_openssl
         PATHS ${LIBEVENT_DEBUG_DIR} ${LIBEVENT_DEBUG_DIR}/lib )
+endif()
+
+# Restore the original find library ordering
+if( LIBEVENT_USE_STATIC_LIBS )
+    restore_find_library_suffixes(_orig_CMAKE_FIND_LIBRARY_SUFFIXES)
 endif()
 
 set(LIBEVENT_LIBRARIES_RELEASE ${LIBEVENT_LIBRARIES})

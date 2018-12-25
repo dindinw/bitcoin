@@ -11,7 +11,7 @@ else()
     include(Common)
     # Support preference of static libs by adjusting CMAKE_FIND_LIBRARY_SUFFIXES
     if( ZMQ_USE_STATIC_LIBS )
-        to_static_find_libary_suffixes(_zmq_orig_CMAKE_FIND_LIBRARY_SUFFIXES)
+        to_static_find_libary_suffixes(_orig_CMAKE_FIND_LIBRARY_SUFFIXES)
     endif()
 
     if (NOT "$ENV{ZMQ_ROOT_DIR}" STREQUAL "")
@@ -29,7 +29,7 @@ else()
 
     # Restore the original find library ordering
     if( ZMQ_USE_STATIC_LIBS )
-        restore_find_library_suffixes(_zmq_orig_CMAKE_FIND_LIBRARY_SUFFIXES)
+        restore_find_library_suffixes(_orig_CMAKE_FIND_LIBRARY_SUFFIXES)
     endif()
 endif()
 
