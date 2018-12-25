@@ -30,14 +30,38 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 # ==============================
+# All Options
+#
+
+# The STATIC_BUILD is on by default, it try to do the static link, which
+# means it will looking for the static libraries only.
+option(STATIC_BUILD           "create static executable if possible" ON)
+option(ENABLE_TEST            "enable test"      ON)
+option(ENABLE_PROPERTY_TESTS  "enable RapidCheck property based tests" OFF)
+option(ENABLE_BENCH           "enable benchmark" ON)
+option(ENABLE_WALLET          "enable wallet"    ON)
+option(ENABLE_ZMQ             "enable zmq"       ON)
+option(USE_ASM                "enable use asm"   ON)
+option(USE_UPNP               "enable UPnP"      OFF)
+
+# the compiler depends options
+if(MSVC)
+    option(USE_VCPKG  "use vcpgk to mange depends on windows" ON)
+endif()
+
+# ==============================
 # Compiler Settings
 #
 
-# -std=c++11 by default
+# use -std=c++11 by default, in most cases we don't need set -std=gnc++11 globally
 set(CMAKE_CXX_STANDARD 11)
 
-# always try to use static link, the use add_compile_options() promise the plalform/compiler in-depends
-add_compile_options(-static)
+# try to ask the compiler to create static libraries and the link to do the static
+# link if possible, use the add_compile_options() for the plalform/compiler in-depends.
+# for example, in macOS the `-static` will be ignored.
+if(STATIC_BUILD)
+    add_compile_options(-static)
+endif()
 
 if(MSVC)
     # 1.) force to use the /MT flag for the static lib
@@ -70,17 +94,6 @@ endif()
 # set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE INTERNAL "")
 
 # ==============================
-# All Options
-option(ENABLE_TEST            "enable test"      ON)
-option(ENABLE_PROPERTY_TESTS  "enable RapidCheck property based tests" OFF)
-option(ENABLE_BENCH           "enable benchmark" ON)
-option(ENABLE_WALLET          "enable wallet"    ON)
-option(ENABLE_ZMQ             "enable zmq"       ON)
-option(USE_ASM                "enable use asm"   ON)
-option(USE_UPNP               "enable UPnP"      OFF)
-
-
-# ==============================
 # Find Requried Dependeces:
 #  - Boost       (required)
 #  - OpenSSL     (required)
@@ -90,16 +103,17 @@ option(USE_UPNP               "enable UPnP"      OFF)
 #  - miniupnpc   (if enable)
 #  - qt          (if enable)
 
-# try to use vcpkg if windows
-if(WIN32)
-    option(USE_VCPKG  "use vcpgk to mange depends on windows" ON)
+# try to use vcpkg if MSVC
+if(MSVC)
     if(USE_VCPKG)
         include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/vcpkg.cmake)
     endif()
 endif()
 
 # Boost
-set(Boost_USE_STATIC_LIBS ON) #always use static libs
+if(STATIC_BUILD)
+    set(Boost_USE_STATIC_LIBS ON) # try to use static libs
+endif()
 list(APPEND required_boost_components system filesystem thread chrono)
 if(ENABLE_TEST)
     list(APPEND required_boost_components unit_test_framework)
@@ -113,11 +127,15 @@ if(Boost_DEBUG) # show debug message if Boost_DEBUG is on
 endif()
 
 # OpenSSL
-set(OPENSSL_USE_STATIC_LIBS ON)
+if(STATIC_BUILD)
+    set(OPENSSL_USE_STATIC_LIBS ON)
+endif()
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
 
 # libevent
-set(LIBEVENT_USE_STATIC_LIBS ON)
+if(STATIC_BUILD)
+    set(LIBEVENT_USE_STATIC_LIBS ON)
+endif()
 find_package(Libevent REQUIRED)
 
 # berkeyley-db
@@ -238,6 +256,7 @@ endif()
 # Show Configuations
 
 message(STATUS "Build Configuration:")
+message(STATUS "  STATIC_BUILD is ${STATIC_BUILD}")
 message(STATUS "  ENABLE_TEST is ${ENABLE_TEST}")
 message(STATUS "  ENABLE_PROPERTY_TESTS is ${ENABLE_PROPERTY_TESTS}")
 message(STATUS "  ENABLE_BENCH is ${ENABLE_BENCH}")
@@ -246,6 +265,9 @@ message(STATUS "  ENABLE_ZMQ is ${ENABLE_ZMQ}")
 message(STATUS "  USE_ASM is ${USE_ASM}")
 message(STATUS "  USE_UPNP is ${USE_UPNP}")
 message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
+if(MSVC)
+    message(STATUS "  USE_VCPKG is ${USE_VCPKG}")
+endif()
 
 message(STATUS "Build Type:")
 get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
