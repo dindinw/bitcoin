@@ -163,6 +163,9 @@ if(ENABLE_WALLET)
 endif()
 
 # zmq
+if(STATIC_BUILD)
+    set(ZMQ_USE_STATIC_LIBS ON)
+endif()
 if(ENABLE_ZMQ)
     find_package (ZMQ)
     if(NOT ZMQ_FOUND)
