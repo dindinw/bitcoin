@@ -127,12 +127,18 @@ if(MSVC)
     endif()
 endif()
 
-# Boost
-if(STATIC_BUILD AND NOT USE_VCPKG) # vcpkg is special
-    # Note: vcpkg use the special triple folder such as xxx-xxx-static for all static libaries
-    # you can't find static boost by naming pattern when set Boost_USE_STATIC_LIBS on
-    set(Boost_USE_STATIC_LIBS ON) # try to use static libs
+# Static lib config
+# Please Note: vcpkg is special
+# vcpkg use the special triple folder such as xxx-xxx-static for all static libaries
+# for example : you can't find static boost by naming pattern when set Boost_USE_STATIC_LIBS on
+if(STATIC_BUILD AND NOT USE_VCPKG)
+    set(Boost_USE_STATIC_LIBS ON)
+    set(OPENSSL_USE_STATIC_LIBS ON)
+    set(LIBEVENT_USE_STATIC_LIBS ON)
+    set(ZMQ_USE_STATIC_LIBS ON)
 endif()
+
+# Boost
 list(APPEND required_boost_components system filesystem thread chrono)
 if(ENABLE_TEST)
     list(APPEND required_boost_components unit_test_framework)
@@ -146,15 +152,9 @@ if(Boost_DEBUG) # show debug message if Boost_DEBUG is on
 endif()
 
 # OpenSSL
-if(STATIC_BUILD)
-    set(OPENSSL_USE_STATIC_LIBS ON)
-endif()
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/FindOpenSSLHelper.cmake)
 
 # libevent
-if(STATIC_BUILD)
-    set(LIBEVENT_USE_STATIC_LIBS ON)
-endif()
 find_package(Libevent REQUIRED)
 
 # berkeyley-db
@@ -163,9 +163,6 @@ if(ENABLE_WALLET)
 endif()
 
 # zmq
-if(STATIC_BUILD)
-    set(ZMQ_USE_STATIC_LIBS ON)
-endif()
 if(ENABLE_ZMQ)
     find_package (ZMQ)
     if(NOT ZMQ_FOUND)
