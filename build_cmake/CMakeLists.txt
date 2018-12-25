@@ -23,13 +23,54 @@ cmake_minimum_required(VERSION 3.5)
 
 project(bitcoin)
 
-set(CMAKE_CXX_STANDARD 11)
-
 # The cmake helper modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 
 # The root dir
 set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+# ==============================
+# Compiler Settings
+#
+
+# -std=c++11 by default
+set(CMAKE_CXX_STANDARD 11)
+
+# always try to use static link, the use add_compile_options() promise the plalform/compiler in-depends
+add_compile_options(-static)
+
+if(MSVC)
+    # 1.) force to use the /MT flag for the static lib
+    #     - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
+    #     - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
+    # 2.) remove /DNDEBUG flag
+    #message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+    #message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
+    #message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
+    string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")     # MDd -> MTd
+    string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD  -> MT
+    string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
+    # show target architecture
+    # https://dev.mysql.com/doc/internals/en/compiling-for-different-hardware-achitectures.html
+    set(ARCHITECTURE_ID ${MSVC_CXX_ARCHITECTURE_ID})
+    message(STATUS "MSVC target architecture = ${ARCHITECTURE_ID}")
+else()
+    # Keep build static exetuable (except MacOSX)
+
+#    if(NOT APPLE)
+#        string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS_RELEASE}")
+#        if(NOT _force_static)
+#            set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static")
+#        endif()
+#    endif()
+    # for other compiler, we need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
+    # for example : src/net_processing.cpp#L34~37
+    string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+endif()
+
+# requried workaround force the compiler flags take effect by replacing the CMakeCache.txt
+# set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}"   CACHE INTERNAL "")
+# set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE INTERNAL "")
 
 # ==============================
 # All Options
@@ -197,7 +238,8 @@ endif()
 # Build bitcion-qt TEST :
 
 #========================
-#
+# Show Configuations
+
 message(STATUS "Build Configuration:")
 message(STATUS "  ENABLE_TEST is ${ENABLE_TEST}")
 message(STATUS "  ENABLE_PROPERTY_TESTS is ${ENABLE_PROPERTY_TESTS}")
@@ -207,84 +249,6 @@ message(STATUS "  ENABLE_ZMQ is ${ENABLE_ZMQ}")
 message(STATUS "  USE_ASM is ${USE_ASM}")
 message(STATUS "  USE_UPNP is ${USE_UPNP}")
 message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
-
-#---------------
-# Windows Build: (test on Win10 + VS2017)
-#
-# 1.) Install Dependes by using `vcpkg` :
-#  vcpkg install berkeleydb:x64-windows-static
-#  vcpkg install boost:x64-windows-static
-#  vcpkg install openssl:x64-windows-static
-#  vcpkg install libevent:x64-windows-static
-#  vcpkg install zeromq:x64-windows-static
-# The vcpkg installed static libs speretely on the folder : <vcpkg_root>\installed\x64-windows-static\
-#
-# 2.) Toolchain configuation
-#  - The toolchain need to specify the architecture to match with x64 (instead of the x86 by default for CLion)
-#  - /MD flag MD_DynamicRelease should be RuntimeLibrary -> swich to /MT
-#    https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
-#    https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
-#  - NDEBUG on Release
-#    - the cmake add the NDEBUG define https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
-#    - net_processing.cpp (#if defined(NDEBUG))
-#    - validation.cpp (#if defined(NDEBUG))
-#
-# 3.) fix Code :
-#  - need to fix non-portable usage in the bitcoin's leveldb code
-#    - remove non-portable headers <sys/types.h> and <unistd.h>  in db/c.cc db/c_test.c
-#      - https://github.com/google/leveldb/commit/623d014a54f8cf9b74ad6aaba9181ca1e65c43a1
-#    - remove ssize in db/db_iter.cc
-#      - https://github.com/google/leveldb/commit/89af27bde59fbbb3025653812b45fec10a655cb7
-#      - remove #define snprintf _snprintf in port/port_win.h
-#  - refactor unicode filename wrapper (src/fs.cpp src/fs.h src/test/fs_test.cpp)
-#    - https://github.com/bitcoin/bitcoin/pull/13878/
-#    - https://github.com/bitcoin/bitcoin/issues/13869
-#  - test-bitcion have 2 failed tests on the unicode filename
-#      - fixed by using the /utf-8 flag to MSVC
-#
-# 4.) Fix linker
-#  - need to add ws2_32 and shlwapi to linker
-#    - __imp__PathFileExistsW -> shlwapi.lib
-#    - net.cpp (FD_ISSET) -> ws2_32.lib
-#  - need link crypt32.lib (if static link openssl)
-#    - libeay32.lib __imp_CertOpenStore -> crypt32.lib
-#  - need Iphlpapi.lib for test-bitcoin
-#
-# 5.) Warnings
-#  - https://github.com/bitcoin/bitcoin/pull/14151
-#
-
-if(MSVC)
-    # 1.) Make sure to use the /MT flag for the static lib
-    #   - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
-    #   - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
-    # 2.) remove /DNDEBUG
-    #message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
-    #message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
-    #message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
-    string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")     # MDd -> MTd
-    string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD ->MT
-    string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
-    # show target architecture
-    # https://dev.mysql.com/doc/internals/en/compiling-for-different-hardware-achitectures.html
-    set(ARCHITECTURE_ID ${MSVC_CXX_ARCHITECTURE_ID})
-    message(STATUS "Target architecture = ${ARCHITECTURE_ID}")
-else()
-    # Keep build static exetuable
-    string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS_RELEASE}")
-    if(NOT _force_static)
-        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static")
-    endif()
-    # for other compiler, we need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
-    # for example : src/net_processing.cpp#L34~37
-    string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-endif()
-
-# requried workaround force the compiler flags take effect by replacing the CMakeCache.txt
-set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}"   CACHE INTERNAL "")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE INTERNAL "")
-
-
 
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")

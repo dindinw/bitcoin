@@ -68,3 +68,7 @@ Other dependencies  :
     .\vcpkg install rapidcheck:x86-windows-static
     .\vcpkg install rapidcheck:x64-windows-static
 ```
+
+## More Build Details
+
+- [CMake Windows Build](./note-cmake-build-windows.md)
