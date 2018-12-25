@@ -120,5 +120,10 @@ db4/
 
 .idea/
 cmake-build-debug/
+cmake-build-release/
+cmake-build-*/
+src/config/bitcoin-config.h.*
+src/config/bitcoin-config.cmake.*
+
 venv/
 
