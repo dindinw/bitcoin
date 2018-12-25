@@ -50,10 +50,7 @@ if(MSVC)
     string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")     # MDd -> MTd
     string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD  -> MT
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
-    # show target architecture
-    # https://dev.mysql.com/doc/internals/en/compiling-for-different-hardware-achitectures.html
-    set(ARCHITECTURE_ID ${MSVC_CXX_ARCHITECTURE_ID})
-    message(STATUS "MSVC target architecture = ${ARCHITECTURE_ID}")
+
 else()
     # Keep build static exetuable (except MacOSX)
 
@@ -250,12 +247,31 @@ message(STATUS "  USE_ASM is ${USE_ASM}")
 message(STATUS "  USE_UPNP is ${USE_UPNP}")
 message(STATUS "  ENABLE_SHANI/ENABLE_AVX2/ENABLE_SSE41 : ${ENABLE_SHANI}/${ENABLE_AVX2}/${ENABLE_SSE41}")
 
-message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
+message(STATUS "Build Type:")
+get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+message(STATUS "  isMultiConfig=${_isMultiConfig}  CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+
+message(STATUS "Compiler : ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "  CXX_COMPILER      : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
 message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
 
-message(STATUS "Build Type:")
-get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-message(STATUS "  isMultiConfig=${_isMultiConfig}  CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+# Show target architecture
+if(MSVC)                                          # if MSVC
+    set(_target_arch ${MSVC_CXX_ARCHITECTURE_ID})
+elseif(APPLE AND CMAKE_OSX_ARCHITECTURES)         # if macOS find '-arch'
+    set(_target_arch ${CMAKE_OSX_ARCHITECTURES})
+elseif(${CMAKE_C_FLAGS} OR ${CMAKE_CXX_FLAGS})    # otherwise find '-march'
+    set(_target_arch_regex "^.*-march[= ]([^ ]+).*$")
+    string(REGEX MATCH "${_target_arch_regex}" _target_arch_match ${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS})
+    if (_target_arch_match)
+        string(REGEX REPLACE "${_target_arch_regex}" "\\1" _target_arch ${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS})
+    endif()
+endif()
+if(NOT _target_arch)  #nothing find, fall back to use system processor, use (os default) as a notice
+    set(_target_arch "${CMAKE_HOST_SYSTEM_PROCESSOR} (os default)")
+endif()
+message(STATUS "Target Archtecture : ${_target_arch}")
+
 
