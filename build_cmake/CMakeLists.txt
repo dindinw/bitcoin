@@ -111,7 +111,9 @@ if(MSVC)
 endif()
 
 # Boost
-if(STATIC_BUILD)
+if(STATIC_BUILD AND NOT USE_VCPKG) # vcpkg is special
+    # Note: vcpkg use the special triple folder such as xxx-xxx-static for all static libaries
+    # you can't find static boost by naming pattern when set Boost_USE_STATIC_LIBS on
     set(Boost_USE_STATIC_LIBS ON) # try to use static libs
 endif()
 list(APPEND required_boost_components system filesystem thread chrono)

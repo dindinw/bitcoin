@@ -72,3 +72,4 @@ Other dependencies  :
 ## More Build Details
 
 - [CMake Windows Build](./note-cmake-build-windows.md)
+- [Static Link vs. Dynmatic Link](./note-static-build.md)
