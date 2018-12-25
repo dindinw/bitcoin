@@ -70,38 +70,19 @@ if(MSVC)
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
 
 else()
-
-    # Keep build static exetuable (special on MacOSX)
-    # try to ask the compiler to create static libraries and the link to do the static
-    # link if possible, use the add_compile_options() for the plalform/compiler in-depends.
-    # for example, in macOS the `-static` will be ignored.
+    # Keep build static exetuable
     if(STATIC_BUILD AND NOT APPLE)
-        # for -static
+        # Note for Flags  : -static -static-libgcc -static-libstdc++
+        # for example, in macOS the `-static` will try to link .
         string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS}")
         if(NOT _force_static)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
-        endif()
-
-    endif()
-    # if GNU :  -static-libgcc -static-libstdc++
-    if(STATIC_BUILD AND NOT APPLE)
-        string(REGEX MATCH "-static-libgcc" _force_static "${CMAKE_CXX_FLAGS}")
-        if(NOT _force_static)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+            #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+            #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
         endif()
     endif()
 
-#    if(STATIC_BUILD)
-#        add_compile_options(-static)
-#    endif()
-
-    #    if(NOT APPLE)
-    #        string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS_RELEASE}")
-    #        if(NOT _force_static)
-    #            set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static")
-    #        endif()
-    #    endif()
-    # for other compiler, we need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
+    # need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
     # for example : src/net_processing.cpp#L34~37
     string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
