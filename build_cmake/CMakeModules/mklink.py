@@ -45,10 +45,12 @@ def _symlink_win32(target, link, target_is_directory=False):
             raise WindowsError(value, strerror)
 
     target_is_directory = target_is_directory or os.path.isdir(target)
-    if os.path.isfile(target) and islink(target) :
-        # only delete link not the real file if the target is
-        if not DeleteFile(target):
-            raise WindowsError('could not delete file "%s"' % target)
+
+    if os.path.isfile(link) and islink(link) :
+        # check if the link already exist and del it
+        # need to make sure we can only delete the file if it's a link, not a real file
+        if not DeleteFile(link):
+            raise WindowsError('could not delete file "%s"' % link)
     handle_nonzero_success(CreateSymbolicLink(link, target, target_is_directory))
 
 
