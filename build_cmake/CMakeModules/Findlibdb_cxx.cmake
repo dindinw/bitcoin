@@ -5,7 +5,7 @@ if (NOT "${LIBDB_CXX_ROOT}" STREQUAL "")
     set(LIBDB_CXX_DIR ${LIBDB_CXX_ROOT})
 endif()
 
-list(APPEND libdbcxx_EXTRA_PREFIXES /usr/local /opt/local "$ENV{HOME}" ${LIBDB_CXX_DIR})
+list(APPEND libdbcxx_EXTRA_PREFIXES ${LIBDB_CXX_DIR} /usr/local /opt/local "$ENV{HOME}" )
 
 if(APPLE)
     list(APPEND libdbcxx_EXTRA_PREFIXES /usr/local/opt/berkeley-db@4)
