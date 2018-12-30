@@ -26,6 +26,14 @@ project(bitcoin)
 # The cmake helper modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 
+# need to fix windows symlink issue otherwise the get_file_componnet REALPATH
+# will not work. the workaround can be removed after the issue 17206 has been
+# resolved see https://gitlab.kitware.com/cmake/cmake/issues/17206 for details
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND
+(CMAKE_VERSION VERSION_LESS "3.11.0" OR CMAKE_VERSION VERSION_GREATER "3.11.2"))
+    include(get_filename_windows_fix)
+endif()
+
 # The root dir
 set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
