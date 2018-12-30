@@ -36,7 +36,7 @@ else()
 endif()
 
 if(NOT "${TRIPLET_NAME_OK}" STREQUAL "" AND EXISTS ${VCPKG_TRIPLET})
-    set(TRIPLET_OK)
+    set(TRIPLET_OK TRUE)
 else()
     string(APPEND _triplet_error_reason "${VCPKG_TRIPLET} not exist")
 endif()
