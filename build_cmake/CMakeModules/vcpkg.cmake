@@ -27,7 +27,7 @@ if(STATIC_BUILD)
 else()
     string(REGEX MATCH "static" _should_not_use_static_triple "${VCPKG_TRIPLET}")
     if(_should_not_use_static_triple)
-        set(TRIPLET_NAME_OK,${_should_not_use_static_triple})
+        set(TRIPLET_NAME_OK "") # clear ok flag, force it goto error handling logic
         string(APPEND _triplet_error_reason "${VCPKG_TRIPLET} can only use for static build, you might need to set -DSTATIC_BUILD=on")
     endif()
 endif()
