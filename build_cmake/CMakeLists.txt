@@ -58,50 +58,42 @@ set(CMAKE_CXX_STANDARD 11)
 
 
 if(MSVC)
+    # for Micosoft Visual Studio
     # 1.) force to use the /MT flag for the static lib
     #     - https://docs.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library?view=vs-2017
     #     - https://github.com/Kitware/CMake/blob/v3.13.2/Modules/Platform/Windows-MSVC.cmake#L362
-    # 2.) remove /DNDEBUG flag
-    #message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
-    #message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
-    #message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
-    string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")     # MDd -> MTd
-    string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD  -> MT
-    string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
-
-else()
-    # Keep build static exetuable
-    if(STATIC_BUILD AND NOT APPLE AND NOT CYGWIN)
-        # Note for Flags  : -static -static-libgcc -static-libstdc++
-        # for example, in macOS the `-static` will result xcode-gcc try to link crt0.o which is impossilbe.
-        string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS}")
-        if(NOT _force_static)
-            #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
-        endif()
+    if(STATIC_BUILD)
+        #message(STATUS "${CMAKE_CXX_FLAGS}")         # /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+        #message(STATUS "${CMAKE_CXX_FLAGS_DEBUG}")   # /MDd /Zi /Ob0 /Od /RTC1
+        #message(STATUS "${CMAKE_CXX_FLAGS_RELEASE}") # /MD /O2 /Ob2 /DNDEBUG
+        string(REPLACE "MDd" "MTd"   CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}")     # MDd -> MTd
+        string(REPLACE "MD"  "MT"    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # MD  -> MT
     endif()
-    # for MacOS using GNU-gcc (non-xcode-gcc) with the xcode linker
+    # 2.) remove /DNDEBUG flag
+    string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
+else()
+    # 1.) if build static executable
+    # the CMAKE_C_COMPILER_ID is "GNU" included (GNU gcc/MingW/CYGWIN)
+    # for cygwin it's impossilbe for static link anyway (please correct me)
+    if(STATIC_BUILD AND CMAKE_C_COMPILER_ID STREQUAL "GNU" AND NOT CYGWIN)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
+    endif()
+
+    # 2.) alwyas need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
+    # for example : src/net_processing.cpp#L34~37
+    string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+
+    # 3.) for MacOS using GNU-gcc (non-xcode-gcc) with the xcode linker
+    # xcode linker requrie objects compiled with the same visibility setting with the combatible gcc-compiled boost
+    # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/CppRuntimeEnv/Articles/SymbolVisibility.html
     if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
-        # xcode linker requrie objects compiled with the same visibility setting with the combatible gcc-compiled boost
-        # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/CppRuntimeEnv/Articles/SymbolVisibility.html
-        string(REGEX MATCH "-fvisibility" _force_visibility "${CMAKE_CXX_FLAGS}")
+       string(REGEX MATCH "-fvisibility" _force_visibility "${CMAKE_CXX_FLAGS}")
         if(NOT _force_visibility)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden")
         endif()
-        # the static flag need to set to -static-libgcc -static-libstdc++
-        if(STATIC_BUILD)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
-        endif()
     endif()
-    # need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
-    # for example : src/net_processing.cpp#L34~37
-    string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
-
-# requried workaround force the compiler flags take effect by replacing the CMakeCache.txt
-# set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}"   CACHE INTERNAL "")
-# set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE INTERNAL "")
 
 # ==============================
 # Find Requried Dependeces:
