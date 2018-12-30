@@ -81,9 +81,14 @@ if(MSVC)
     string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")   # remove NDEBUG
 else()
     # 1.) if build static executable
-    # the CMAKE_C_COMPILER_ID is "GNU" included (GNU gcc/MingW/CYGWIN)
+    # the CMAKE_C_COMPILER_ID is GNU will include all GNU-alike compilers (GNU gcc/MingW/CYGWIN)
     # for cygwin it's impossilbe for static link anyway (please correct me)
     if(STATIC_BUILD AND CMAKE_C_COMPILER_ID STREQUAL "GNU" AND NOT CYGWIN)
+        if(MINGW)
+            # for mingw, we can use static flag to static link the all the required dll
+            # for example -lpthread
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+        endif()
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
     endif()
