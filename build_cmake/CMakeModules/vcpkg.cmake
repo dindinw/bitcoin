@@ -16,6 +16,9 @@ if ("${VCPKG_TRIPLET}" STREQUAL "")
     endif()
 endif()
 
+# make sure the input triplet is an well-formatted file path
+file(TO_CMAKE_PATH "${VCPKG_TRIPLET}" VCPKG_TRIPLET)
+
 # check vcpkg triple pattern
 # https://github.com/Microsoft/vcpkg/blob/master/docs/users/triplets.md
 string(REGEX MATCH "x86|x64|arm|arm64-.*" TRIPLET_NAME_OK "${VCPKG_TRIPLET}")
@@ -33,15 +36,20 @@ else()
 endif()
 
 if(NOT "${TRIPLET_NAME_OK}" STREQUAL "" AND EXISTS ${VCPKG_TRIPLET})
-    if(VCPKG_TRIPLET_BYGUESS)
-        string( APPEND _vcpkg_triple_warn "WARNNING : VCPKG_TRIPLET set to ${VCPKG_TRIPLET} by default, ")
-        string( APPEND _vcpkg_triple_warn "you might need to change to the suitable triplet for the ")
-        string( APPEND _vcpkg_triple_warn "correct depends libraries")
-        message(STATUS ${_vcpkg_triple_warn})
-    endif()
+    set(TRIPLET_OK)
 else()
-    message(FATAL_ERROR "vcpkg triple : ${VCPKG_TRIPLET} not correct, please specify correct VCPKG_TRIPLET"
-            "${_triplet_error_reason}")
+    string(APPEND _triplet_error_reason "${VCPKG_TRIPLET} not exist")
+endif()
+
+if(NOT TRIPLET_OK)
+    message(FATAL_ERROR "vcpkg triple : ${_triplet_error_reason}, please specify correct VCPKG_TRIPLET")
+endif()
+
+if(VCPKG_TRIPLET_BYGUESS)
+    string( APPEND _vcpkg_triple_warn "WARNNING : VCPKG_TRIPLET set to ${VCPKG_TRIPLET} by default, ")
+    string( APPEND _vcpkg_triple_warn "you might need to change to the suitable triplet for the ")
+    string( APPEND _vcpkg_triple_warn "correct depends libraries")
+    message(STATUS ${_vcpkg_triple_warn})
 endif()
 
 message(STATUS "vcpkg triplet: ${VCPKG_TRIPLET}")
