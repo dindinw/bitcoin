@@ -1,3 +1,5 @@
+# -------------------------------
+# Prepare all test_bitcoin source
 
 list (APPEND JSON_TEST_FILES
         ../../src/test/data/script_tests.json
@@ -10,7 +12,6 @@ list (APPEND JSON_TEST_FILES
         ../../src/test/data/tx_invalid.json
         ../../src/test/data/tx_valid.json
 )
-
 
 list (APPEND BITCOIN_TEST_SUITE
         ../../src/test/test_bitcoin_main.cpp
@@ -118,16 +119,18 @@ list (APPEND test_bitcoin_SOURCES
         ${JSON_TEST_FILES}
         ${RAW_TEST_FILES})
 
+
+# -----------------------
+# build for test_bitcion
+
 add_executable(test_bitcoin ${test_bitcoin_SOURCES})
 
 if (ENABLE_WALLET)
     list(APPEND test_bitcoin_LIBRARIES bitcoin_wallet)
 endif()
 
-
 if(USE_UPNP)
     set(LIB_MINIUPNP ${LIBMINIUPNPC_LIBRARIES})
-
 endif()
 
 list(APPEND test_bitcoin_LIBRARIES
@@ -145,6 +148,7 @@ list(APPEND test_bitcoin_LIBRARIES
         ${LIBEVENT_LIBRARIES}
         ${LIB_MINIUPNP}
 )
+
 if(ENABLE_ZMQ)
     list(APPEND test_bitcoin_LIBRARIES ${ZMQ_LIBRARIES})
 endif()
@@ -153,37 +157,7 @@ if(WIN32)
     list(APPEND test_bitcoin_LIBRARIES ws2_32 Iphlpapi shlwapi crypt32)
 endif()
 
-# The FindPython is more powerful but only avaible on the latest versions
-if(CMAKE_VERSION VERSION_GREATER 3.11)
-    find_package (Python REQUIRED COMPONENTS Interpreter)
-else()
-    find_program(Python_EXECUTABLE python)
-endif()
-
-function(gen_json_header NAME)
-    set(HEADERS "")
-    foreach(f ${ARGN})
-        # Get the proper name for the test variable.
-        get_filename_component(TEST_NAME ${f} NAME_WE)
-        get_filename_component(FULL_NAME ${f} ABSOLUTE)
-        set(h "${FULL_NAME}.h")
-        # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}/${f} > ${h}")
-        add_custom_command(OUTPUT ${h}
-                COMMAND ${Python_EXECUTABLE}
-                ARGS
-                "${CMAKE_CURRENT_SOURCE_DIR}/gen_json_h.py"
-                "${TEST_NAME}"
-                "${CMAKE_CURRENT_SOURCE_DIR}/${f}" > ${h}
-                MAIN_DEPENDENCY ${f}
-                DEPENDS
-                "gen_json_h.py"
-                VERBATIM
-                )
-        list(APPEND HEADERS ${h})
-    endforeach(f)
-    set(${NAME} "${HEADERS}" PARENT_SCOPE)
-endfunction()
-
+include(get_json_header.cmake)
 gen_json_header(JSON_HEADERS ${JSON_TEST_FILES})
 
 target_link_libraries(test_bitcoin ${test_bitcoin_LIBRARIES})
@@ -202,7 +176,6 @@ if(WIN32)
         target_compile_options(test_bitcoin PRIVATE "/utf-8")
     endif()
 endif()
-
 
 target_include_directories(test_bitcoin PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
@@ -225,9 +198,15 @@ if(STATIC_BUILD AND UNIX AND NOT APPLE)
     target_link_libraries(test_bitcoin dl)
 endif()
 
+# ----------------------------
+# build for test_bitcoin_fuzzy
+#
 
+
+# -----------------------
+# support for ctest, use the boost test helper for a nice output
+# using 'check-bitcoin' target to execute the all tests
 enable_testing()
-#add_test(test_bitcion test_bitcoin)
 
 include(BoostTestHelper)
 add_boost_test(test_bitcoin ${BITCOIN_TESTS})
@@ -249,4 +228,6 @@ else()
             ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
     add_dependencies(check-bitcoin test_bitcoin)
 endif()
+
+
 
