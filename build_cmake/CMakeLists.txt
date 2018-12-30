@@ -80,7 +80,7 @@ else()
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
     endif()
 
-    # 2.) alwyas need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
+    # 2.) always need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
     # for example : src/net_processing.cpp#L34~37
     string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
