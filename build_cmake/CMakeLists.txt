@@ -342,7 +342,7 @@ if(NOT "${_config_point_to}" STREQUAL "${_current_build_config}")
               "The \"${_toolchain_name}\" conflicts with the current build toolchain \"" "${CMAKE_CXX_COMPILER_ID}" "\".\n"
               "Need to re-link the config file : ${_current_build_config}\n"
               "Please use `make relink` or `cmake --build . --target relink` to fix, "
-              "or avoid using different toolchains in a multi-configuration or multiple cmake-build-type envoriment."
+              "or avoid using different toolchains in a multi-configuration or multiple cmake-build-type environment."
                )
         message(WARNING "${config_file_ERROR_REASON}")
         #message(SEND_ERROR "${config_file_ERROR_REASON}")
