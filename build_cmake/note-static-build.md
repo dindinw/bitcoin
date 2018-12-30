@@ -1,5 +1,4 @@
-## MacOS
-
+# MacOS
 
 #### -DSTATIC_BUILD=on (but depends might not all static)
 
@@ -79,6 +78,143 @@ There's no crt0.o or crt0.a or anything like that on OS X and XCode.
 ld: library not found for -lcrt0.o
 ```
 
+
+
+# Linux
+
+## The Download Version from
+
+https://bitcoin.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+
+```
+alex@lfs:~/work$ sha256sum bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+53ffca45809127c9ba33ce0080558634101ec49de5224b2998c489b6d0fc2b17  bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+alex@lfs:~/work$ sha256sum bitcoin-0.17.1/bin/bitcoind
+5886026ab5c84145778c1c45e63dbaaad8732923f9e0477885b6505fa6621e6c  bitcoin-0.17.1/bin/bitcoind
+alex@lfs:~/work$ ldd bitcoin-0.17.1/bin/bitcoind
+        linux-vdso.so.1 (0x00007ffc5fcb6000)
+        libpthread.so.0 => /lib/libpthread.so.0 (0x00007f7bcf722000)
+        librt.so.1 => /lib/librt.so.1 (0x00007f7bcf718000)
+        libm.so.6 => /lib/libm.so.6 (0x00007f7bcf595000)
+        libgcc_s.so.1 => /usr/lib/libgcc_s.so.1 (0x00007f7bcf57b000)
+        libc.so.6 => /lib/libc.so.6 (0x00007f7bcf3ba000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f7bd03ea000)
+```
+
+```
+alex@ubuntu1804:~/work$ sha256sum bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+53ffca45809127c9ba33ce0080558634101ec49de5224b2998c489b6d0fc2b17  bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+alex@ubuntu1804:~/work$ sha256sum bitcoin-0.17.1/bin/bitcoind
+5886026ab5c84145778c1c45e63dbaaad8732923f9e0477885b6505fa6621e6c  bitcoin-0.17.1/bin/bitcoind
+alex@ubuntu1804:~/work$ ldd bitcoin-0.17.1/bin/bitcoind
+        linux-vdso.so.1 (0x00007ffe4c6c7000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007efe6d453000)
+        librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007efe6d24b000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007efe6cead000)
+        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007efe6cc95000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007efe6c8a4000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007efe6e312000)
+```
+
+```
+alex@ubuntu1604:/work/bitcoin$ sha256sum bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+53ffca45809127c9ba33ce0080558634101ec49de5224b2998c489b6d0fc2b17  bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+alex@ubuntu1604:/work/bitcoin$ sha256sum bitcoin-0.17.1/bin/bitcoind
+5886026ab5c84145778c1c45e63dbaaad8732923f9e0477885b6505fa6621e6c  bitcoin-0.17.1/bin/bitcoind
+alex@ubuntu1604:/work/bitcoin$ ldd bitcoin-0.17.1/bin/bitcoind
+        linux-vdso.so.1 =>  (0x00007fff309de000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f0419d53000)
+        librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f0419b4b000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f0419842000)
+        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f041962a000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f0419260000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f041ac10000)
+```
+
+it shows the usage of dynamic link libc/libgcc
+
+## Ubuntu 1804
+
+-static-libstdc++
+
+```
+alex@ubuntu1804:~/work/bitcoin-ubuntu1804/build_cmake/build$ ldd bitcoind/bitcoind
+        linux-vdso.so.1 (0x00007ffcda3fe000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f0bbb6ca000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f0bbb4ab000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f0bbb10d000)
+        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f0bbaef5000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f0bbab04000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f0bbc920000)
+
+```
+
+-static-libgcc -static-libstdc++
+```
+alex@ubuntu1804:~/work/bitcoin-ubuntu1804/build_cmake/build$ ldd bitcoind/bitcoind
+        linux-vdso.so.1 (0x00007ffc945d8000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f01be8b8000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f01be699000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f01be2fb000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f01bdf0a000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f01bfb14000)
+```
+
+## Ubuntu 1604
+
+-static-libstdc++
+
+```
+alex@ubuntu1604:/work/bitcoin/bitcoin-cmake/build_cmake/build$ ldd bitcoind/bitcoind
+        linux-vdso.so.1 =>  (0x00007ffe2fde7000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f8963cf0000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f8963ad3000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f89637ca000)
+        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f89635b2000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f89631e8000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f8963ef4000)
+
+```
+
+-static-libgcc -static-libstdc++
+```
+alex@ubuntu1604:/work/bitcoin/bitcoin-cmake/build_cmake/build$ ldd bitcoind/bitcoind
+        linux-vdso.so.1 =>  (0x00007fff5b1e1000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fa92234e000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fa922131000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fa921e28000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa921a5e000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fa922552000)
+
+```
+
+libgcc should be excluded
+
+## LFS (kernel 4.19.6 & gcc 8.2.0)
+
+-static-libstdc++
+
+```
+alex@lfs:~/work/bitcoin/build_cmake/build$ ldd bitcoind/bitcoind
+        linux-vdso.so.1 (0x00007ffdf3354000)
+        libdl.so.2 => /lib/libdl.so.2 (0x00007f60685fd000)
+        libpthread.so.0 => /lib/libpthread.so.0 (0x00007f60685dc000)
+        libm.so.6 => /lib/libm.so.6 (0x00007f6068459000)
+        libgcc_s.so.1 => /usr/lib/libgcc_s.so.1 (0x00007f606843f000)
+        libc.so.6 => /lib/libc.so.6 (0x00007f606827e000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f6068609000)
+```
+
+-static-libgcc -static-libstdc++
+```
+alex@lfs:~/work/bitcoin/build_cmake/build$ ldd bitcoind/bitcoind
+        linux-vdso.so.1 (0x00007ffd67dfc000)
+        libdl.so.2 => /lib/libdl.so.2 (0x00007fbafb0a2000)
+        libpthread.so.0 => /lib/libpthread.so.0 (0x00007fbafb081000)
+        libm.so.6 => /lib/libm.so.6 (0x00007fbafaefe000)
+        libc.so.6 => /lib/libc.so.6 (0x00007fbafad3d000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fbafb0ae000)
+```
 ## Linux Static Link issue
 
 ### LFS
@@ -208,8 +344,4 @@ the reason
 > `-ldl` tells the linker to also link against libdl.so, which is the shared library containing  dlopen(), dlsym(), dlclose() etc.
 
 
-### Ubuntu 1804
-
-```
-
-```
+# Windows
