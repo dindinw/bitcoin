@@ -290,11 +290,14 @@ message(STATUS "Build Type:")
 get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 message(STATUS "  isMultiConfig=${_isMultiConfig}  CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 
-message(STATUS "Compiler : ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Toolchain : ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "  C_COMPILER        : ${CMAKE_C_COMPILER}")
 message(STATUS "  CXX_COMPILER      : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
 message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "  MAKE_PROGRAM      : ${CMAKE_MAKE_PROGRAM}")
+message(STATUS "  LINKER            : ${CMAKE_LINKER}")
 
 # Show target architecture
 if(MSVC)                                          # if MSVC
