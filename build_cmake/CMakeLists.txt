@@ -88,10 +88,7 @@ else()
     # xcode linker requrie objects compiled with the same visibility setting with the combatible gcc-compiled boost
     # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/CppRuntimeEnv/Articles/SymbolVisibility.html
     if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
-       string(REGEX MATCH "-fvisibility" _force_visibility "${CMAKE_CXX_FLAGS}")
-        if(NOT _force_visibility)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden")
-        endif()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden")
     endif()
 endif()
 
