@@ -73,7 +73,7 @@ else()
     # Keep build static exetuable
     if(STATIC_BUILD AND NOT APPLE AND NOT CYGWIN)
         # Note for Flags  : -static -static-libgcc -static-libstdc++
-        # for example, in macOS the `-static` will try to link .
+        # for example, in macOS the `-static` will result xcode-gcc try to link crt0.o which is impossilbe.
         string(REGEX MATCH "-static" _force_static "${CMAKE_CXX_FLAGS}")
         if(NOT _force_static)
             #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
@@ -81,7 +81,19 @@ else()
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
         endif()
     endif()
-
+    # for MacOS using GNU-gcc (non-xcode-gcc) with the xcode linker
+    if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        # xcode linker requrie objects compiled with the same visibility setting with the combatible gcc-compiled boost
+        # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/CppRuntimeEnv/Articles/SymbolVisibility.html
+        string(REGEX MATCH "-fvisibility" _force_visibility "${CMAKE_CXX_FLAGS}")
+        if(NOT _force_visibility)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden")
+        endif()
+        # the static flag need to set to -static-libgcc -static-libstdc++
+        if(STATIC_BUILD)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+        endif()
+    endif()
     # need to remove -DNDEBUG flag anyway even in release, because bitcoin always use assert()
     # for example : src/net_processing.cpp#L34~37
     string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")

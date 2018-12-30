@@ -1,7 +1,7 @@
 ## MacOS
 
 
-#### -DSTATIC_BUILD=on
+#### -DSTATIC_BUILD=on (but depends might not all static)
 
 ```
 $ otool -L test_bitcoin/test_bitcoin
@@ -17,7 +17,7 @@ test_bitcoin/test_bitcoin:
         /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.50.4)
 ```
 
-#### -DSTATIC_BUILD=off
+#### -DSTATIC_BUILD=off (all dynmatic)
 
 ```
 $ otool -L test_bitcoin/test_bitcoin
@@ -41,8 +41,9 @@ test_bitcoin/test_bitcoin:
 ```
 
 
-#### the work version
+#### the pure static version (with all depends are static)
 
+using Xcode's gcc
 
 ```
 $ otool -L ./bitcoind
@@ -52,7 +53,22 @@ $ otool -L ./bitcoind
 
 ```
 
-####  -static
+#### using GNU gcc (more pure static version)
+
+we can also remove the libc++ depends, only required System.B
+
+```
+$ otool -L  bitcoind/bitcoind
+bitcoind/bitcoind:
+        /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.50.4)
+```
+
+#### Can we remove System.B ?
+
+Its depends
+
+
+#### Notes on using `-static`
 
 Using -static is impossible, since the linker tries to statically link the standard library as well, which is prohibited in OSX. On the other hand, clang doesn't know -Wl,-Bstatic.
 
