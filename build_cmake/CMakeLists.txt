@@ -46,6 +46,7 @@ set(BITCOIN_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 option(STATIC_BUILD           "create static executable if possible" ON)
 option(ENABLE_TEST            "enable test"      ON)
 option(ENABLE_PROPERTY_TESTS  "enable RapidCheck property based tests" OFF)
+option(ENABLE_FUZZY_TEST      "enable Fuzz-testings with afl" OFF)
 option(ENABLE_BENCH           "enable benchmark" ON)
 option(ENABLE_WALLET          "enable wallet"    ON)
 option(ENABLE_ZMQ             "enable zmq"       ON)
@@ -242,19 +243,13 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bitcoin-tx)
 #========================
 # Build Test Executable :
 #  - test_bitcoin
-#     - $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV)
-#     - $(BOOST_LIBS) $(BOOST_UNIT_TEST_FRAMEWORK_LIB) $(LIBSECP256K1) $(EVENT_LIBS) $(EVENT_PTHREADS_LIBS)
-#     - $(LIBBITCOIN_SERVER) $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL)
-#     - $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE)
-#     if enable :
-#        - $(LIBBITCOIN_WALLET) $(ZMQ_LIBS)
 #  - test_bitcoin_fuzzy
-#     - $(LIBUNIVALUE) $(LIBBITCOIN_SERVER) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL)
-#     - $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_CRYPTO_SSE41)
-#     - $(LIBBITCOIN_CRYPTO_AVX2) $(LIBBITCOIN_CRYPTO_SHANI) $(LIBSECP256K1)
-#     - $(BOOST_LIBS) $(CRYPTO_LIBS)
+#    see https://github.com/bitcoin/bitcoin/blob/master/doc/fuzzing.md
 if(ENABLE_TEST)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin)
+endif()
+if(ENABLE_FUZZY_TEST)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin_fuzzy)
 endif()
 
 
@@ -276,6 +271,7 @@ message(STATUS "Build Configuration:")
 message(STATUS "  STATIC_BUILD is ${STATIC_BUILD}")
 message(STATUS "  ENABLE_TEST is ${ENABLE_TEST}")
 message(STATUS "  ENABLE_PROPERTY_TESTS is ${ENABLE_PROPERTY_TESTS}")
+message(STATUS "  ENABLE_FUZZY_TEST is ${ENABLE_FUZZY_TEST}")
 message(STATUS "  ENABLE_BENCH is ${ENABLE_BENCH}")
 message(STATUS "  ENABLE_WALLET is ${ENABLE_WALLET}")
 message(STATUS "  ENABLE_ZMQ is ${ENABLE_ZMQ}")

@@ -198,11 +198,6 @@ if(STATIC_BUILD AND UNIX AND NOT APPLE)
     target_link_libraries(test_bitcoin dl)
 endif()
 
-# ----------------------------
-# build for test_bitcoin_fuzzy
-#
-
-
 # -----------------------
 # support for ctest, use the boost test helper for a nice output
 # using 'check-bitcoin' target to execute the all tests
