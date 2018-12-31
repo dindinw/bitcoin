@@ -70,6 +70,9 @@ endif()
 if(ENABLE_WALLET)
     target_link_libraries(bench_bitcoin bitcoin_wallet ${LIBDB_CXX_LIBRARIES})
 endif()
+if(STATIC_BUILD AND UNIX AND NOT APPLE)
+    target_link_libraries(bench_bitcoin dl) # required by static link of libcrypto.a
+endif()
 
 target_include_directories(bench_bitcoin PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
