@@ -50,6 +50,11 @@ endif()
 
 # build bench
 add_executable(bench_bitcoin ${bench_bitcoin_SOURCES})
+
+if(ENABLE_WALLET)
+    target_link_libraries(bench_bitcoin bitcoin_wallet ${LIBDB_CXX_LIBRARIES})
+endif()
+
 target_link_libraries(bench_bitcoin
         bitcoin_server
         bitcoin_common
@@ -64,12 +69,11 @@ target_link_libraries(bench_bitcoin
         Boost::thread
         Boost::chrono
         ${OPENSSL_CRYPTO_LIBRARY})
+
 if(ENABLE_ZMQ)
     target_link_libraries(bench_bitcoin bitcoin_zmq ${ZMQ_LIBRARIES})
 endif()
-if(ENABLE_WALLET)
-    target_link_libraries(bench_bitcoin bitcoin_wallet ${LIBDB_CXX_LIBRARIES})
-endif()
+
 if(STATIC_BUILD AND UNIX AND NOT APPLE)
     target_link_libraries(bench_bitcoin dl) # required by static link of libcrypto.a
 endif()
