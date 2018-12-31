@@ -93,6 +93,11 @@ target_include_directories(test_bitcoin_fuzzy PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src)
 target_compile_definitions(test_bitcoin_fuzzy PRIVATE HAVE_CONFIG_H)
 
+if(STATIC_BUILD AND UNIX AND NOT APPLE)
+    # required by static link of libcrypto.a
+    target_link_libraries(test_bitcoin_fuzzy dl)
+endif()
+
 #
 # TODO: refactor the usage the global CMAKE_CXX_FALG
 # use the CMake generator expressions to handle the target's ${BUILD_FLAGS}
