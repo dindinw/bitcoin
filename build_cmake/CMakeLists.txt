@@ -252,10 +252,10 @@ if(ENABLE_FUZZY_TEST)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test_bitcoin_fuzzy)
 endif()
 
-
 #========================
 # Build BENCHMARKS :
 if(ENABLE_BENCH)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/bench_bitcoin)
 endif()
 
 #========================
