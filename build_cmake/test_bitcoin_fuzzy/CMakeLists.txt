@@ -63,11 +63,13 @@ set( CMAKE_CXX_COMPILER "${AFL_CXX}" )
 # TODO: clear the gobal CMAKE_CXX_FLAGS setting if need
 # set( CMAKE_CXX_FLAGS    "${AFL_CXX_FLAGS}" )
 
-message(STATUS "  C_COMPILER        : ${CMAKE_C_COMPILER}")
-message(STATUS "  CXX_COMPILER      : ${CMAKE_CXX_COMPILER}")
-message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
-message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
+if(AFL_DEBUG)
+    message(STATUS "  C_COMPILER        : ${CMAKE_C_COMPILER}")
+    message(STATUS "  CXX_COMPILER      : ${CMAKE_CXX_COMPILER}")
+    message(STATUS "  CXX_FLAGS         : ${CMAKE_CXX_FLAGS}")
+    message(STATUS "  CXX_FLAGS_DEBUG   : ${CMAKE_CXX_FLAGS_DEBUG}")
+    message(STATUS "  CXX_FLAGS_RELEASE : ${CMAKE_CXX_FLAGS_RELEASE}")
+endif()
 
 # ----------------------------
 # build for test_bitcoin_fuzzy
