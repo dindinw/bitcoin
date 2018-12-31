@@ -78,6 +78,10 @@ if(STATIC_BUILD AND UNIX AND NOT APPLE)
     target_link_libraries(bench_bitcoin dl) # required by static link of libcrypto.a
 endif()
 
+if(WIN32)
+    target_link_libraries(bench_bitcoin ws2_32 Iphlpapi shlwapi crypt32)
+endif()
+
 target_include_directories(bench_bitcoin PRIVATE ${BITCOIN_ROOT}
         ${BITCOIN_ROOT}/src
         ${BITCOIN_ROOT}/src/leveldb/include
